@@ -30,7 +30,7 @@ from molive.molive_memelo import main_molive_memelo
 
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 
-# CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ
+# CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ TEST
 @bot.message_handler(commands=['molive_memelo'])
 def molive_memelo(message):
     main_molive_memelo(message)
