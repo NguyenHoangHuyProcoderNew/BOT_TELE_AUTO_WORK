@@ -131,8 +131,38 @@ def main_molive_memelo(message):
     sleep(1)
 
     # IN VÀ GỬI TIN NHẮN
-    dylib.print_yellow_and_send_message(user_id, "Tiến hành tạo cấu hình mới")
+    dylib.print_yellow_and_send_message(user_id, "Tạo cấu hình mới")
 
     # IN RA MÀN HÌNH
-    dylib.print_green("Đang chọn tài khoản")
-    driver.find_element(By.CSS_SELECTOR, f"{select_account}")
+    dylib.print_green("Chọn tài khoản")
+
+    # CHỌN TÀI KHOẢN LIVE
+    driver.find_element(By.CSS_SELECTOR, f"{select_account}").click()
+
+    sleep(1)
+
+    # IN RA MÀN HÌNH
+    dylib.print_green("Nhập tiêu đề live")
+
+    # NHẬP TIÊU ĐỀ LIVE
+    driver.find_element(By.ID, "title").send_keys('kéo rank Liên Quân')
+
+    sleep(1)
+
+    # IN RA MÀN HÌNH
+    dylib.print_green("Chọn chủ đề live")
+
+    # CHỌN CHỦ ĐỀ LIVE
+    driver.find_element(By.CSS_SELECTOR, "#topic > option:nth-child(11)").click()
+
+    sleep(1)
+
+    # IN RA MÀN HÌNH
+    dylib.print_green("Chọn kiểu live Mobile")
+
+    # CHỌN KIỂU LIVE
+    driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[1]/div/div[3]/div/div/div[2]/form/div[4]/div/div/div/button[2]").click()
+
+    # IN RA MÀN HÌNH
+    dylib.print_green("Nhập link nguồn cho phiên live")
+    
