@@ -97,16 +97,24 @@ def main_checklive_memelo(message):
             WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
             now = datetime.datetime.now()
             
+            # CHECK DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
             checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
+
+            # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
             view = checkview.text
 
+            # NẾU PHIÊN LIVE TRÊN 5 NGƯỜI XEM THÌ TIẾP TỤC KIỂM TRA
             if int(view) > 5:
-                print(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại có {view} người xem => TIẾP TỤC KIỂM TRA...")
+                dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại có {view} người xem => TIẾP TỤC KIỂM TRA...")
                 driver.refresh()
             else:
-                bot_reply_and_print(message, f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại đang có {view} người xem => Tiến hành tắt live")
+                # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+                dylib.print_yellow_and_send_message(message, f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại đang có {view} người xem => Tiến hành tắt live")
+
+                # ĐÓNG CHROME
                 driver.quit()
-                tatlive(message)
+
+                # KẾT THÚC TIẾN TRÌNH
                 return
         except TimeoutException:
             bot_reply_and_print(message, "Không check được số người xem live, có vẻ như phiên live đã bị sập.")
