@@ -92,25 +92,42 @@ def main_tatlive(message):
     #  IN RA MÀN HÌNH
     dylib.print_yellow_and_send_message(user_id, "Tiến hành tắt live")
 
+    # KIỂM TRA SỰ KIỆN TẮT LIVE
     try:
-        # Kiểm tra giá trị data-original-title của button (Nếu là Dừng live thì mới click)
+        # Kiểm tra giá trị data-original-title của button 
+        # (Nếu là Dừng live thì mới click)
         button_tatlive = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-original-title='Dừng live']"))
     )
         if button_tatlive.get_attribute("data-original-title") == "Dừng live":
+            
+            # IN RA MÀN HÌNH
+            dylib.print_green("Click vào nút tắt live")
             button_tatlive.click() # CLICK VÀO NÚT TẮT LIVE NẾU GIÁ TRỊ HỢP LỆ                                     
     except:
-        bot_reply_and_print(message, "Hiện tại không có phiên live nào được mở")
+        dylib.print_red_and_send_message(user_id, "Hiện tại không có phiên live nào được mở")
         driver.quit()
         return
 
     # KIỂM TRA SỰ KIỆN TẮT LIVE CÓ THÀNH CÔNG HAY KHÔNG
     try:
+        # CHỜ DỢI THÔNG BÁO TẮT LIVE XUẤT HIỆN
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))) # ĐỢI THÔNG BÁO TẮT LIVE THÀNH CÔNG XUẤT HIỆN
-        bot_reply_and_print(message, "TẮT LIVE THÀNH CÔNG")
+
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_yellow_and_send_message(user_id, "Tắt live thành công")
+
+        # ĐÓNG CHROME
         driver.quit()
+
+        # KẾT THÚC TIẾN TRÌNH
         return
     except TimeoutException:
-        bot_reply_and_print(message, "TẮT LIVE KHÔNG THÀNH CÔNG, VUI LÒNG KIỂM TRA LẠI")
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_red_and_send_message(user_id, "Tắt live không thành công")
+
+        # ĐÓNG CHROME
         driver.quit()
-        return    
+
+        # KẾT THÚC TIẾN TRÌNH
+        return 
