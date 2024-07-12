@@ -29,7 +29,6 @@ chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 from molive.molive_memelo import main_molive_memelo
 
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
-
 print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
 
 # CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ

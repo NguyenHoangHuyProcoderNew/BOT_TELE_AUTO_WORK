@@ -80,7 +80,7 @@ def print_yellow_and_send_message(chat_id, message):
     print(Fore.YELLOW + '[*] ' + message + Fore.RESET)    
 
 # IN RA MÀN HÌNH MÀU XANH LÁ CÂY VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-def print_yellow_and_send_message(chat_id, message):
+def print_green_and_send_message(chat_id, message):
     # Gửi tin nhắn đến người dùng
     bot.send_message(chat_id, message)
     # In ra màn hình với ký tự đầu là [*] và màu xanh lác cây
