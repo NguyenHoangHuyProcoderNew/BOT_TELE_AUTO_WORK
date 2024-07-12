@@ -73,7 +73,7 @@ def main_checklive_memelo(message):
     # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
     try:
         # MỞ PHIÊN LIVE
-        driver.get('https://www.tiktok.com/@vanbao165201/live')
+        driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
         # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
         WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[1]/div/div[1]/a')))
@@ -116,7 +116,76 @@ def main_checklive_memelo(message):
 
                 # KẾT THÚC TIẾN TRÌNH
                 return
+        # KIỂM TRA LẦN 2
         except TimeoutException:
-            bot_reply_and_print(message, "Không check được số người xem live, có vẻ như phiên live đã bị sập.")
-            driver.quit()
-            return    
+            # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+            dylib.print_red_and_send_message(user_id, "Kiểm tra phiên live lần 1 hoàn tất")
+
+            sleep(1)
+
+            # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+            dylib.print_yellow_and_send_message(user_id, "Tiến hành kiểm tra lần 2")
+
+            # KHỞI TẠO WEB DRIVER
+            driver = webdriver.Chrome(service=service, options=options)
+
+            # IN RA MÀN HÌNH
+            dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
+
+            # IN RA MÀN HÌNH
+            dylib.print_yellow("Truy cập phiên livestream")
+
+            # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
+            try:
+                # MỞ PHIÊN LIVE
+                driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
+
+                # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
+                WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[1]/div/div[1]/a')))
+
+                # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
+                dylib.print_yellow_and_send_message(user_id, "Truy cập phiên livestream thành công, tiến hành kiểm tra\nKhi nào phiên live dưới 5 người xem tôi sẽ thông báo cho bạn")
+            except TimeoutException:
+                # IN RA MÀN HÌNH
+                dylib.print_red_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")
+
+                # ĐÓNG CHROME
+                driver.quit()
+
+                # KẾT THÚC TIẾN TRÌNH
+                return
+                        
+            while True:
+                try:
+                    WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
+                    now = datetime.datetime.now()
+                    
+                    # CHECK DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
+                    checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
+
+                    # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
+                    view = checkview.text
+
+                    # NẾU PHIÊN LIVE TRÊN 5 NGƯỜI XEM THÌ TIẾP TỤC KIỂM TRA
+                    if int(view) > 5:
+                        dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại có {view} người xem => TIẾP TỤC KIỂM TRA...")
+                        driver.refresh()
+                    else:
+                        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+                        dylib.print_yellow_and_send_message(message, f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại đang có {view} người xem => Tiến hành tắt live")
+
+                        # ĐÓNG CHROME
+                        driver.quit()
+
+                        # KẾT THÚC TIẾN TRÌNH
+                        return
+                # KẾT THÚC KIỂM TRA LẦN 2
+                except TimeoutException:
+                    # IN VÀ GỬI TIN NHẮN
+                    dylib.print_red_and_send_message(user_id, "Kiểm tra lần 2 hoàn tất")
+                    
+                    # ĐÓNG CHROME
+                    driver.quit()
+
+                    # KẾT THÚC TIẾN TRÌNH
+                    return
