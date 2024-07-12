@@ -30,22 +30,12 @@ from molive.molive_memelo import main_molive_memelo
 
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 
+print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
+
 # CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ
 @bot.message_handler(commands=['molive_memelo'])
 def molive_memelo(message):
     main_molive_memelo(message)
-
-# CHỨC NĂNG KHỞI ĐỘNG LẠI BOT
-@bot.message_handler(commands=['restart'])
-def handle_restart(message):
-    restart_bot(message)
-
-# Hàm để restart bot
-def restart_bot(message):
-    driver = webdriver.Chrome(service=service, options=options)
-    bot.reply_to(message, "Khởi động lại bot thành công")
-    driver.quit()  # Đóng trình duyệt Selenium trước khi restart
-    os.execv(sys.executable, ['python'] + sys.argv)
 
 ########################################################
 ####################### CHẠY BOT #######################

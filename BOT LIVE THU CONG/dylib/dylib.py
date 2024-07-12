@@ -19,12 +19,24 @@ logging.basicConfig(level=logging.CRITICAL)  # Chỉ in thông báo lỗi nghiê
 import datetime
 now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
+from colorama import init, Fore
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+# CẤU HÌNH WEBDRIVER
+chromedriver_path = r'D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\chrome_driver\\chromedriver.exe'
+
+options = Options()
+options.add_argument('--log-level=3')  # Vô hiệu hóa thông báo của Selenium
+options.add_argument('--user-data-dir=D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\du lieu trinh duyet')
+
+service = Service(chromedriver_path)
+service_log_path = os.path.devnull
+service = Service(chromedriver_path, service_log_path=service_log_path)
+
+# user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 # HÀM ĐẾM NGƯỢC SỐ PHÚT
 def countdown(minutes):
@@ -35,56 +47,52 @@ def countdown(minutes):
         time.sleep(1)
     print("Đếm ngược hoàn tất, tiến hành kiểm tra trạng thái phiên live")
 
-# HÀM IN VĂN BẢN THÀNH MÀU ĐỎ
+# IN VĂN BẢN THÀNH MÀU ĐỎ
 def print_red(text):
     red_color_code = "\033[91m"
     reset_code = "\033[0m"
-    print(f"{red_color_code}[*] {text}{reset_code}")
+    print(f"{red_color_code}[*] {text}{reset_code}")   
 
-# IN VĂN BẢN THÀNH MÀU ĐỎ VÀ GỬI TIN NHẮN VỀ CHO NGƯỜI DÙNG
-def print_red_and_send_message(text, chat_id):
-    red_color_code = "\033[91m"
-    reset_code = "\033[0m"
-    formatted_text = f"{red_color_code}[*] {text}{reset_code}"
-    
-    # In văn bản màu đỏ
-    print(formatted_text)
-    
-    # Gửi tin nhắn tới người dùng
-    bot.send_message(chat_id, f"[*] {text}")    
-
-# HÀM IN VĂN BẢN THÀNH MÀU VÀNG
+# IN VĂN BẢN THÀNH MÀU VÀNG
 def print_yellow(text):
     yellow_color_code = "\033[93m"
     reset_code = "\033[0m"
-    print(f"{yellow_color_code}[*] {text}{reset_code}")
+    print(f"{yellow_color_code}[*] {text}{reset_code}")  
 
-# IN VĂN BẢN THÀNH MÀU VÀNG VÀ GỬI TIN NHẮN VỀ CHO NGƯỜI DÙNG
-def print_yellow_and_send_message(text, chat_id):
-    yellow_color_code = "\033[93m"
-    reset_code = "\033[0m"
-    formatted_text = f"{yellow_color_code}[*] {text}{reset_code}"
-    
-    # In văn bản màu vàng
-    print(formatted_text)
-    
-    # Gửi tin nhắn tới người dùng
-    bot.send_message(chat_id, f"[*] {text}")    
-
-# HÀM IN VĂN BẢN THÀNH MÀU XANH LÁ CÂY
+# IN VĂN BẢN THÀNH MÀU XANH LÁ CÂY
 def print_green(text):
     green_color_code = "\033[92m"
     reset_code = "\033[0m"
     print(f"{green_color_code}[*] {text}{reset_code}")
 
-# IN VĂN BẢN THÀNH MÀU XANH LÁ CÂY VÀ GỬI TIN NHẮN VỀ CHO NGƯỜI DÙNG
-def print_green_and_send_message(text, chat_id):
-    green_color_code = "\033[92m"
-    reset_code = "\033[0m"
-    formatted_text = f"{green_color_code}[*] {text}{reset_code}"
-    
-    # In văn bản màu xanh lá cây
-    print(formatted_text)
-    
-    # Gửi tin nhắn tới người dùng
-    bot.send_message(chat_id, f"[*] {text}")
+# IN RA RA MÀN HÌNH MÀU ĐỎ VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+def print_red_and_send_message(user_id, message):
+    # Gửi tin nhắn đến người dùng
+    bot.send_message(user_id, message)
+    # In ra màn hình với màu đỏ
+    print(Fore.RED + '[*] ' + message + Fore.RESET)
+
+# IN RA MÀN HÌNH MÀU VÀNG VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+def print_yellow_and_send_message(chat_id, message):
+    # Gửi tin nhắn đến người dùng
+    bot.send_message(chat_id, message)
+    # In ra màn hình với ký tự đầu là [*] và màu vàng
+    print(Fore.YELLOW + '[*] ' + message + Fore.RESET)    
+
+# IN RA MÀN HÌNH MÀU XANH LÁ CÂY VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+def print_yellow_and_send_message(chat_id, message):
+    # Gửi tin nhắn đến người dùng
+    bot.send_message(chat_id, message)
+    # In ra màn hình với ký tự đầu là [*] và màu xanh lác cây
+    print(Fore.GREEN + '[*] ' + message + Fore.RESET)    
+
+# CHỨC NĂNG KHỞI ĐỘNG LẠI BOT
+def handle_restart(message):
+    restart_bot(message)
+
+# Hàm để restart bot
+def restart_bot(message):
+    driver = webdriver.Chrome(service=service, options=options)
+    bot.reply_to(message, "Khởi động lại bot thành công")
+    driver.quit()  # Đóng trình duyệt Selenium trước khi restart
+    os.execv(sys.executable, ['python'] + sys.argv)    
