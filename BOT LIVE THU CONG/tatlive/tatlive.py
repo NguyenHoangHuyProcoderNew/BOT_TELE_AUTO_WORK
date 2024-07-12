@@ -58,11 +58,6 @@ def main_tatlive(message):
     dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_red_and_send_message(user_id, f"Tiến hành mở livestream tài khoản {ten_tai_khoan}")
-
-    sleep(1) # CHỜ 1 GIÂY
-
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.print_green("Mở website livestream")
 
     # MỞ WEB LIVESTREAM
