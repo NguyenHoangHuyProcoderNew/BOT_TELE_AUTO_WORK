@@ -25,8 +25,15 @@ bot = telebot.TeleBot(API_TOKEN)
 
 chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
-# IMPORT CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ
+# IMPORT CHỨC NĂNG MỞ LIVE
+
+# MỞ LIVE TÀI KHOẢN MEME LỎ
 from molive.molive_memelo import main_molive_memelo
+
+# IMPORT CHỨC NĂNG CHECKLIVE
+
+# CHECKLIVE MEME LỎ
+from checklive.checklive_memelo import main_checklive_memelo
 
 # IMPORT CHỨC NĂNG TẮT LIVE
 from tatlive.tatlive import main_tatlive
@@ -38,6 +45,11 @@ print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | ===========
 @bot.message_handler(commands=['molive_memelo'])
 def molive_memelo(message):
     main_molive_memelo(message)
+
+# CHỨC NĂNG CHECK LIVE MEME LỎ
+@bot.message_handler(commands=['checklive_memelo'])
+def checklive_meme_lo(message):
+    main_checklive_memelo(message)
 
 # CHỨC NĂNG TẮT LIVE
 @bot.message_handler(commands=['tatlive'])

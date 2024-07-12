@@ -76,7 +76,7 @@ def main_checklive_memelo(message):
         driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
         # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
-        WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[1]/div/div[1]/a')))
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
         dylib.print_yellow_and_send_message(user_id, "Truy cập phiên livestream thành công, tiến hành kiểm tra\nKhi nào phiên live dưới 5 người xem tôi sẽ thông báo cho bạn")
@@ -94,11 +94,16 @@ def main_checklive_memelo(message):
     while True:
         # KIỂM TRA LẦN 1
         try:
-            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
+            # ĐỢI WEB LIVE LOAD XONG
+            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
+
             now = datetime.datetime.now()
             
+            # ĐỢI PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM LIVE XUẤT HIỆN
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
+
             # CHECK DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
-            checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
+            checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
 
             # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
             view = checkview.text
@@ -110,21 +115,20 @@ def main_checklive_memelo(message):
             else:
                 # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
                 dylib.print_yellow_and_send_message(message, f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại đang có {view} người xem => Tiến hành tắt live")
-
                 # ĐÓNG CHROME
                 driver.quit()
-
                 # KẾT THÚC TIẾN TRÌNH
                 return
-        # KIỂM TRA LẦN 2
         except TimeoutException:
             # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
             dylib.print_red_and_send_message(user_id, "Kiểm tra phiên live lần 1 hoàn tất")
-
-            sleep(1)
+            # ĐÓNG CHROME
+            driver.quit()
 
             # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
             dylib.print_yellow_and_send_message(user_id, "Tiến hành kiểm tra lần 2")
+
+########################### KIỂM TRA LẦN 2 ############################
 
             # KHỞI TẠO WEB DRIVER
             driver = webdriver.Chrome(service=service, options=options)
@@ -141,7 +145,7 @@ def main_checklive_memelo(message):
                 driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
                 # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
-                WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[1]/div/div[1]/a')))
+                WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
                 # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
                 dylib.print_yellow_and_send_message(user_id, "Truy cập phiên livestream thành công, tiến hành kiểm tra\nKhi nào phiên live dưới 5 người xem tôi sẽ thông báo cho bạn")
@@ -156,12 +160,18 @@ def main_checklive_memelo(message):
                 return
                         
             while True:
+                # KIỂM TRA LẦN 2
                 try:
-                    WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
+                    # ĐỢI WEB LIVE LOAD XONG
+                    WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
+
                     now = datetime.datetime.now()
                     
+                    # ĐỢI PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM LIVE XUẤT HIỆN
+                    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
+
                     # CHECK DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
-                    checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
+                    checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
 
                     # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
                     view = checkview.text
@@ -173,19 +183,17 @@ def main_checklive_memelo(message):
                     else:
                         # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
                         dylib.print_yellow_and_send_message(message, f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại đang có {view} người xem => Tiến hành tắt live")
-
                         # ĐÓNG CHROME
                         driver.quit()
-
                         # KẾT THÚC TIẾN TRÌNH
                         return
-                # KẾT THÚC KIỂM TRA LẦN 2
+                # KẾT THÚC KIỂM TRA LẦN 2                    
                 except TimeoutException:
-                    # IN VÀ GỬI TIN NHẮN
+                    # IN RA MÀN HÌNH
                     dylib.print_red_and_send_message(user_id, "Kiểm tra lần 2 hoàn tất")
-                    
+
                     # ĐÓNG CHROME
                     driver.quit()
 
                     # KẾT THÚC TIẾN TRÌNH
-                    return
+                    return                    

@@ -1,0 +1,48 @@
+[13112:11272:0712/163306.392:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163306.531:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163321.987:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163322.194:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163327.444:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163327.609:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163332.228:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163332.872:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163336.554:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163336.704:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163342.028:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163342.517:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163346.550:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163346.706:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163351.704:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163352.125:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163356.339:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163356.547:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163401.169:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163401.572:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163405.679:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163405.869:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163410.441:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163410.851:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163415.331:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163415.577:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163420.267:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163420.625:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163424.818:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163425.063:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163429.653:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163430.018:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[14996:836:0712/163431.561:INFO:rlz_lib.cc(438)] Attempting to send RLZ ping brand=CHBF
+[14996:836:0712/163432.060:INFO:rlz_lib.cc(447)] Succeeded in sending RLZ ping
+[13112:5868:0712/163432.500:WARNING:webrtc_voice_engine.cc(683)] Attempting to stop aecdump when no audio processing module is present
+[13112:5868:0712/163432.500:WARNING:webrtc_voice_engine.cc(683)] Attempting to stop aecdump when no audio processing module is present
+[13112:5868:0712/163432.500:WARNING:webrtc_voice_engine.cc(683)] Attempting to stop aecdump when no audio processing module is present
+[13112:5868:0712/163432.500:WARNING:webrtc_voice_engine.cc(683)] Attempting to stop aecdump when no audio processing module is present
+[13112:5868:0712/163432.500:WARNING:webrtc_voice_engine.cc(683)] Attempting to stop aecdump when no audio processing module is present
+[13112:5868:0712/163432.501:WARNING:webrtc_voice_engine.cc(683)] Attempting to stop aecdump when no audio processing module is present
+[13112:5868:0712/163432.501:WARNING:webrtc_voice_engine.cc(683)] Attempting to stop aecdump when no audio processing module is present
+[13112:5868:0712/163433.035:WARNING:webrtc_voice_engine.cc(683)] Attempting to stop aecdump when no audio processing module is present
+[13112:11272:0712/163434.258:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163434.468:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163439.145:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163439.530:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163444.047:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
+[13112:11272:0712/163444.267:WARNING:codec.cc(515)] Explicitly added H264 constrained baseline to list of supported formats.
