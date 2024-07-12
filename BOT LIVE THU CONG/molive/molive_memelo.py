@@ -54,7 +54,7 @@ init()
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_molive_memelo(message):
 
-    print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok}=============")
+    print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
      # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)

@@ -30,10 +30,22 @@ chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 # MỞ LIVE TÀI KHOẢN MEME LỎ
 from molive.molive_memelo import main_molive_memelo
 
+# MỞ LIVE TÀI KHOẢN VĂN BẢO
+from molive.molive_vanbao import main_molive_vanbao
+
+# MỞ LIVE TÀI KHOẢN NICK PHU LBH
+from molive.molive_nickphulbh import main_molive_nickphulbh
+
 # IMPORT CHỨC NĂNG CHECKLIVE
 
 # CHECKLIVE MEME LỎ
 from checklive.checklive_memelo import main_checklive_memelo
+
+# CHECK LIVE VĂN BẢO
+from checklive.checklive_vanbao import main_checklive_vanbao
+
+# CHECK LIVE NICK PHU LBH
+from checklive.checklive_nickphulbh import main_checklive_nickphulbh
 
 # IMPORT CHỨC NĂNG TẮT LIVE
 from tatlive.tatlive import main_tatlive
@@ -41,17 +53,41 @@ from tatlive.tatlive import main_tatlive
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
 
+########################## BẮT ĐẦU CÁC CHỨC NĂNG MỞ LIVE ###############################
+
 # CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ
 @bot.message_handler(commands=['molive_memelo'])
 def molive_memelo(message):
     main_molive_memelo(message)
+
+# CHỨC NĂNG MỞ LIVE TÀI KHOẢN NICK-PHU-LBH
+@bot.message_handler(commands=['molive_nickphulbh'])
+def molive_nickphulbh(message):
+    main_molive_nickphulbh(message)
+
+# CHỨC NĂNG MỞ LIVE TÀI KHOẢN VĂN BẢO
+@bot.message_handler(commands=['molive_vanbao'])
+def molive_vanbao(message):
+    main_molive_vanbao(message)
+
+########################## BẮT ĐẦU CÁC CHỨC NĂNG CHECK LIVE ###############################        
 
 # CHỨC NĂNG CHECK LIVE MEME LỎ
 @bot.message_handler(commands=['checklive_memelo'])
 def checklive_meme_lo(message):
     main_checklive_memelo(message)
 
-# CHỨC NĂNG TẮT LIVE
+# CHỨC NĂNG CHECK LIVE VĂN BẢO
+@bot.message_handler(commands=['checklive_vanbao'])
+def checklive_vanbao(message):
+    main_checklive_vanbao(message)
+
+# CHỨC NĂNG CHECK LIVE NICK PHU LBH
+@bot.message_handler(commands=['checklive_nickphulbh'])
+def checklive_nickphulbh(message):
+    main_checklive_nickphulbh(message)    
+
+############################## CHỨC NĂNG TẮT LIVE #######################################
 @bot.message_handler(commands=['tatlive'])
 def tatlive(message):
     main_tatlive(message)

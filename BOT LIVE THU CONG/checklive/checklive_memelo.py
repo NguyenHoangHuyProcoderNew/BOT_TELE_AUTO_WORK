@@ -43,7 +43,6 @@ user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 # THÔNG TIN TÀI KHOẢN LIVE
 ten_tai_khoan = "MEME LỎ"
 id_tiktok = "meme.l810"
-select_account = "#tiktok_account > option:nth-child(5)"
 
 # LINK NGUỒN CHO PHIÊN LIVE 
 from nguonlive.linknguon import linknguon
@@ -54,7 +53,7 @@ init()
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_checklive_memelo(message):
 
-    print(f"\n============= CHECK LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok}=============")
+    print(f"\n============= CHECK LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
      # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
