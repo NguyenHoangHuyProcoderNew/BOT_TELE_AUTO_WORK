@@ -207,4 +207,55 @@ def main_molive_memelo(message):
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
         dylib.print_yellow_and_send_message(user_id, "Mở livestream thành công")
     except TimeoutError:
-          
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_red_and_send_message(user_id, "Mở livestream không thành công")
+        
+        # ĐÓNG CHROME
+        driver.quit()
+
+        # KẾT THÚC TIẾN TRÌNH
+        return
+    
+    # IN RA MÀN HÌNH
+    dylib.print_yellow("Tiến hành kiểm tra khi nào phiên live được mở")
+
+    # KIỂM TRA XEM PHIÊN LIVE ĐƯỢC MỞ HAY CHƯA
+    try:
+        # MỞ PHIÊN LIVE
+        driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
+
+        # ĐỢI PHIÊN LIVE LOAD XONG
+        WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[1]/div/div[1]/a')))
+
+        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
+        dylib.print_green_and_send_message(message, "Khi nào phiên live được diễn ra tôi sẽ thông báo cho bạn")
+        
+        # KIỂM TRA SỐ LƯỢNG NGƯỜI XEM ĐỂ XÁC ĐỊNH PHIÊN LIVE ĐƯỢC MỞ HAY CHƯA
+        while True:
+            # CHỜ WEB LOAD XONG SAU KHI LÀM MỚI Ở PHẦN EXCEPT BÊN DƯỚI
+            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[1]/div/div[1]/a')))
+            now = datetime.datetime.now()
+            try:
+                # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM CHUYỂN THÀNH VĂN BẢN 
+                # VÀ KIỂM TRA DỮ LIỆU BẰNG ĐIỀU KIỆN IF
+                element = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
+                view = element.text
+
+                # NẾU SỐ LƯỢNG NGƯỜI XEM TỪ 0 TRỞ LÊN => PHIÊN LIVE ĐÃ ĐƯỢC MỞ
+                if int(view) >= 0:
+                    dylib.print_yellow_and_send_message(message, f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
+                    driver.quit()
+                    break
+            # NẾU CHƯA ĐƯỢC DIỄN RA THÌ TIẾP TỤC KIỂM TRA            
+            except:
+                dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa được diễn ra => TIẾP TỤC KIỂM TRA...")
+                driver.refresh()
+    except:
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_red_and_send_message(message, "Kiểm tra thất bại")
+
+        # ĐÓNG CHROME
+        driver.quit()
+
+        # KẾT THÚC TIẾN TRÌNH
+        return
