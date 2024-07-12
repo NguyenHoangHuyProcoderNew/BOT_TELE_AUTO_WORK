@@ -28,6 +28,9 @@ chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 # IMPORT CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ
 from molive.molive_memelo import main_molive_memelo
 
+# IMPORT CHỨC NĂNG TẮT LIVE
+from tatlive.tatlive import main_tatlive
+
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
 
@@ -35,6 +38,11 @@ print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | ===========
 @bot.message_handler(commands=['molive_memelo'])
 def molive_memelo(message):
     main_molive_memelo(message)
+
+# CHỨC NĂNG TẮT LIVE
+@bot.message_handler(commands=['tatlive'])
+def tatlive(message):
+    main_tatlive(message)
 
 ########################################################
 ####################### CHẠY BOT #######################
