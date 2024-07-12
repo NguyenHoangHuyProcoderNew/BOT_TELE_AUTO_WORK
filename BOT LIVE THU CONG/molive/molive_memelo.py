@@ -14,12 +14,13 @@ import telebot
 import sys
 import pyperclip
 from selenium.common.exceptions import NoSuchElementException
-# CẤU HÌNH LOGGING
 logging.basicConfig(level=logging.CRITICAL)  # Chỉ in thông báo lỗi nghiêm trọng
 import datetime
 now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
-from nguonlive.linknguon import linknguon
+from colorama import Fore, Style, init
+
+# NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
 from dylib import dylib
 
 # CẤU HÌNH WEBDRIVER
@@ -44,7 +45,8 @@ ten_tai_khoan = "MEME LỎ"
 id_tiktok = "meme.l810"
 select_account = "#tiktok_account > option:nth-child(5)"
 
-from colorama import Fore, Style, init
+# LINK NGUỒN CHO PHIÊN LIVE 
+from nguonlive.linknguon import linknguon
 
 # Khởi tạo colorama
 init()
@@ -139,23 +141,17 @@ def main_molive_memelo(message):
     # CHỌN TÀI KHOẢN LIVE
     driver.find_element(By.CSS_SELECTOR, f"{select_account}").click()
 
-    sleep(1)
-
     # IN RA MÀN HÌNH
     dylib.print_green("Nhập tiêu đề live")
 
     # NHẬP TIÊU ĐỀ LIVE
     driver.find_element(By.ID, "title").send_keys('kéo rank Liên Quân')
 
-    sleep(1)
-
     # IN RA MÀN HÌNH
     dylib.print_green("Chọn chủ đề live")
 
     # CHỌN CHỦ ĐỀ LIVE
     driver.find_element(By.CSS_SELECTOR, "#topic > option:nth-child(11)").click()
-
-    sleep(1)
 
     # IN RA MÀN HÌNH
     dylib.print_green("Chọn kiểu live Mobile")
@@ -165,4 +161,50 @@ def main_molive_memelo(message):
 
     # IN RA MÀN HÌNH
     dylib.print_green("Nhập link nguồn cho phiên live")
-    
+
+    # NHẬP LINK NGUỒN
+    driver.find_element(By.ID, "url_source").send_keys(linknguon)
+
+    # IN RA MÀN HÌNH
+    dylib.print_yellow("Lưu cấu hình")
+
+    # KIỂM TRA XEM CẤU HÌNH CÓ ĐƯỢC LƯU THÀNH CÔNG HAY KHÔNG
+    try:
+        # IN RA MÀN HÌNH
+        dylib.print_green("Click vào nút lưu cấu hình")
+
+        # CLICK VÀO NÚT LƯU CẤU HÌNH
+        driver.find_element(By.CSS_SELECTOR, "#formLive > button").click()
+
+        # CHO LOAD LẠI TRANG WEB
+        driver.refresh()
+
+        # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
+        # SAU KHI TRANG WEB LOAD XONG THÌ => CẤU HÌNH ĐÃ ĐƯỢC LƯU LẠI
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[1]')))
+
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_yellow_and_send_message(user_id, "Tạo cấu hình mới thành công")
+    except TimeoutError:
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_red_and_send_message(user_id, "Tạo cấu hình mới thất bại")
+
+    sleep(1)
+
+    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    dylib.print_yellow_and_send_message(user_id, "Tiến hành mở phiên live")
+
+    # MỞ LIVE
+    try:
+        dylib.print_green("Click vào nút mở live")
+
+        # CLICK VÀO NÚT MỞ LIVE
+        driver.find_element(By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']").click()
+
+        # ĐỢI THÔNG BÁO THÀNH CÔNG XUẤT HIỆN
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#table-live > tbody > tr > td:nth-child(10) > span')))
+
+        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_yellow_and_send_message(user_id, "Mở livestream thành công")
+    except TimeoutError:
+          
