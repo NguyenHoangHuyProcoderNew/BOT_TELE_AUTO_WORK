@@ -42,7 +42,7 @@ user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 
 # THÔNG TIN TÀI KHOẢN LIVE
 ten_tai_khoan = "MEME LỎ"
-id_tiktok = "meme.l810"
+id_tiktok = "vanbao165201"
 select_account = "#tiktok_account > option:nth-child(5)"
 
 # LINK NGUỒN CHO PHIÊN LIVE 
@@ -61,39 +61,36 @@ def main_test(message):
 
     # IN RA MÀN HÌNH
     dylib.print_yellow("Truy cập phiên livestream")
-    # MỞ PHIÊN LIVE
-    driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')    
+   
 
     # KIỂM TRA XEM PHIÊN LIVE ĐƯỢC MỞ HAY CHƯA
     try:
+        # MỞ PHIÊN LIVE
+        driver.get(f'https://www.tiktok.com/@{id_tiktok}/live') 
+
         # ĐỢI PHIÊN LIVE LOAD XONG
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#tiktok-live-main-container-id > div.css-1nhxvas-DivHeaderContainer.e10win0d0 > div > div.css-oteyea-DivLeftContainer.e7nz4yf0 > a')))
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#tiktok-live-main-container-id > div.css-iozudi-DivHeaderContainer.e10win0d0 > div > div.css-oteyea-DivLeftContainer.e7nz4yf0 > a > svg')))
 
         # IN RA MÀN HÌNH
-        dylib.print_green("Truy cập phiên livestream thành công")
+        dylib.print_red("Truy cập phiên livestream thành công")
 
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow(user_id, "Khi nào phiên live được diễn ra tôi sẽ thông báo cho bạn")
+        dylib.print_green_and_send_message(user_id, "Tiến hành kiểm tra thời điểm phiên live được mở")
         
         # KIỂM TRA SỐ LƯỢNG NGƯỜI XEM ĐỂ XÁC ĐỊNH PHIÊN LIVE ĐƯỢC MỞ HAY CHƯA
         while True:
-            # CHỜ WEB LOAD XONG SAU KHI LÀM MỚI Ở PHẦN EXCEPT BÊN DƯỚI
-            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#tiktok-live-main-container-id > div.css-1nhxvas-DivHeaderContainer.e10win0d0 > div > div.css-oteyea-DivLeftContainer.e7nz4yf0 > a')))
-
-            # IN RA MÀN HÌNH
-            dylib.print_green("Làm mới lại phiên livestream thành công")
+            # CHỜ WEB LOAD XONG SAU KHI REFESH LẠI TRANG
+            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#tiktok-live-main-container-id > div.css-iozudi-DivHeaderContainer.e10win0d0 > div > div.css-oteyea-DivLeftContainer.e7nz4yf0 > a > svg')))
 
             # CHỜ PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM XUẤT HIỆN
-            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
-            now = datetime.datetime.now()
+            WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
 
-            # IN RA MÀN HÌNH
-            dylib.print_red("Phần tử chứa số lượng người xem đã xuất hiện => TIẾN HÀNH KIỂM TRA")
+            now = datetime.datetime.now()
 
             try:
                 # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM CHUYỂN THÀNH VĂN BẢN 
                 # VÀ KIỂM TRA DỮ LIỆU BẰNG ĐIỀU KIỆN IF
-                element = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
+                element = driver.find_element(By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div")
                 view = element.text
 
                 # NẾU SỐ LƯỢNG NGƯỜI XEM TỪ 0 TRỞ LÊN => PHIÊN LIVE ĐÃ ĐƯỢC MỞ
@@ -103,7 +100,8 @@ def main_test(message):
                     break
             # NẾU CHƯA ĐƯỢC DIỄN RA THÌ TIẾP TỤC KIỂM TRA            
             except NoSuchElementException:
-                dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa được diễn ra => TIẾP TỤC KIỂM TRA...")
+                # IN RA MÀN HÌNH
+                dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa được diễn ra => Tiếp tục kiểm tra")
                 driver.refresh()
     except TimeoutError:
         # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
