@@ -41,74 +41,76 @@ bot = telebot.TeleBot(API_TOKEN)
 user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 
 # THÔNG TIN TÀI KHOẢN LIVE
-ten_tai_khoan = "MEME LỎ"
-id_tiktok = "vanbao165201"
-select_account = "#tiktok_account > option:nth-child(5)"
+ten_tai_khoan = "NICK PHU LBH"
+id_tiktok = "nammapsang_keorank"
 
 # LINK NGUỒN CHO PHIÊN LIVE 
 from nguonlive.linknguon import linknguon
 
-# Khởi tạo colorama
-init()
-
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_test(message):
-
-    
 
      # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
 
     # IN RA MÀN HÌNH
-    dylib.print_yellow("Truy cập phiên livestream")
-   
+    dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
 
-    # KIỂM TRA XEM PHIÊN LIVE ĐƯỢC MỞ HAY CHƯA
+    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    dylib.print_red_and_send_message(user_id, f"Tiến hành kiểm tra phiên livestream tài khoản {ten_tai_khoan}")
+
+    sleep(1) # CHỜ 1 GIÂY
+
+    # IN RA MÀN HÌNH
+    dylib.print_yellow("Truy cập phiên livestream")
+
+    # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
     try:
         # MỞ PHIÊN LIVE
-        driver.get(f'https://www.tiktok.com/@{id_tiktok}/live') 
+        driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
-        # ĐỢI PHIÊN LIVE LOAD XONG
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#tiktok-live-main-container-id > div.css-iozudi-DivHeaderContainer.e10win0d0 > div > div.css-oteyea-DivLeftContainer.e7nz4yf0 > a > svg')))
-
-        # IN RA MÀN HÌNH
-        dylib.print_red("Truy cập phiên livestream thành công")
+        # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_green_and_send_message(user_id, "Tiến hành kiểm tra thời điểm phiên live được mở")
-        
-        # KIỂM TRA SỐ LƯỢNG NGƯỜI XEM ĐỂ XÁC ĐỊNH PHIÊN LIVE ĐƯỢC MỞ HAY CHƯA
-        while True:
-            # CHỜ WEB LOAD XONG SAU KHI REFESH LẠI TRANG
-            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#tiktok-live-main-container-id > div.css-iozudi-DivHeaderContainer.e10win0d0 > div > div.css-oteyea-DivLeftContainer.e7nz4yf0 > a > svg')))
-
-            # CHỜ PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM XUẤT HIỆN
-            WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
-
-            now = datetime.datetime.now()
-
-            try:
-                # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM CHUYỂN THÀNH VĂN BẢN 
-                # VÀ KIỂM TRA DỮ LIỆU BẰNG ĐIỀU KIỆN IF
-                element = driver.find_element(By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div")
-                view = element.text
-
-                # NẾU SỐ LƯỢNG NGƯỜI XEM TỪ 0 TRỞ LÊN => PHIÊN LIVE ĐÃ ĐƯỢC MỞ
-                if int(view) >= 0:
-                    dylib.print_yellow_and_send_message(user_id, f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
-                    driver.quit()
-                    break
-            # NẾU CHƯA ĐƯỢC DIỄN RA THÌ TIẾP TỤC KIỂM TRA            
-            except NoSuchElementException:
-                # IN RA MÀN HÌNH
-                dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa được diễn ra => Tiếp tục kiểm tra")
-                driver.refresh()
-    except TimeoutError:
-        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Kiểm tra thất bại")
+        dylib.print_yellow_and_send_message(user_id, "Khi nào phiên live được diễn ra tôi sẽ thông báo cho bạn")
+    except TimeoutException:
+        # IN RA MÀN HÌNH
+        dylib.print_red_and_send_message(user_id, "Sảy ra sự cố khi truy cập phiên live, vui lòng kiểm tra lại kết nối internet")
 
         # ĐÓNG CHROME
         driver.quit()
 
         # KẾT THÚC TIẾN TRÌNH
         return
+    
+    while True:
+        now = datetime.datetime.now()
+        try:
+            # KIỂM TRA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
+
+            # SỬ DỤNG WebDriverWait, NẾU TRONG 1 GIÂY MÀ PHẦN TỬ XUẤT HIỆN THÌ PHIÊN LIVE ĐÃ ĐƯỢC MỞ
+            checkview = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div"))
+            )
+            dylib.print_red_and_send_message(user_id, f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            
+            # ĐÓNG TRÌNH DUYỆT CHROME
+            driver.quit()
+
+            # KẾT THÚC TIẾN TRÌNH
+            return
+        except TimeoutException:
+            # IN RA MÀN HÌNH
+            dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa dược diễn ra => TIẾP TỤC KIỂM TRA")
+
+            # LÀM MỚI LẠI PHIÊN LIVE
+            driver.refresh()
+
+            # KIỂM TRA XEM PHIÊN LIVE CÓ ĐƯỢC LÀM MỚI THÀNH CÔNG HAY KHÔNG SAU KHI LÀM MỚI
+            try:
+                WebDriverWait(driver, 100).until(
+                    EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/main/div[3]/div/div[1]/a"))
+                )
+            except TimeoutException:
+                dylib.print_red_and_send_message(user_id, "Có lỗi sảy ra khi kiểm tra phiên live, vui lòng kiểm tra lại kết nối internet")
