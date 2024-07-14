@@ -23,7 +23,7 @@ from selenium.common.exceptions import TimeoutException
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+chat_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 
 # IMPORT CHỨC NĂNG MỞ LIVE
 
@@ -91,6 +91,12 @@ def checklive_nickphulbh(message):
 @bot.message_handler(commands=['tatlive'])
 def tatlive(message):
     main_tatlive(message)
+
+########################  TEST CHỨC NĂNG MỚI ####################
+from thunghiem.test import main_test
+@bot.message_handler(commands=['test'])
+def test(message):
+    main_test(message)
 
 ########################################################
 ####################### CHẠY BOT #######################

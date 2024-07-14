@@ -23,7 +23,7 @@ from selenium.common.exceptions import TimeoutException
 API_TOKEN = '6555297922:AAF7DFvu9c-gi10-wBtwa_3jKa3TeyInNQ8'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+chat_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 
 # IMPORT CÁC CHỨC NĂNG TẠO KEY IOS
 

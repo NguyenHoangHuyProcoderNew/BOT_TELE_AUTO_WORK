@@ -36,7 +36,7 @@ service = Service(chromedriver_path)
 service_log_path = os.path.devnull
 service = Service(chromedriver_path, service_log_path=service_log_path)
 
-# user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+# user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 
 # HÀM ĐẾM NGƯỢC SỐ PHÚT
 def countdown(minutes):

@@ -38,7 +38,7 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 
 # THÔNG TIN TÀI KHOẢN LIVE
 ten_tai_khoan = "VĂN BẢO"
