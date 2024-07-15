@@ -78,7 +78,7 @@ def main_checklive_nickphulbh(message):
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Truy cập phiên livestream thành công, tiến hành kiểm tra\nKhi nào phiên live dưới 5 người xem tôi sẽ thông báo cho bạn")
+        dylib.print_yellow_and_send_message(user_id, "Truy cập phiên live thành công, khi nào dưới 5 người xem sẽ tự động tắt live")
     except TimeoutException:
         # IN RA MÀN HÌNH
         dylib.print_red_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")
@@ -147,7 +147,7 @@ def main_checklive_nickphulbh(message):
                 WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
                 # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-                dylib.print_yellow_and_send_message(user_id, "Truy cập phiên livestream thành công, tiến hành kiểm tra\nKhi nào phiên live dưới 5 người xem tôi sẽ thông báo cho bạn")
+                dylib.print_yellow_and_send_message(user_id, "Truy cập phiên live thành công, khi nào dưới 5 người xem sẽ tự động tắt live")
             except TimeoutException:
                 # IN RA MÀN HÌNH
                 dylib.print_red_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")

@@ -76,16 +76,19 @@ def molive_vanbao(message):
 @bot.message_handler(commands=['checklive_memelo'])
 def checklive_meme_lo(message):
     main_checklive_memelo(message)
+    main_tatlive(message)
 
 # CHỨC NĂNG CHECK LIVE VĂN BẢO
 @bot.message_handler(commands=['checklive_vanbao'])
 def checklive_vanbao(message):
     main_checklive_vanbao(message)
+    main_tatlive(message)
 
 # CHỨC NĂNG CHECK LIVE NICK PHU LBH
 @bot.message_handler(commands=['checklive_nickphulbh'])
 def checklive_nickphulbh(message):
-    main_checklive_nickphulbh(message)    
+    main_checklive_nickphulbh(message)
+    main_tatlive(message)    
 
 ############################## CHỨC NĂNG TẮT LIVE #######################################
 @bot.message_handler(commands=['tatlive'])
