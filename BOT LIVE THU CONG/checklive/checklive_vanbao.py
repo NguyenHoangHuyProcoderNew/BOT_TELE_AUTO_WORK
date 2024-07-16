@@ -53,7 +53,7 @@ init()
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_checklive_vanbao(message):
 
-    print(f"\n============= CHECK LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
+    print(f"\n============= KIỂM TRA PHIÊN LIVE CỦA TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
      # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
@@ -63,8 +63,6 @@ def main_checklive_vanbao(message):
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.print_red_and_send_message(user_id, f"Tiến hành kiểm tra phiên livestream tài khoản {ten_tai_khoan}")
-
-    sleep(1) # CHỜ 1 GIÂY
 
     # IN RA MÀN HÌNH
     dylib.print_yellow("Truy cập phiên livestream")
@@ -89,110 +87,69 @@ def main_checklive_vanbao(message):
         # KẾT THÚC TIẾN TRÌNH
         return
     
-    # KIỂM TRA SỐ LƯỢNG NGƯỜI XEM CỦA PHIÊN LIVE
+    # KIỂM TRA PHIÊN LIVE
     while True:
-        # KIỂM TRA LẦN 1
+        now = datetime.datetime.now()
+
         try:
-            # ĐỢI WEB LIVE LOAD XONG
-            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
+            # KIỂM TRA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
 
-            now = datetime.datetime.now()
-            
-            # ĐỢI PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM LIVE XUẤT HIỆN
-            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
+            # CHECK DỮ LIỆU CỦA BIẾN CHỨA SỐ LƯỢNG NGƯỜI XEM
+            checkview = WebDriverWait(driver, 1000).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div"))
+            )
 
-            # CHECK DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
-            checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
-
-            # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
+            # CHUYỂN DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM THÀNH VĂN BẢN
             view = checkview.text
 
-            # NẾU PHIÊN LIVE TRÊN 5 NGƯỜI XEM THÌ TIẾP TỤC KIỂM TRA
+            # ĐIỀU KIỆN KIỂM TRA NHƯ SAU:
+            # NẾU DỮ LIỆU CỦA BIẾN view TRÊN 5 THÌ SẼ ĐÓNG CHROME TRƯỚC, RỒI MỞ LẠI, SAU ĐÓ TRUY CẬP PHIÊN LIVE VÀ TIẾP TỤC KIỂM TRA
             if int(view) > 5:
-                dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại có {view} người xem => TIẾP TỤC KIỂM TRA...")
-                driver.refresh()
-            else:
-                # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-                dylib.print_yellow_and_send_message(message, f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại đang có {view} người xem => Tiến hành tắt live")
-                # ĐÓNG CHROME
-                driver.quit()
-                # KẾT THÚC TIẾN TRÌNH
-                return
-        except TimeoutException:
-            # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-            dylib.print_red_and_send_message(user_id, "Kiểm tra phiên live lần 1 hoàn tất")
-            # ĐÓNG CHROME
-            driver.quit()
+                # GỬI TIN NHẮN VỀ CHO NGƯỜI DÙNG
+                dylib.print_green(f"Phiên live vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')} có {view} người xem => TIẾP TỤC KIỂM TRA")
 
-            # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-            dylib.print_yellow_and_send_message(user_id, "Tiến hành kiểm tra lần 2")
-
-########################### KIỂM TRA LẦN 2 ############################
-
-            # KHỞI TẠO WEB DRIVER
-            driver = webdriver.Chrome(service=service, options=options)
-
-            # IN RA MÀN HÌNH
-            dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
-
-            # IN RA MÀN HÌNH
-            dylib.print_yellow("Truy cập phiên livestream")
-
-            # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
-            try:
-                # MỞ PHIÊN LIVE
-                driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
-
-                # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
-                WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
-
-                # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-                dylib.print_yellow_and_send_message(user_id, "Truy cập phiên live thành công, khi nào dưới 5 người xem sẽ tự động tắt live")
-            except TimeoutException:
                 # IN RA MÀN HÌNH
-                dylib.print_red_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")
-
+                dylib.print_green("Đóng trình duyệt")
                 # ĐÓNG CHROME
                 driver.quit()
 
-                # KẾT THÚC TIẾN TRÌNH
-                return
-                        
-            while True:
-                # KIỂM TRA LẦN 2
+                # IN RA MÀN HÌNH
+                dylib.print_green("Khởi tạo lại driver mới")
+                # KHỞI TẠO LẠI DRIVER MỚI
+                driver = webdriver.Chrome(service=service, options=options)
+
+                # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
                 try:
-                    # ĐỢI WEB LIVE LOAD XONG
+                    # IN RA MÀN HÌNH
+                    dylib.print_green("Truy cập vào phiên live")
+
+                    # MỞ PHIÊN LIVE
+                    driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
+
+                    # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
                     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
-                    now = datetime.datetime.now()
-                    
-                    # ĐỢI PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM LIVE XUẤT HIỆN
-                    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
-
-                    # CHECK DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
-                    checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
-
-                    # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
-                    view = checkview.text
-
-                    # NẾU PHIÊN LIVE TRÊN 5 NGƯỜI XEM THÌ TIẾP TỤC KIỂM TRA
-                    if int(view) > 5:
-                        dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại có {view} người xem => TIẾP TỤC KIỂM TRA...")
-                        driver.refresh()
-                    else:
-                        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-                        dylib.print_yellow_and_send_message(message, f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại đang có {view} người xem => Tiến hành tắt live")
-                        # ĐÓNG CHROME
-                        driver.quit()
-                        # KẾT THÚC TIẾN TRÌNH
-                        return
-                # KẾT THÚC KIỂM TRA LẦN 2                    
+                    # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
+                    dylib.print_green("Truy cập phiên live thành công => tiến hành kiểm tra")
                 except TimeoutException:
                     # IN RA MÀN HÌNH
-                    dylib.print_red_and_send_message(user_id, "Kiểm tra lần 2 hoàn tất")
+                    dylib.print_green_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")
 
                     # ĐÓNG CHROME
                     driver.quit()
 
                     # KẾT THÚC TIẾN TRÌNH
-                    return                    
+                    return    
+            else:
+                # GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH
+                dylib.print_yellow_and_send_message(user_id, f"Phiên live vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')} có {view} người xem => TIẾN HÀNH TẮT LIVE")
+            
+        except TimeoutException:
+            # IN RA MÀN HÌNH
+            dylib.print_yellow_and_send_message(user_id, "Có lỗi sảy ra khi kiểm tra phiên live, vui lòng kiểm tra lại kết nối internet")
+            
+            # ĐÓNG CHROME
+            driver.quit()
+
+            # KẾT THÚC TIẾN TRÌNH
+            return

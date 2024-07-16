@@ -56,7 +56,7 @@ from nguonlive.linknguon import linknguon
 init()
 
 ############################ CHỨC NĂNG CHÍNH ##########################
-def main_test(message):
+def main_checklive_memelo(message):
 
     print(f"\n============= KIỂM TRA PHIÊN LIVE CỦA TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
