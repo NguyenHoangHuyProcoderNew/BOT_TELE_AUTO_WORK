@@ -260,7 +260,7 @@ def main_molive_memelo(message):
             return
         except TimeoutException:
             # IN RA MÀN HÌNH
-            dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa dược diễn ra => TIẾP TỤC KIỂM TRA")
+            dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa dược diễn ra => TIẾP TỤC fKIỂM TRA")
 
             # LÀM MỚI LẠI PHIÊN LIVE
             driver.refresh()
