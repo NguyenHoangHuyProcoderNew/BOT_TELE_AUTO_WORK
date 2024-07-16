@@ -43,7 +43,7 @@ user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 # THÔNG TIN TÀI KHOẢN LIVE
 ten_tai_khoan = "VĂN BẢO"
 id_tiktok = "vanbao165201"
-select_account = "#tiktok_account > option:nth-child(3)"
+select_account = "#tiktok_account > option:nth-child(4)"
 
 # LINK NGUỒN CHO PHIÊN LIVE 
 from nguonlive.linknguon import linknguon
@@ -56,6 +56,9 @@ def main_molive_vanbao(message):
 
     print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
+    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    dylib.bot_reply(user_id, f"Tiến hành mở livestream tài khoản {ten_tai_khoan}")
+
      # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -63,12 +66,7 @@ def main_molive_vanbao(message):
     dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_yellow_and_send_message(user_id, f"Tiến hành mở livestream tài khoản {ten_tai_khoan}")
-
-    sleep(1) # CHỜ 1 GIÂY
-
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_green("Mở website livestream")
+    dylib.print_green_and_send_message(user_id,"Truy cập website livestream")
 
     # MỞ WEB LIVESTREAM
     driver.get('https://autolive.me/tiktok')
@@ -76,7 +74,7 @@ def main_molive_vanbao(message):
     # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
         # IN RA MÀN HÌNH
-        dylib.print_green("Đang load website")
+        dylib.print_green_and_send_message(user_id, "Đang load website...")
 
         # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
         # SAU KHI PHẦN TỬ XUẤT HIỆN => KẾT LUẬN WEB ĐÃ LOAD XONG
@@ -95,7 +93,7 @@ def main_molive_vanbao(message):
         return
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_yellow_and_send_message(user_id, "Tiến hành xóa cấu hình cũ")
+    dylib.print_yellow_and_send_message(user_id, "Xóa cấu hình hiện tại")
 
     # XÓA CẤU HÌNH CŨ
     try:
@@ -125,9 +123,11 @@ def main_molive_vanbao(message):
 
             # DỪNG TIẾN TRÌNH
             return
-    except:
+        else:
+            dylib.print_green_and_send_message(user_id, "Xóa cấu hình thành công")
+    except NoSuchElementException:
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Xóa cấu hình thành công")
+        dylib.print_yellow_and_send_message(user_id, "Hiện tại không có cấu hình nào")
 
     # CHỜ 1 GIÂY
     sleep(1)
@@ -166,7 +166,7 @@ def main_molive_vanbao(message):
     driver.find_element(By.ID, "url_source").send_keys(linknguon)
 
     # IN RA MÀN HÌNH
-    dylib.print_yellow("Lưu cấu hình")
+    dylib.print_green("Lưu cấu hình")
 
     # KIỂM TRA XEM CẤU HÌNH CÓ ĐƯỢC LƯU THÀNH CÔNG HAY KHÔNG
     try:
@@ -217,7 +217,7 @@ def main_molive_vanbao(message):
         return
     
     # IN RA MÀN HÌNH
-    dylib.print_yellow("Tiến hành kiểm tra khi nào phiên live được mở")
+    dylib.print_green_and_send_message(user_id, "Truy cập vào phiên live để kiểm tra xem khi nào phiên live được mở")
 
     # KIỂM TRA XEM PHIÊN LIVE ĐƯỢC MỞ HAY CHƯA
     try:
@@ -231,7 +231,7 @@ def main_molive_vanbao(message):
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Khi nào phiên live được diễn ra tôi sẽ thông báo cho bạn")
+        dylib.print_yellow_and_send_message(user_id, "Truy cập phiên live thành công, khi nào phiên live được diễn ra tôi sẽ thông báo cho bạn")
     except TimeoutException:
         # IN RA MÀN HÌNH
         dylib.print_red_and_send_message(user_id, "Sảy ra sự cố khi truy cập phiên live, vui lòng kiểm tra lại kết nối internet")
