@@ -53,17 +53,17 @@ init()
 
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_molive_nickphulbh(message):
+    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    dylib.bot_reply(user_id, "THỰC THI LỆNH THÀNH CÔNG")
 
+    # IN RA MÀN HÌNH
     print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
-    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.bot_reply(user_id, f"Tiến hành mở livestream tài khoản {ten_tai_khoan}")
-
-     # KHỞI TẠO WEB DRIVER
+    # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
 
     # IN RA MÀN HÌNH
-    dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
+    dylib.print_red("KHỞI TẠO WEB DRIVER\n")
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.print_green_and_send_message(user_id,"Truy cập website livestream")
@@ -84,7 +84,7 @@ def main_molive_nickphulbh(message):
         dylib.print_yellow_and_send_message(user_id, "Truy cập website livestream thành công")
     except TimeoutError:
         # IN VÀ GỬI TIN NHẮN
-        dylib.print_red_and_send_message(user_id, "Truy cập website livestream thất bại")
+        dylib.print_green_and_send_message(user_id, "Truy cập website livestream thất bại")
 
         # ĐÓNG CHROME
         driver.quit()
@@ -93,7 +93,7 @@ def main_molive_nickphulbh(message):
         return
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_yellow_and_send_message(user_id, "Xóa cấu hình hiện tại")
+    dylib.print_red_and_send_message(user_id, "Xóa cấu hình hiện tại")
 
     # XÓA CẤU HÌNH CŨ
     try:
@@ -102,6 +102,9 @@ def main_molive_nickphulbh(message):
 
         # CLICK VÀO NÚT XÓA CẤU HÌNH
         driver.find_element(By.XPATH, '//button[@class="btn btn-circle btn-dark btn-sm waves-effect waves-light btn-status-live" and @data-status="-1" and @data-toggle="tooltip"]').click()
+
+        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_green_and_send_message(user_id, "Đang đợi cấu hình được xóa...")
 
         # ĐỢI THÔNG BÁO XÓA CẤU HÌNH THÀNH CÔNG XUẤT HIỆN
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
@@ -116,7 +119,7 @@ def main_molive_nickphulbh(message):
 
         # KIỂM TRA DỮ LIỆU
         if data_xoacauhinh == "Bạn phải dừng luồng live trước khi xóa":
-            dylib.print_red_and_send_message(user_id, "Không thể xóa cấu hình vì có 1 luồng live đang được chạy, vui lòng dừng live bằng lệnh /tatlive rồi thử lại sau")
+            dylib.print_yellow_and_send_message(user_id, "Không thể xóa cấu hình vì có 1 luồng live đang được chạy, vui lòng dừng live bằng lệnh /tatlive rồi thử lại sau")
 
             # ĐÓNG CHROME
             driver.quit()
@@ -124,16 +127,16 @@ def main_molive_nickphulbh(message):
             # DỪNG TIẾN TRÌNH
             return
         else:
-            dylib.print_green_and_send_message(user_id, "Xóa cấu hình thành công")
+            dylib.print_yellow_and_send_message(user_id, "Xóa cấu hình thành công")
     except NoSuchElementException:
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Hiện tại không có cấu hình nào")
+        dylib.print_yellow_and_send_message(user_id, "Hiện tại không có cấu hình")
 
     # CHỜ 1 GIÂY
     sleep(1)
 
     # IN VÀ GỬI TIN NHẮN
-    dylib.print_yellow_and_send_message(user_id, "Tạo cấu hình mới")
+    dylib.print_red_and_send_message(user_id, "Tạo cấu hình mới")
 
     # IN RA MÀN HÌNH
     dylib.print_green("Chọn tài khoản")
@@ -192,7 +195,7 @@ def main_molive_nickphulbh(message):
     sleep(1)
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_yellow_and_send_message(user_id, "Tiến hành mở phiên live")
+    dylib.print_yellow_and_send_message(user_id, "Tiến hành mở live")
 
     # MỞ LIVE
     try:
@@ -205,10 +208,10 @@ def main_molive_nickphulbh(message):
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#table-live > tbody > tr > td:nth-child(10) > span')))
 
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_yellow_and_send_message(user_id, "Mở livestream thành công")
+        dylib.print_yellow_and_send_message(user_id, "Mở live thành công")
     except TimeoutError:
         # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Mở livestream không thành công")
+        dylib.print_red_and_send_message(user_id, "Mở live không thành công")
         
         # ĐÓNG CHROME
         driver.quit()
@@ -217,8 +220,7 @@ def main_molive_nickphulbh(message):
         return
     
     # IN RA MÀN HÌNH
-    dylib.print_green_and_send_message(user_id, "Truy cập vào phiên live để kiểm tra xem khi nào phiên live được mở")
-
+    dylib.print_red("Truy cập vào phiên live để kiểm tra khi nào phiên live được mở")
     # KIỂM TRA XEM PHIÊN LIVE ĐƯỢC MỞ HAY CHƯA
     try:
         # IN RA MÀN HÌNH
@@ -230,11 +232,14 @@ def main_molive_nickphulbh(message):
         # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Truy cập phiên live thành công, khi nào phiên live được diễn ra tôi sẽ thông báo cho bạn")
+        # GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.bot_reply(user_id, "Khi nào phiên live được diễn ra tôi sẽ thông báo cho bạn")
+
+        # IN RA MÀN HÌNH
+        dylib.print_yellow("Truy cập phiên live thành công, tiến hành kiểm tra")
     except TimeoutException:
         # IN RA MÀN HÌNH
-        dylib.print_red_and_send_message(user_id, "Sảy ra sự cố khi truy cập phiên live, vui lòng kiểm tra lại kết nối internet")
+        dylib.print_yellow_and_send_message(user_id, "Xảy ra sự cố khi truy cập phiên live, vui lòng kiểm tra lại kết nối internet")
 
         # ĐÓNG CHROME
         driver.quit()
@@ -242,6 +247,7 @@ def main_molive_nickphulbh(message):
         # KẾT THÚC TIẾN TRÌNH
         return
     
+    # HÀM KIỂM TRA PHIÊN LIVE
     while True:
         now = datetime.datetime.now()
         try:
@@ -251,7 +257,7 @@ def main_molive_nickphulbh(message):
             checkview = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div"))
             )
-            dylib.print_red_and_send_message(user_id, f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            dylib.print_yellow_and_send_message(user_id, f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
             
             # ĐÓNG TRÌNH DUYỆT CHROME
             driver.quit()
@@ -271,4 +277,10 @@ def main_molive_nickphulbh(message):
                     EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/main/div[3]/div/div[1]/a"))
                 )
             except TimeoutException:
-                dylib.print_red_and_send_message(user_id, "Có lỗi sảy ra khi kiểm tra phiên live, vui lòng kiểm tra lại kết nối internet")
+                # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+                dylib.print_yellow_and_send_message(user_id, "Có lỗi sảy ra khi kiểm tra phiên live, vui lòng kiểm tra lại kết nối internet")
+
+                # ĐÓNG CHROME
+                driver.quit()
+
+                return # KẾT THÚC TIẾN TRÌNH

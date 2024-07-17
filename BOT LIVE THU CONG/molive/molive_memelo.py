@@ -53,13 +53,13 @@ init()
 
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_molive_memelo(message):
+    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    dylib.bot_reply(user_id, f"Thực thi lệnh thành công")
 
+    # IN RA MÀN HÌNH
     print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
-    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.bot_reply(user_id, f"Tiến hành mở livestream tài khoản {ten_tai_khoan}")
-
-     # KHỞI TẠO WEB DRIVER
+    # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
 
     # IN RA MÀN HÌNH
