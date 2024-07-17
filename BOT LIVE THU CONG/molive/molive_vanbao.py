@@ -43,7 +43,7 @@ user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 # THÔNG TIN TÀI KHOẢN LIVE
 ten_tai_khoan = "VĂN BẢO"
 id_tiktok = "vanbao165201"
-select_account = "#tiktok_account > option:nth-child(4)"
+select_account = "#tiktok_account > option:nth-child(3)"
 
 # LINK NGUỒN CHO PHIÊN LIVE 
 from nguonlive.linknguon import linknguon
