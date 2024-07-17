@@ -40,28 +40,33 @@ bot = telebot.TeleBot(API_TOKEN)
 
 user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
 
-green_text = "TẮT LIVE TÀI KHOẢN"
+# THÔNG TIN TÀI KHOẢN LIVE
+ten_tai_khoan = "MEME LỎ"
+id_tiktok = "meme.l810"
+select_account = "#tiktok_account > option:nth-child(2)"
+
+# LINK NGUỒN CHO PHIÊN LIVE 
+from nguonlive.linknguon import linknguon
 
 # Khởi tạo colorama
 init()
 
 ############################ CHỨC NĂNG CHÍNH ##########################
-def main_tatlive(message):
-
+def main_molive_memelo(message):
     # GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.bot_reply(user_id, "THỰC THI LỆNH THÀNH CÔNG")
 
     # IN RA MÀN HÌNH
-    print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
+    print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
-     # KHỞI TẠO WEB DRIVER
+    # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
 
     # IN RA MÀN HÌNH
     dylib.print_red("KHỞI TẠO WEB DRIVER\n")
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_green("Mở website livestream")
+    dylib.print_green_and_send_message(user_id,"Truy cập website livestream")
 
     # MỞ WEB LIVESTREAM
     driver.get('https://autolive.me/tiktok')
@@ -69,17 +74,17 @@ def main_tatlive(message):
     # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
         # IN RA MÀN HÌNH
-        dylib.print_green("Đang load website...")
+        dylib.print_green_and_send_message(user_id, "Đang load website...")
 
         # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
         # SAU KHI PHẦN TỬ XUẤT HIỆN => KẾT LUẬN WEB ĐÃ LOAD XONG
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
 
         # IN VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Mở website livestream thành công")
+        dylib.print_yellow_and_send_message(user_id, "Truy cập website livestream thành công")
     except TimeoutError:
         # IN VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Mở website livestream thất bại")
+        dylib.print_green_and_send_message(user_id, "Truy cập website livestream thất bại")
 
         # ĐÓNG CHROME
         driver.quit()
@@ -87,45 +92,17 @@ def main_tatlive(message):
         # KẾT THÚC TIẾN TRÌNH
         return
 
-    #  IN RA MÀN HÌNH
-    dylib.print_yellow_and_send_message(user_id, "Tiến hành tắt live")
+    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    dylib.print_red_and_send_message(user_id, "TIẾN HÀNH ĐỔI IP")
 
-    # KIỂM TRA SỰ KIỆN TẮT LIVE
-    try:
-        # Kiểm tra giá trị data-original-title của button 
-        # (Nếu là Dừng live thì mới click)
-        button_tatlive = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-original-title='Dừng live']"))
-    )
-        if button_tatlive.get_attribute("data-original-title") == "Dừng live":
-            
-            # IN RA MÀN HÌNH
-            dylib.print_green("Click vào nút tắt live")
-            button_tatlive.click() # CLICK VÀO NÚT TẮT LIVE NẾU GIÁ TRỊ HỢP LỆ                                     
-    except:
-        dylib.print_red_and_send_message(user_id, "Hiện tại không có phiên live nào được mở")
-        driver.quit()
-        return
+    # IN RA MÀN HÌNH
+    dylib.print_red("Click vào nút Thêm TK bằng Web")
 
-    # KIỂM TRA SỰ KIỆN TẮT LIVE CÓ THÀNH CÔNG HAY KHÔNG
-    try:
-        # CHỜ DỢI THÔNG BÁO TẮT LIVE XUẤT HIỆN
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))) # ĐỢI THÔNG BÁO TẮT LIVE THÀNH CÔNG XUẤT HIỆN
+    # CHECK TÊN TÀI KHOẢN NICK PHU LBH
+    checkname_nickphulbh = driver.find_element(By.CSS_SELECTOR, "#table-tiktok-account > tbody > tr:nth-child(2) > td.text-left")
+    name_nickphulbh = checkname_nickphulbh.text
 
-        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_yellow_and_send_message(user_id, "Tắt live thành công")
+    # GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH
+    dylib.print_green_and_send_message(user_id, f"Đổi IP cho tài khoản {name_nickphulbh}")
 
-        # ĐÓNG CHROME
-        driver.quit()
-
-        # KẾT THÚC TIẾN TRÌNH
-        return
-    except TimeoutException:
-        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Tắt live không thành công")
-
-        # ĐÓNG CHROME
-        driver.quit()
-
-        # KẾT THÚC TIẾN TRÌNH
-        return
+    div > div.notifyjs-container > div > div.text-wrapper > div.text
