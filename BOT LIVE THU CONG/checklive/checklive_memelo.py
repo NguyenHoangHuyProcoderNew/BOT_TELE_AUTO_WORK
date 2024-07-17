@@ -115,33 +115,36 @@ def main_checklive_memelo(message):
                 dylib.print_green(f"Phiên live vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')} có {view} người xem => TIẾP TỤC KIỂM TRA")
 
                 # IN RA MÀN HÌNH
-                dylib.print_green("Đóng trình duyệt")
+                dylib.print_green("ĐÓNG TRÌNH DUYỆT")
 
                 # ĐÓNG CHROME
                 driver.quit()
 
-                # IN RA MÀN HÌNH
-                dylib.print_green("Khởi tạo lại driver mới")
-                
                 # KHỞI TẠO LẠI DRIVER MỚI
                 driver = webdriver.Chrome(service=service, options=options)
+
+                # IN RA MÀN HÌNH
+                dylib.print_red("KHỞI TẠO LẠI WEB DRIVER MỚI")
+
+                # TRUY CẬP LẠI PHIÊN LIVE
+                dylib.print_green("TRUY CẬP LẠI VÀO PHIÊN LIVE") ; driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
                 # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
                 try:
                     # IN RA MÀN HÌNH
-                    dylib.print_green("Truy cập vào phiên live")
-
-                    # MỞ PHIÊN LIVE
-                    driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
+                    dylib.print_green("Phiên live đang được load...")
 
                     # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
                     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
 
-                    # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-                    dylib.print_green("Truy cập phiên live thành công => tiến hành kiểm tra")
+                    # IN RA MÀN HÌNH
+                    dylib.print_green("Load phiên live thành công")
+
+                    # IN RA MÀN HÌNH
+                    dylib.print_green("Tiếp tục kiểm tra")
                 except TimeoutException:
                     # IN RA MÀN HÌNH
-                    dylib.print_green_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")
+                    dylib.print_green_and_send_message(user_id, "Trang web load không thành công, vui lòng kiểm tra lại kết nối internet của thiết bị")
 
                     # ĐÓNG CHROME
                     driver.quit()
@@ -151,7 +154,6 @@ def main_checklive_memelo(message):
             else:
                 # GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH
                 dylib.print_yellow_and_send_message(user_id, f"Phiên live vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')} có {view} người xem => TIẾN HÀNH TẮT LIVE")
-            
         except TimeoutException:
             # IN RA MÀN HÌNH
             dylib.print_yellow_and_send_message(user_id, "Có lỗi sảy ra khi kiểm tra phiên live, vui lòng kiểm tra lại kết nối internet")
