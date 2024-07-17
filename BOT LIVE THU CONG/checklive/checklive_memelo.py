@@ -58,35 +58,33 @@ init()
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_checklive_memelo(message):
 
-    
-
     print(f"\n============= KIỂM TRA PHIÊN LIVE CỦA TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
+
+    # Gửi tin nhắn cho người dùng
+    dylib.bot_reply(user_id, f"Tiến hành thực thi lệnh kiểm tra phiên live cho tài khoản {ten_tai_khoan} có ID tiktok: {id_tiktok}")
+
+    # Gửi tin nhắn cho người dùng
+    dylib.bot_reply(user_id, "Truy cập vào phiên live")
 
      # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
 
     # IN RA MÀN HÌNH
-    dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
+    dylib.print_red("KHỞI TẠO WEB DRIVER\n")
 
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_red_and_send_message(user_id, f"Tiến hành kiểm tra phiên livestream tài khoản {ten_tai_khoan}")
-
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Truy cập phiên livestream")
+    # MỞ PHIÊN LIVE
+    dylib.print_green(f"Mở phiên livestream với URL: https://www.tiktok.com/@{id_tiktok}/live") ; driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
     # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
     try:
-        # MỞ PHIÊN LIVE
-        driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
+        # ĐỢI LOAD WEBSITE
+        dylib.print_green_and_send_message(user_id, "Phiên live đang được load, vui lòng chờ...")
 
-        # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
+        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN, SAU KHI PHẦN TỬ XUẤT HIỆN THÌ => LOAD HOÀN TẤT
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a'))) ; dylib.print_green("Load trang web thành công => TIẾN HÀNH KIỂM TRA") ; dylib.bot_reply(user_id, "Trang web đã load xong") ; sleep(1) ; dylib.bot_reply(user_id, "Khi nào phiên live dưới 5 người xem tôi sẽ tự động tắt live")
 
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Truy cập phiên live thành công, khi nào dưới 5 người xem sẽ tự động tắt live")
     except TimeoutException:
-        # IN RA MÀN HÌNH
-        dylib.print_red_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")
+        dylib.print_yellow("Load website thất bại => KẾT THÚC TIẾN TRÌNH") ; dylib.bot_reply(user_id, "Trang web load không thành công, vui lòng kiểm tra lại kết nối internet của thiết bị")
 
         # ĐÓNG CHROME
         driver.quit()
@@ -96,11 +94,12 @@ def main_checklive_memelo(message):
     
     # KIỂM TRA PHIÊN LIVE
     while True:
-        now = datetime.datetime.now()
+        now = datetime.datetime.now() # HÀM LẤY NGÀY GIỜ HIỆN TẠI CỦA THIẾT BỊ
+
+        # IN RA MÀN HÌNH
+        dylib.print_green(f"Đang check dữ liệu của phiên live vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}...")
 
         try:
-            # KIỂM TRA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
-
             # CHECK DỮ LIỆU CỦA BIẾN CHỨA SỐ LƯỢNG NGƯỜI XEM
             checkview = WebDriverWait(driver, 1000).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div"))
@@ -117,11 +116,13 @@ def main_checklive_memelo(message):
 
                 # IN RA MÀN HÌNH
                 dylib.print_green("Đóng trình duyệt")
+
                 # ĐÓNG CHROME
                 driver.quit()
 
                 # IN RA MÀN HÌNH
                 dylib.print_green("Khởi tạo lại driver mới")
+                
                 # KHỞI TẠO LẠI DRIVER MỚI
                 driver = webdriver.Chrome(service=service, options=options)
 
