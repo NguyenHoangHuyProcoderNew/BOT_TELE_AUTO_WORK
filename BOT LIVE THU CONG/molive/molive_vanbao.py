@@ -45,8 +45,8 @@ ten_tai_khoan = "VĂN BẢO"
 id_tiktok = "vanbao165201"
 select_account = "#tiktok_account > option:nth-child(3)"
 
-# LINK NGUỒN CHO PHIÊN LIVE 
-from nguonlive.linknguon import linknguon
+# # LINK NGUỒN CHO PHIÊN LIVE 
+# from nguonlive.linknguon import linknguon
 
 # Khởi tạo colorama
 init()
@@ -57,9 +57,6 @@ def main_molive_vanbao(message):
     # IN RA MÀN HÌNH
     print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
-    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.bot_reply(user_id, f"THỰC THI LỆNH MỞ LIVE TÀI KHOẢN {ten_tai_khoan} THÀNH CÔNG") ; sleep(1)
-
     # YÊU CẦU NGƯỜI DÙNG LỰA CHỌN NGUỒN CHO PHIÊN LIVE
     dylib.print_yellow("Bot đang yêu cầu người dùng lựa chọn nguồn cho phiên live") ; bot.send_message(message.chat.id, "Xin vui lòng chọn nguồn cho phiên live\n1. Hồi chiêu full HD\n2.Quỳnh em chửi\nVui lòng nhập số 1 hoặc 2 để chọn")
 
@@ -69,16 +66,15 @@ def main_molive_vanbao(message):
 def nhaplinknguon(message):
     global linknguon
     nhaplinknguon = message.text
-    
     if int(nhaplinknguon) == 1:
         dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công, tiến hành mở phiên live với nguồn | HỒI CHIÊU FULL HD | ") ; dylib.print_green("Người dùng đã chọn 1 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | HỒI CHIÊU FULL HD |")
         linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk"
     elif int(nhaplinknguon) == 2:
-        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công, tiến hành mở phiên live với nguồn | QUỲNH EM CHỬI | ") ; dylib.print_green("Người dùng đã chọn 2 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | QUỲNH EM CHỬI |")
+        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công, tiến hành mở phiên live với nguồn | HỒI CHIÊU FULL HD | ") ; dylib.print_green("Người dùng đã chọn 2 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | QUỲNH EM CHỬI |")
         linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing"
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_green_and_send_message(user_id,"Mở trang web livestream")
+    dylib.print_green_and_send_message(user_id, "Mở trang web livestream")
 
     # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options) ; dylib.print_red("KHỞI TẠO WEB DRIVER\n")
@@ -152,11 +148,14 @@ def nhaplinknguon(message):
     # CHỌN KIỂU LIVE
     dylib.print_green("Chọn kiểu live Mobile") ; driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[1]/div/div[3]/div/div/div[2]/form/div[4]/div/div/div/button[2]").click()
 
+
     # NHẬP LINK NGUỒN
     dylib.print_green("Nhập link nguồn cho phiên live") ; driver.find_element(By.ID, "url_source").send_keys(linknguon)
 
     # LƯU CẤU HÌNH
     dylib.print_green("Lưu cấu hình")
+
+    sleep(1000)
 
     # KIỂM TRA XEM CẤU HÌNH CÓ ĐƯỢC LƯU THÀNH CÔNG HAY KHÔNG
     try:

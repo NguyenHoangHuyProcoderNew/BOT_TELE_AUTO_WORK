@@ -32,6 +32,7 @@ from molive.molive_memelo import main_molive_memelo
 
 # MỞ LIVE TÀI KHOẢN VĂN BẢO
 from molive.molive_vanbao import main_molive_vanbao
+from molive.molive_vanbao import nhaplinknguon
 
 # MỞ LIVE TÀI KHOẢN NICK PHU LBH
 from molive.molive_nickphulbh import main_molive_nickphulbh
@@ -69,6 +70,7 @@ def molive_nickphulbh(message):
 @bot.message_handler(commands=['molive_vanbao'])
 def molive_vanbao(message):
     main_molive_vanbao(message)
+    bot.register_next_step_handler(message, nhaplinknguon)
 
 ########################## BẮT ĐẦU CÁC CHỨC NĂNG CHECK LIVE ###############################        
 
@@ -93,12 +95,12 @@ def tatlive(message):
     main_tatlive(message)
 
 ########################  TEST CHỨC NĂNG MỚI ####################
-from thunghiem.test import main_test
-from thunghiem.test import nhaplinknguon
-@bot.message_handler(commands=['test'])
-def test(message):
-    main_test(message)
-    bot.register_next_step_handler(message, nhaplinknguon)
+# from thunghiem.test import main_test
+# from thunghiem.test import nhaplinknguon
+# @bot.message_handler(commands=['test'])
+# def test(message):
+#     main_test(message)
+#     bot.register_next_step_handler(message, nhaplinknguon)
 
 ########################################################
 ####################### CHẠY BOT #######################
