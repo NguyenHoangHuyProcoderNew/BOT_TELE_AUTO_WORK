@@ -47,12 +47,14 @@ init()
 
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_tatlive(message):
+    # IN RA MÀN HÌNH
+    print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
 
     # GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.bot_reply(user_id, "THỰC THI LỆNH THÀNH CÔNG")
 
-    # IN RA MÀN HÌNH
-    print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
+    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    dylib.print_green_and_send_message(user_id, "Tiến hành mở trang web livestream")    
 
      # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
@@ -88,7 +90,7 @@ def main_tatlive(message):
         return
 
     #  IN RA MÀN HÌNH
-    dylib.print_yellow_and_send_message(user_id, "Tiến hành tắt live")
+    dylib.print_yellow_and_send_message(user_id, "Tiến hành tắt live...")
 
     # KIỂM TRA SỰ KIỆN TẮT LIVE
     try:
@@ -113,7 +115,7 @@ def main_tatlive(message):
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))) # ĐỢI THÔNG BÁO TẮT LIVE THÀNH CÔNG XUẤT HIỆN
 
         # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_yellow_and_send_message(user_id, "Tắt live thành công")
+        dylib.print_yellow_and_send_message(user_id, "Tắt live thành công...!")
 
         # ĐÓNG CHROME
         driver.quit()
