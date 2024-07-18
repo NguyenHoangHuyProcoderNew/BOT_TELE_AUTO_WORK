@@ -35,7 +35,7 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 API_TOKEN = '6555297922:AAF7DFvu9c-gi10-wBtwa_3jKa3TeyInNQ8'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
+user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 timekey = None
 

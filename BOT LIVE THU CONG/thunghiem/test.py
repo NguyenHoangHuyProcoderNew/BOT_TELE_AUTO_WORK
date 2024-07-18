@@ -29,11 +29,6 @@ chromedriver_path = r'D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\chrome_driver\\
 options = Options()
 options.add_argument('--log-level=3')  # Vô hiệu hóa thông báo của Selenium
 options.add_argument('--user-data-dir=D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\du lieu trinh duyet')
-options.add_argument("--disable-gpu")
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--disable-images")
-options.add_argument("--disable-javascript")
 
 service = Service(chromedriver_path)
 service_log_path = os.path.devnull
@@ -43,11 +38,12 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
+user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 # THÔNG TIN TÀI KHOẢN LIVE
 ten_tai_khoan = "MEME LỎ"
 id_tiktok = "meme.l810"
+select_account = "#tiktok_account > option:nth-child(4)"
 
 # LINK NGUỒN CHO PHIÊN LIVE 
 from nguonlive.linknguon import linknguon
@@ -55,106 +51,55 @@ from nguonlive.linknguon import linknguon
 # Khởi tạo colorama
 init()
 
+linknguon = None
+
 ############################ CHỨC NĂNG CHÍNH ##########################
 def main_test(message):
 
-    print(f"\n============= KIỂM TRA PHIÊN LIVE CỦA TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
+    # Yêu cầu người dùng nhập link nguồn
+    bot.send_message(message.chat.id, "Xin vui lòng chọn nguồn cho phiên live\n1. Hồi chiêu full HD\n2.Quỳnh em chửi\nVui lòng nhập số 1 hoặc 2 để chọn")
+    bot.register_next_step_handler(message, nhaplinknguon)
 
-     # KHỞI TẠO WEB DRIVER
+def nhaplinknguon(message):
+    global linknguon
+    nhaplinknguon = message.text
+    
+    if int(nhaplinknguon) == 1:
+        linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk"
+    elif int(nhaplinknguon) == 2:
+        linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing"
+
+    # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
 
     # IN RA MÀN HÌNH
-    dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
+    dylib.print_red("KHỞI TẠO WEB DRIVER\n")
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_red_and_send_message(user_id, f"Tiến hành kiểm tra phiên livestream tài khoản {ten_tai_khoan}")
+    dylib.print_green_and_send_message(user_id,"Truy cập website livestream")
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Truy cập phiên livestream")
+    # MỞ WEB LIVESTREAM
+    driver.get('https://autolive.me/tiktok')
 
-    # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
+    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
-        # MỞ PHIÊN LIVE
-        driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
-
-        # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
-
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Truy cập phiên live thành công, khi nào dưới 5 người xem sẽ tự động tắt live")
-    except TimeoutException:
         # IN RA MÀN HÌNH
-        dylib.print_red_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")
+        dylib.print_green_and_send_message(user_id, "Đang load website...")
+
+        # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
+        # SAU KHI PHẦN TỬ XUẤT HIỆN => KẾT LUẬN WEB ĐÃ LOAD XONG
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
+
+        # IN VÀ GỬI TIN NHẮN
+        dylib.print_yellow_and_send_message(user_id, "Truy cập website livestream thành công")
+    except TimeoutError:
+        # IN VÀ GỬI TIN NHẮN
+        dylib.print_green_and_send_message(user_id, "Truy cập website livestream thất bại")
 
         # ĐÓNG CHROME
         driver.quit()
 
         # KẾT THÚC TIẾN TRÌNH
         return
-    
-    # KIỂM TRA PHIÊN LIVE
-    while True:
-        now = datetime.datetime.now()
 
-        try:
-            # KIỂM TRA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
-
-            # CHECK DỮ LIỆU CỦA BIẾN CHỨA SỐ LƯỢNG NGƯỜI XEM
-            checkview = WebDriverWait(driver, 1000).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div"))
-            )
-
-            # CHUYỂN DỮ LIỆU CỦA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM THÀNH VĂN BẢN
-            view = checkview.text
-
-            # ĐIỀU KIỆN KIỂM TRA NHƯ SAU:
-            # NẾU DỮ LIỆU CỦA BIẾN view TRÊN 5 THÌ SẼ ĐÓNG CHROME TRƯỚC, RỒI MỞ LẠI, SAU ĐÓ TRUY CẬP PHIÊN LIVE VÀ TIẾP TỤC KIỂM TRA
-            if int(view) > 5:
-                # GỬI TIN NHẮN VỀ CHO NGƯỜI DÙNG
-                dylib.print_green(f"Phiên live vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')} có {view} người xem => TIẾP TỤC KIỂM TRA")
-
-                # IN RA MÀN HÌNH
-                dylib.print_green("Đóng trình duyệt")
-                # ĐÓNG CHROME
-                driver.quit()
-
-                # IN RA MÀN HÌNH
-                dylib.print_green("Khởi tạo lại driver mới")
-                # KHỞI TẠO LẠI DRIVER MỚI
-                driver = webdriver.Chrome(service=service, options=options)
-
-                # KIỂM TRA XEM CÓ TRUY CẬP PHIÊN LIVE THÀNH CÔNG HAY KHÔNG
-                try:
-                    # IN RA MÀN HÌNH
-                    dylib.print_green("Truy cập vào phiên live")
-
-                    # MỞ PHIÊN LIVE
-                    driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
-
-                    # ĐỢI PHIÊN LIVE LOAD HOÀN TẤT
-                    WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
-
-                    # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-                    dylib.print_green("Truy cập phiên live thành công => tiến hành kiểm tra")
-                except TimeoutException:
-                    # IN RA MÀN HÌNH
-                    dylib.print_green_and_send_message(user_id, "Truy cập phiên livestream thất bại, vui lòng kiểm tra lại")
-
-                    # ĐÓNG CHROME
-                    driver.quit()
-
-                    # KẾT THÚC TIẾN TRÌNH
-                    return    
-            else:
-                # GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH
-                dylib.print_yellow_and_send_message(user_id, f"Phiên live vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')} có {view} người xem => TIẾN HÀNH TẮT LIVE")
-            
-        except TimeoutException:
-            # IN RA MÀN HÌNH
-            dylib.print_yellow_and_send_message(user_id, "Có lỗi sảy ra khi kiểm tra phiên live, vui lòng kiểm tra lại kết nối internet")
-            
-            # ĐÓNG CHROME
-            driver.quit()
-
-            # KẾT THÚC TIẾN TRÌNH
-            return
+    driver.find_element(By.ID, "url_source").send_keys(linknguon)        

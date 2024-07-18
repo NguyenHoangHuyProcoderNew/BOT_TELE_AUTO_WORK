@@ -24,7 +24,7 @@ from dylib import dylib
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-chat_id = '6355094590' # ID CỦA NGƯỜI DÙNG
+chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 # IMPORT CHỨC NĂNG MỞ LIVE
 

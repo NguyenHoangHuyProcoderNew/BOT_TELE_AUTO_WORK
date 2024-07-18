@@ -38,7 +38,7 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '6355094590' # ID CỦA NGƯỜI DÙNG
+user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 # THÔNG TIN TÀI KHOẢN LIVE
 ten_tai_khoan = "MEME LỎ"
@@ -254,7 +254,7 @@ def main_molive_memelo(message):
             # KIỂM TRA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
 
             # SỬ DỤNG WebDriverWait, NẾU TRONG 1 GIÂY MÀ PHẦN TỬ XUẤT HIỆN THÌ PHIÊN LIVE ĐÃ ĐƯỢC MỞ
-            checkview = WebDriverWait(driver, 1).until(
+            checkview = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div"))
             )
             dylib.print_yellow_and_send_message(user_id, f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
@@ -264,7 +264,7 @@ def main_molive_memelo(message):
 
             # KẾT THÚC TIẾN TRÌNH
             return
-        except TimeoutException:
+        except NoSuchElementException:
             # IN RA MÀN HÌNH
             dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa dược diễn ra => TIẾP TỤC KIỂM TRA")
 
