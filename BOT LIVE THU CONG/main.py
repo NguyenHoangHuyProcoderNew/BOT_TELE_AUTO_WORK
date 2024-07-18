@@ -29,13 +29,15 @@ chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 # MỞ LIVE TÀI KHOẢN MEME LỎ
 from molive.molive_memelo import main_molive_memelo
+from molive.molive_memelo import phu_molive_memelo
 
 # MỞ LIVE TÀI KHOẢN VĂN BẢO
 from molive.molive_vanbao import main_molive_vanbao
-from molive.molive_vanbao import nhaplinknguon
+from molive.molive_vanbao import phu_molive_vanbao
 
 # MỞ LIVE TÀI KHOẢN NICK PHU LBH
 from molive.molive_nickphulbh import main_molive_nickphulbh
+from molive.molive_nickphulbh import phu_molive_nickphulbh
 
 # IMPORT CHỨC NĂNG CHECKLIVE
 
@@ -60,17 +62,19 @@ print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | ===========
 @bot.message_handler(commands=['molive_memelo'])
 def molive_memelo(message):
     main_molive_memelo(message)
+    bot.register_next_step_handler(message, phu_molive_memelo)
 
 # CHỨC NĂNG MỞ LIVE TÀI KHOẢN NICK-PHU-LBH
 @bot.message_handler(commands=['molive_nickphulbh'])
 def molive_nickphulbh(message):
     main_molive_nickphulbh(message)
+    bot.register_next_step_handler(message, phu_molive_nickphulbh)
 
 # CHỨC NĂNG MỞ LIVE TÀI KHOẢN VĂN BẢO
 @bot.message_handler(commands=['molive_vanbao'])
 def molive_vanbao(message):
     main_molive_vanbao(message)
-    bot.register_next_step_handler(message, nhaplinknguon)
+    bot.register_next_step_handler(message, phu_molive_vanbao)
 
 ########################## BẮT ĐẦU CÁC CHỨC NĂNG CHECK LIVE ###############################        
 

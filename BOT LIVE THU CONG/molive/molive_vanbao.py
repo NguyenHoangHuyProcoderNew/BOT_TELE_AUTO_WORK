@@ -60,17 +60,17 @@ def main_molive_vanbao(message):
     # YÊU CẦU NGƯỜI DÙNG LỰA CHỌN NGUỒN CHO PHIÊN LIVE
     dylib.print_yellow("Bot đang yêu cầu người dùng lựa chọn nguồn cho phiên live") ; bot.send_message(message.chat.id, "Xin vui lòng chọn nguồn cho phiên live\n1. Hồi chiêu full HD\n2.Quỳnh em chửi\nVui lòng nhập số 1 hoặc 2 để chọn")
 
-    bot.register_next_step_handler(message, nhaplinknguon)
+    bot.register_next_step_handler(message, phu_molive_vanbao)
 
 # hàm xử lý việc lựa chọn nguồn và mở live
-def nhaplinknguon(message):
+def phu_molive_vanbao(message):
     global linknguon
     nhaplinknguon = message.text
     if int(nhaplinknguon) == 1:
-        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công, tiến hành mở phiên live với nguồn | HỒI CHIÊU FULL HD | ") ; dylib.print_green("Người dùng đã chọn 1 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | HỒI CHIÊU FULL HD |")
+        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn | HỒI CHIÊU FULL HD | ") ; dylib.print_green("Người dùng đã chọn 1 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | HỒI CHIÊU FULL HD |")
         linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk"
     elif int(nhaplinknguon) == 2:
-        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công, tiến hành mở phiên live với nguồn | HỒI CHIÊU FULL HD | ") ; dylib.print_green("Người dùng đã chọn 2 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | QUỲNH EM CHỬI |")
+        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn | QUỲNH EM CHỬI | ") ; dylib.print_green("Người dùng đã chọn 2 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | QUỲNH EM CHỬI |")
         linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing"
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
@@ -85,14 +85,14 @@ def nhaplinknguon(message):
     # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
         # IN RA MÀN HÌNH
-        dylib.print_green_and_send_message(user_id, "Đang load website LIVESTREAM...")
+        dylib.print_green_and_send_message(user_id, "Đang load trang web livestream...")
 
         # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
         # SAU KHI PHẦN TỬ XUẤT HIỆN => GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH ĐỂ THÔNG BÁO
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b'))) ; dylib.print_yellow_and_send_message(user_id, "Load website livestream thành công")
     except TimeoutError:
         # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG NẾU THẤT BẠI
-        dylib.print_green_and_send_message(user_id, "Có lỗi xảy ra khi truy cập vào website LIVESTREAM, vui lòng kiểm tra lại kết nối internet của máy chủ.")
+        dylib.print_green_and_send_message(user_id, "Có lỗi xảy ra khi truy cập vào trang web livestream, vui lòng kiểm tra lại kết nối internet của máy chủ.")
 
         # ĐÓNG CHROME
         driver.quit()
@@ -154,8 +154,6 @@ def nhaplinknguon(message):
 
     # LƯU CẤU HÌNH
     dylib.print_green("Lưu cấu hình")
-
-    sleep(1000)
 
     # KIỂM TRA XEM CẤU HÌNH CÓ ĐƯỢC LƯU THÀNH CÔNG HAY KHÔNG
     try:
