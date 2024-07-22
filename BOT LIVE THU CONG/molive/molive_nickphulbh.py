@@ -62,13 +62,19 @@ def main_molive_nickphulbh(message):
 # hàm xử lý việc lựa chọn nguồn và mở live
 def phu_molive_nickphulbh(message):
     global linknguon
-    nhaplinknguon = message.text
-    if int(nhaplinknguon) == 1:
-        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn | HỒI CHIÊU FULL HD | ") ; dylib.print_green("Người dùng đã chọn 1 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | HỒI CHIÊU FULL HD |")
+    nhaplinknguon = message.text.strip()
+    if nhaplinknguon == "1":
+        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn | HỒI CHIÊU FULL HD | ")
+        dylib.print_green("Người dùng đã chọn 1 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | HỒI CHIÊU FULL HD |")
         linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk"
-    elif int(nhaplinknguon) == 2:
-        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn | QUỲNH EM CHỬI | ") ; dylib.print_green("Người dùng đã chọn 2 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | QUỲNH EM CHỬI |")
+    elif nhaplinknguon == "2":
+        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn | QUỲNH EM CHỬI | ")
+        dylib.print_green("Người dùng đã chọn 2 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | QUỲNH EM CHỬI |")
         linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing"
+    else:
+        dylib.bot_reply(user_id, f"Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn do người dùng cung cấp:\n{nhaplinknguon}")
+        dylib.print_green(f"Người dùng đã chọn nguồn tùy chỉnh => TIẾN HÀNH MỞ LIVE VỚI NGUỒN {nhaplinknguon}")
+        linknguon = nhaplinknguon
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.print_green_and_send_message(user_id, "Mở trang web livestream")
@@ -143,7 +149,7 @@ def phu_molive_nickphulbh(message):
     dylib.print_green("Chọn chủ đề live") ; driver.find_element(By.CSS_SELECTOR, "#topic > option:nth-child(11)").click()
 
     # CHỌN KIỂU LIVE
-    dylib.print_green("Chọn kiểu live Mobile") ; driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[1]/div/div[3]/div/div/div[2]/form/div[4]/div/div/div/button[2]").click()
+    dylib.print_green("Chọn kiểu live Mobile") ; driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[1]/div/div[3]/div/div/div/form/div[4]/div/div/div/button[2]/i").click()
 
 
     # NHẬP LINK NGUỒN
