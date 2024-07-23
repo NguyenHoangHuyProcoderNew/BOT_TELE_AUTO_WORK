@@ -58,7 +58,7 @@ def main_molive_vanbao(message):
     print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
     # YÊU CẦU NGƯỜI DÙNG LỰA CHỌN NGUỒN CHO PHIÊN LIVE
-    dylib.print_yellow("Bot đang yêu cầu người dùng lựa chọn nguồn cho phiên live") ; bot.send_message(message.chat.id, "Xin vui lòng chọn nguồn cho phiên live\n1. Hồi chiêu full HD\n2.Quỳnh em chửi\nVui lòng nhập số 1 hoặc 2 để chọn")
+    dylib.print_yellow("Bot đang yêu cầu người dùng lựa chọn nguồn cho phiên live") ; bot.send_message(message.chat.id, "Xin vui lòng chọn nguồn cho phiên live\n1. Hồi chiêu full HD\n2.Quỳnh em chửi\nVui lòng nhập số 1 hoặc 2 để chọn\nNếu dữ liệu khác thì cứ nhập link")
 
     bot.register_next_step_handler(message, phu_molive_vanbao)
 

@@ -40,24 +40,38 @@ bot = telebot.TeleBot(API_TOKEN)
 
 user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
-# THÔNG TIN TÀI KHOẢN LIVE
-ten_tai_khoan = "MEME LỎ"
-id_tiktok = "meme.l810"
-select_account = "#tiktok_account > option:nth-child(2)"
-
-# LINK NGUỒN CHO PHIÊN LIVE 
-from nguonlive.linknguon import linknguon
-
-# Khởi tạo colorama
-init()
+ip = None
+device = None
 
 ############################ CHỨC NĂNG CHÍNH ##########################
-def main_molive_memelo(message):
+def ask_select_account_doiip(message):
     # GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.bot_reply(user_id, "THỰC THI LỆNH THÀNH CÔNG")
 
     # IN RA MÀN HÌNH
-    print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
+    print(f"\n============= | YÊU CẦU NGƯỜI DÙNG CHỌN TÀI KHOẢN CẦN ĐỔI IP | =============")
+
+    # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
+    dylib.bot_reply(user_id, "Đang đợi người dùng chọn tài khoản cần đổi IP..."); dylib.bot_reply(user_id, "Vui lòng chọn tài khoản cần đổi IP\n1. Văn Bảo\n2.Nick phụ LBH\n3.Meme Lỏ\nNhập số 1-3 để chọn tài khoản")
+
+    bot.register_next_step_handler(message, doiip)
+
+def doiip(message):
+    global ip
+    global device
+
+    # NHẬN DỮ LIỆU MÀ NGƯỜI DÙNG NHẬP
+    user_message_select = message.text.strip()
+
+    if user_message_select == "1":
+        ip = "ip-22680"
+        device = "renew-22680"
+    elif user_message_select == "2":
+        ip = "ip-22679"
+        device = "renew-22679"
+    elif user_message_select == "3":
+        ip = ""
+
 
     # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)
