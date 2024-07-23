@@ -64,23 +64,22 @@ def doiip(message):
     user_message_select = message.text.strip()
 
     if user_message_select == "1":
+        dylib.bot_reply(user_id, "Bạn đã chọn 1, tiến hành đổi IP & thiết bị cho tài khoản VĂN BẢO") ; dylib.print_green("Người dùng đã chọn 1") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản VĂN BẢO")
         ip = "ip-22680"
         device = "renew-22680"
     elif user_message_select == "2":
+        dylib.bot_reply(user_id, "Bạn đã chọn 2, tiến hành đổi IP & thiết bị cho tài khoản nick phụ lbh") ; dylib.print_green("Người dùng đã chọn 2") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản nick phụ lbh")
         ip = "ip-22679"
         device = "renew-22679"
     elif user_message_select == "3":
-        ip = ""
+        dylib.bot_reply(user_id, "Bạn đã chọn 3, tiến hành đổi IP & thiết bị cho tài khoản MEME LỎ") ; dylib.print_green("Người dùng đã chọn 3") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản MEME LỎ")
+        ip = "ip-22733"
+        device = "renew-22733"
 
+    dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_yellow("Mở website livestream\n")
 
     # KHỞI TẠO WEB DRIVER
-    driver = webdriver.Chrome(service=service, options=options)
-
-    # IN RA MÀN HÌNH
-    dylib.print_red("KHỞI TẠO WEB DRIVER\n")
-
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_green_and_send_message(user_id,"Truy cập website livestream")
+    driver = webdriver.Chrome(service=service, options=options) ; dylib.print_green("Khởi tạo chrome web driver")
 
     # MỞ WEB LIVESTREAM
     driver.get('https://autolive.me/tiktok')
@@ -88,17 +87,14 @@ def doiip(message):
     # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
         # IN RA MÀN HÌNH
-        dylib.print_green_and_send_message(user_id, "Đang load website...")
+        dylib.print_green_and_send_message(user_id, "Đang load trang web livestream...")
 
         # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
-        # SAU KHI PHẦN TỬ XUẤT HIỆN => KẾT LUẬN WEB ĐÃ LOAD XONG
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
-
-        # IN VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Truy cập website livestream thành công")
+        # SAU KHI PHẦN TỬ XUẤT HIỆN => GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH ĐỂ THÔNG BÁO
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b'))) ; dylib.print_yellow_and_send_message(user_id, "Load website livestream thành công")
     except TimeoutError:
-        # IN VÀ GỬI TIN NHẮN
-        dylib.print_green_and_send_message(user_id, "Truy cập website livestream thất bại")
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG NẾU THẤT BẠI
+        dylib.print_green_and_send_message(user_id, "Có lỗi xảy ra khi truy cập vào trang web livestream, vui lòng kiểm tra lại kết nối internet của máy chủ.")
 
         # ĐÓNG CHROME
         driver.quit()
@@ -107,16 +103,7 @@ def doiip(message):
         return
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_red_and_send_message(user_id, "TIẾN HÀNH ĐỔI IP")
+    dylib.print_yellow_and_send_message(user_id, "Tiến hành đổi ip & thiết bị cho tài khoản")
 
-    # IN RA MÀN HÌNH
-    dylib.print_red("Click vào nút Thêm TK bằng Web")
-
-    # CHECK TÊN TÀI KHOẢN NICK PHU LBH
-    checkname_nickphulbh = driver.find_element(By.CSS_SELECTOR, "#table-tiktok-account > tbody > tr:nth-child(2) > td.text-left")
-    name_nickphulbh = checkname_nickphulbh.text
-
-    # GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH
-    dylib.print_green_and_send_message(user_id, f"Đổi IP cho tài khoản {name_nickphulbh}")
-
-    div > div.notifyjs-container > div > div.text-wrapper > div.text
+    # CLICK VÀO NÚT ĐỔI TK WEH
+    driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(3) > div.col-md-3 > div > div > button:nth-child(2) > i").click() ; sleep (100)
