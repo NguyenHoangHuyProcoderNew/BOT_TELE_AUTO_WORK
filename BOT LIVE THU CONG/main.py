@@ -53,6 +53,9 @@ from checklive.checklive_nickphulbh import main_checklive_nickphulbh
 # IMPORT CHỨC NĂNG TẮT LIVE
 from tatlive.tatlive import main_tatlive
 
+# IMPORT CHỨC NĂNG ĐỔI IP & THIẾT BỊ
+from doiip.doiip import ask_select_account_doiip
+from doiip.doiip import doiip
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
 
@@ -97,6 +100,12 @@ def checklive_nickphulbh(message):
 @bot.message_handler(commands=['tatlive'])
 def tatlive(message):
     main_tatlive(message)
+
+############################## CHỨC NĂNG ĐỔI IP & THIẾT BỊ #######################################
+@bot.message_handler(commands=['doiip'])
+def doiip_thietbi(message):
+    ask_select_account_doiip(message)
+    bot.register_next_step_handler(message, doiip)
 
 ########################  TEST CHỨC NĂNG MỚI ####################
 # from thunghiem.test import main_test

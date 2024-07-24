@@ -52,7 +52,7 @@ def ask_select_account_doiip(message):
     print(f"\n============= | YÊU CẦU NGƯỜI DÙNG CHỌN TÀI KHOẢN CẦN ĐỔI IP | =============")
 
     # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
-    dylib.bot_reply(user_id, "Đang đợi người dùng chọn tài khoản cần đổi IP..."); dylib.bot_reply(user_id, "Vui lòng chọn tài khoản cần đổi IP\n1. Văn Bảo\n2.Nick phụ LBH\n3.Meme Lỏ\nNhập số 1-3 để chọn tài khoản")
+    dylib.print_red("Đang đợi người dùng chọn tài khoản cần đổi IP..."); dylib.bot_reply(user_id, "Vui lòng chọn tài khoản cần đổi IP\n1. Văn Bảo\n2.Nick phụ LBH\n3.Meme Lỏ\nNhập số 1-3 để chọn tài khoản")
 
     bot.register_next_step_handler(message, doiip)
 
@@ -76,7 +76,7 @@ def doiip(message):
         ip = "ip-22733"
         device = "renew-22733"
 
-    dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_yellow("Mở website livestream\n")
+    dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_red("Mở website livestream")
 
     # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options) ; dylib.print_green("Khởi tạo chrome web driver")
@@ -102,8 +102,60 @@ def doiip(message):
         # KẾT THÚC TIẾN TRÌNH
         return
 
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_yellow_and_send_message(user_id, "Tiến hành đổi ip & thiết bị cho tài khoản")
+    # CLICK VÀO NÚT ĐỔI TK WEB
+    dylib.print_green("Click vào nút đổi TK WEB"); driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(3) > div.col-md-3 > div > div > button:nth-child(2) > i").click()
 
-    # CLICK VÀO NÚT ĐỔI TK WEH
-    driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(3) > div.col-md-3 > div > div > button:nth-child(2) > i").click() ; sleep (100)
+    WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#dialog_tiktok > div > div > div")))
+
+    # ĐỔI IP
+    dylib.print_green("Click vào nút đổi IP"); driver.find_element(By.ID, f"{ip}").click() ; dylib.bot_reply(user_id, "Đang đổi IP...")
+
+    # CHỜ ĐỢI THÔNG BÁO CỬ SỰ KIỆN ĐỔI IP XUẤT HIỆN
+    WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
+
+    # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
+    check_data_notify = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
+
+    # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
+    data_notify = check_data_notify.text.strip()
+
+    # DỮ LIỆU CỦA THÔNG BÁO ĐỔI IP
+    dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi IP: {data_notify}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi IP: {data_notify}")
+
+    # MỞ WEB LIVESTREAM
+    driver.get('https://autolive.me/tiktok')
+
+    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
+    try:
+        # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
+        # SAU KHI PHẦN TỬ XUẤT HIỆN => GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH ĐỂ THÔNG BÁO
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
+    except TimeoutError:
+
+        # ĐÓNG CHROME
+        driver.quit()
+
+        # KẾT THÚC TIẾN TRÌNH
+        return
+    
+    # CLICK VÀO NÚT ĐỔI TK WEB
+    dylib.print_green("Click vào nút đổi TK WEB"); driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(3) > div.col-md-3 > div > div > button:nth-child(2) > i").click()
+
+    WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#dialog_tiktok > div > div > div")))
+
+    # ĐỔI THIẾT BỊ
+    dylib.print_green("Click vào nút đổi THIẾT BỊ"); driver.find_element(By.ID, f"{device}").click() ; dylib.bot_reply(user_id, "Đang đổi THIẾT BỊ...")
+
+    # CHỜ ĐỢI THÔNG BÁO CỬ SỰ KIỆN ĐỔI THIẾT BỊ XUẤT HIỆN
+    WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
+
+    # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
+    check_data_notify = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
+
+    # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
+    data_notify = check_data_notify.text.strip()
+
+    # DỮ LIỆU CỦA THÔNG BÁO ĐỔI THIẾT BỊ
+    dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi THIẾT BỊ: {data_notify}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi THIẾT BỊ: {data_notify}")
+
+    driver.quit()
