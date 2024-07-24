@@ -108,19 +108,28 @@ def doiip(message):
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#dialog_tiktok > div > div > div")))
 
     # ĐỔI IP
-    dylib.print_green("Click vào nút đổi IP"); driver.find_element(By.ID, f"{ip}").click() ; dylib.bot_reply(user_id, "Đang đổi IP...")
+    change_ip = f'document.getElementById("{ip}").click();'
+
+    dylib.print_green("Click vào nút đổi IP"); driver.execute_script(change_ip) ; dylib.bot_reply(user_id, "Đang đổi IP...")
 
     # CHỜ ĐỢI THÔNG BÁO CỬ SỰ KIỆN ĐỔI IP XUẤT HIỆN
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
 
-    # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
-    check_data_notify = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
+    # # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
+    # check_data_notify = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
 
-    # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
-    data_notify = check_data_notify.text.strip()
+    # # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
+    # data_notify = check_data_notify.text.strip()
+
+    data_changeip = driver.execute_script('''
+        // JavaScript code here
+        // Đoạn mã JavaScript để lấy nội dung của phần tử
+        var element = document.querySelector('div.text[data-notify-html="text"]');
+        return element.textContent;
+    ''')
 
     # DỮ LIỆU CỦA THÔNG BÁO ĐỔI IP
-    dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi IP: {data_notify}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi IP: {data_notify}")
+    dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi IP: {data_changeip}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi IP: {data_changeip}")
 
     # MỞ WEB LIVESTREAM
     driver.get('https://autolive.me/tiktok')
@@ -144,18 +153,26 @@ def doiip(message):
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#dialog_tiktok > div > div > div")))
 
     # ĐỔI THIẾT BỊ
-    dylib.print_green("Click vào nút đổi THIẾT BỊ"); driver.find_element(By.ID, f"{device}").click() ; dylib.bot_reply(user_id, "Đang đổi THIẾT BỊ...")
+    change_device = f'document.getElementById("{device}").click();'
+    driver.execute_script(change_device) ; dylib.print_green("Click vào nút đổi THIẾT BỊ"); dylib.bot_reply(user_id, "Đang đổi THIẾT BỊ...")
 
     # CHỜ ĐỢI THÔNG BÁO CỬ SỰ KIỆN ĐỔI THIẾT BỊ XUẤT HIỆN
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
 
-    # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
-    check_data_notify = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
+    # # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
+    # check_data_notify = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
 
-    # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
-    data_notify = check_data_notify.text.strip()
+    # # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
+    # data_notify = check_data_notify.text.strip()
+
+    data_changdevice = driver.execute_script('''
+        // JavaScript code here
+        // Đoạn mã JavaScript để lấy nội dung của phần tử
+        var element = document.querySelector('div.text[data-notify-html="text"]');
+        return element.textContent;
+    ''')
 
     # DỮ LIỆU CỦA THÔNG BÁO ĐỔI THIẾT BỊ
-    dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi THIẾT BỊ: {data_notify}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi THIẾT BỊ: {data_notify}")
+    dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi THIẾT BỊ: {data_changdevice}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi THIẾT BỊ: {data_changdevice}")
 
     driver.quit()
