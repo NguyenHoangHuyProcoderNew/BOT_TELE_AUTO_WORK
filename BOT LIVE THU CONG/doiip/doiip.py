@@ -128,7 +128,7 @@ def doiip(message):
         dylib.bot_reply(user_id, f"Đổi IP thành công") ; dylib.print_yellow(f"Thông báo của web sau khi đổi IP: {data_changeip}")
 
     else:
-        dylib.print_yellow_and_send_message(user_id, f"Đổi IP thất bại\nThông báo của web: {data_changeip}")
+        dylib.print_yellow_and_send_message(user_id, f"Đổi IP thất bại\nThông báo của web:\n{data_changeip}")
 
         driver.quit()
 

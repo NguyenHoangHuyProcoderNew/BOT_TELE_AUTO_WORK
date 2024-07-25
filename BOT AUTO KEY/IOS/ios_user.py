@@ -70,7 +70,7 @@ def timekey_ios_user(message):
     # IN RA MÀN HÌNH
     dylib.print_green("Mở website tạo key")
     # MỞ WEBSITE TẠO KEY
-    driver.get('https://v3.ppapikey.xyz/pages/signIn')
+    driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=128&email=nguyenhoanghuyprocoder@gmail.com&token=LOzCeWYL0Ffqj6o9w4zOWuY9NcbkyJ0zytzj8HzkQdCMTQ0ubBYz9R5K5MvxJjNDDWkNQBlo8idLJpZDjxyh7TAJ0BylLELdxRli&loaikey=30day&luotdung=1')
 
     # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
@@ -78,7 +78,7 @@ def timekey_ios_user(message):
         dylib.print_green("Đang tải website tạo key...")
 
         # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM WEB LOAD XONG CHƯA
-        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/nav/div')))
+        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
 
         # IN RA MÀN HÌNH
         dylib.print_green("Tải website tạo key thành công")
@@ -86,117 +86,120 @@ def timekey_ios_user(message):
         # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
         dylib.print_red_and_send_message(user_id, "Tạo key thất bại")        
 
-    # ĐĂNG NHẬP VÀO WEB
+    # # ĐĂNG NHẬP VÀO WEB
     
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Đăng nhập vào web tạo key")
+    # # IN RA MÀN HÌNH
+    # dylib.print_yellow("Đăng nhập vào web tạo key")
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập tài khoản")
+    # # IN RA MÀN HÌNH
+    # dylib.print_green("Nhập tài khoản")
 
-    # NHẬP TÀI KHOẢN
-    driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[1]/input").send_keys('nguyenhoanghuyprocoder@gmail.com')
+    # # NHẬP TÀI KHOẢN
+    # driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[1]/input").send_keys('nguyenhoanghuyprocoder@gmail.com')
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập mật khẩu")
+    # # IN RA MÀN HÌNH
+    # dylib.print_green("Nhập mật khẩu")
 
-    # NHẬP MẬT KHẨU
-    driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[2]/input").send_keys('123321Huy')
+    # # NHẬP MẬT KHẨU
+    # driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[2]/input").send_keys('123321Huy')
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Click vào nút đăng nhập")
+    # # IN RA MÀN HÌNH
+    # dylib.print_green("Click vào nút đăng nhập")
 
-    # CLICK VÀO NÚT ĐĂNG NHẬP
-    driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[4]/button").click()
+    # # CLICK VÀO NÚT ĐĂNG NHẬP
+    # driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[4]/button").click()
 
-    try:
-        # KIỂM TRA XEM CÓ ĐĂNG NHẬP THÀNH CÔNG HAY KHÔNG
-        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/nav/div/div[1]/nav/a/h6')))
+    # try:
+    #     # KIỂM TRA XEM CÓ ĐĂNG NHẬP THÀNH CÔNG HAY KHÔNG
+    #     WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/nav/div/div[1]/nav/a/h6')))
 
-        # IN RA MÀN HÌNH
-        dylib.print_yellow("Đăng nhập thành công")
-    except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại")
+    #     # IN RA MÀN HÌNH
+    #     dylib.print_yellow("Đăng nhập thành công")
+    # except TimeoutError:
+    #     # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    #     dylib.print_red_and_send_message(user_id, "Tạo key thất bại")
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Truy cập trang tạo key")
+    # # IN RA MÀN HÌNH
+    # dylib.print_yellow("Truy cập trang tạo key")
 
-    # MỞ TRANG TẠO KEY
-    driver.get('https://v3.ppapikey.xyz/pages/keys')
+    # # MỞ TRANG TẠO KEY
+    # driver.get('https://v3.ppapikey.xyz/pages/keys')
 
-    try:
-        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/nav/div/div[1]/nav/a/h6')))
-        # IN RA MÀN HÌNH
-        dylib.print_yellow("Truy cập trang tạo key thành công")
-    except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại")        
+    # try:
+    #     WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/nav/div/div[1]/nav/a/h6')))
+    #     # IN RA MÀN HÌNH
+    #     dylib.print_yellow("Truy cập trang tạo key thành công")
+    # except TimeoutError:
+    #     # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    #     dylib.print_red_and_send_message(user_id, "Tạo key thất bại")        
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Click vào nút TẠO KEY ĐỘNG")
+    # # IN RA MÀN HÌNH
+    # dylib.print_green("Click vào nút TẠO KEY ĐỘNG")
 
-    # CLICK VÀO NÚT TẠO KEY ĐỘNG
-    driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[4]/button[2]").click()
+    # # CLICK VÀO NÚT TẠO KEY ĐỘNG
+    # driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[4]/button[2]").click()
 
-    #### ĐIỀN THÔNG TIN KEY ####
+    # #### ĐIỀN THÔNG TIN KEY ####
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Điền thông tin key")
+    # # IN RA MÀN HÌNH
+    # dylib.print_yellow("Điền thông tin key")
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập số lượng key")
+    # # IN RA MÀN HÌNH
+    # dylib.print_green("Nhập số lượng key")
 
-    # NHẬP SỐ LƯỢNG KEY
-    driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[1]/div[1]/div/input").send_keys("1")
+    # # NHẬP SỐ LƯỢNG KEY
+    # driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[1]/div[1]/div/input").send_keys("1")
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập số lượng thiết bị")
+    # # IN RA MÀN HÌNH
+    # dylib.print_green("Nhập số lượng thiết bị")
     
-    # NHẬP SỐ LƯỢNG THIẾT BỊ
-    driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[1]/div[2]/div/input").send_keys("1")
+    # # NHẬP SỐ LƯỢNG THIẾT BỊ
+    # driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[1]/div[2]/div/input").send_keys("1")
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Chọn server IOS USER")
+    # # IN RA MÀN HÌNH
+    # dylib.print_green("Chọn server IOS USER")
     
-    # CHỌN SERVER
-    driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[2]/div[1]/div/select/option[2]").click()
+    # # CHỌN SERVER
+    # driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[2]/div[1]/div/select/option[2]").click()
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập thời gian của key")
+    # # IN RA MÀN HÌNH
+    # dylib.print_green("Nhập thời gian của key")
 
-    # NHẬP THỜI GIAN CỦA KEY
-    driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[3]/div/div/input").send_keys(timekey)
+    # # NHẬP THỜI GIAN CỦA KEY
+    # driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[3]/div/div/input").send_keys(timekey)
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Click vào nút TẠO KEY")
+    # # IN RA MÀN HÌNH
+    # dylib.print_yellow("Click vào nút TẠO KEY")
 
-    # CLICK VÀO NÚT TẠO KEY
-    driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[4]/div/button").click()
+    # # CLICK VÀO NÚT TẠO KEY
+    # driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[4]/div/button").click()
 
-    try:
-        # KIỂM TRA XEM KEY CÓ TẠO THÀNH CÔNG HAY KHÔNG
-        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'swal2-title')))
+    # try:
+    #     # KIỂM TRA XEM KEY CÓ TẠO THÀNH CÔNG HAY KHÔNG
+    #     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'swal2-title')))
         
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_yellow_and_send_message(user_id, "Tạo key thành công")
-    except TimeoutError:
-        dylib.print_red_and_send_message(user_id, "Tạo key không thành công")
+    #     # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    #     dylib.print_yellow_and_send_message(user_id, "Tạo key thành công")
+    # except TimeoutError:
+    #     dylib.print_red_and_send_message(user_id, "Tạo key không thành công")
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Gửi key cho người dùng")
+    # # IN RA MÀN HÌNH
+    # dylib.print_yellow("Gửi key cho người dùng")
 
-    # IN VÀ GỬI TIN NHẮN
-    dylib.print_green_and_send_message(user_id, "Key của bạn:")
+    # # IN VÀ GỬI TIN NHẮN
+    # dylib.print_green_and_send_message(user_id, "Key của bạn:")
 
     try:
         # Đợi cho đến khi phần tử xuất hiện
         WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, 'swal2-html-container'))
+            EC.visibility_of_element_located((By.ID, 'keyDiv'))
         )
         
-        # Sử dụng JavaScript để lấy dữ liệu của phần tử
-        data = driver.execute_script("return document.querySelector('.swal2-html-container').innerText;")
+        # # Sử dụng JavaScript để lấy dữ liệu của phần tử
+        # data = driver.execute_script("return document.querySelector('.swal2-html-container').innerText;")
+
+        element = driver.find_element_by_id('keyDiv')
+        data = driver.execute_script("return arguments[0].textContent;", element).strip()        
         
         dylib.print_yellow_and_send_message(user_id, f"{data}")
     except Exception as e:
