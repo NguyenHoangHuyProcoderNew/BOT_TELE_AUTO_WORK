@@ -126,15 +126,7 @@ def main_checklive(message):
 @bot.message_handler(commands=['checkoff'])
 def main_checkoff(message):
     ask_select_account_checkoff(message)
-    bot.register_next_step_handler(message, checkoff)       
-
-########################  TEST CHỨC NĂNG MỚI ####################
-# from thunghiem.test import main_test
-# from thunghiem.test import nhaplinknguon
-# @bot.message_handler(commands=['test'])
-# def test(message):
-#     main_test(message)
-#     bot.register_next_step_handler(message, nhaplinknguon)
+    bot.register_next_step_handler(message, checkoff)
 
 ########################################################
 ####################### CHẠY BOT #######################
