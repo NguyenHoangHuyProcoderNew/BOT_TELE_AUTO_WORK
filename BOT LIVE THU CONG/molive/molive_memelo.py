@@ -184,6 +184,20 @@ def phu_molive_memelo(message):
 
         # ĐỢI THÔNG BÁO MỞ LIVE THÀNH CÔNG XUẤT HIỆN
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#table-live > tbody > tr > td:nth-child(10) > span'))) ; dylib.print_yellow_and_send_message(user_id, "Mở live thành công")
+
+        data_notify = driver.execute_script('''
+        // JavaScript code here
+        // Đoạn mã JavaScript để lấy nội dung của phần tử
+        var element = document.querySelector('div.text[data-notify-html="text"]');
+        return element.textContent;
+    ''')
+        
+        if data_notify == "Thành công":
+            dylib.print_yellow_and_send_message(user_id, "Mở live thành công")
+        else:
+            dylib.print_yellow_and_send_message(user_id, f"Mở live thất bại\nThông báo của web:\n{data_notify}")
+            driver.quit()
+            return
     except TimeoutError:
         # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
         dylib.print_red_and_send_message(user_id, "Mở live thất bại, vui lòng kiểm tra lại kết nối internet máy chủ")

@@ -61,6 +61,10 @@ from doiip.doiip import doiip
 from checklive.checklive import ask_select_account_checklive
 from checklive.checklive import checklive
 
+# IMPORT CHỨC NĂNG CHECK LIVE
+from checklive.checkoff import ask_select_account_checkoff
+from checklive.checkoff import checkoff
+
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
 
@@ -117,6 +121,12 @@ def doiip_thietbi(message):
 def main_checklive(message):
     ask_select_account_checklive(message)
     bot.register_next_step_handler(message, checklive)    
+
+####################### CHỨC NĂNG CHECK OFF ##############
+@bot.message_handler(commands=['checkoff'])
+def main_checkoff(message):
+    ask_select_account_checkoff(message)
+    bot.register_next_step_handler(message, checkoff)       
 
 ########################  TEST CHỨC NĂNG MỚI ####################
 # from thunghiem.test import main_test

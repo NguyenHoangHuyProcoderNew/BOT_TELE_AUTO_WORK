@@ -115,12 +115,6 @@ def doiip(message):
     # CHỜ ĐỢI THÔNG BÁO CỬ SỰ KIỆN ĐỔI IP XUẤT HIỆN
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
 
-    # # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
-    # check_data_notify = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
-
-    # # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
-    # data_notify = check_data_notify.text.strip()
-
     data_changeip = driver.execute_script('''
         // JavaScript code here
         // Đoạn mã JavaScript để lấy nội dung của phần tử
@@ -128,8 +122,15 @@ def doiip(message):
         return element.textContent;
     ''')
 
-    # DỮ LIỆU CỦA THÔNG BÁO ĐỔI IP
-    dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi IP: {data_changeip}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi IP: {data_changeip}")
+    if data_changeip == "Thành công":
+
+        # DỮ LIỆU CỦA THÔNG BÁO ĐỔI IP
+        dylib.bot_reply(user_id, f"Đổi IP thành công") ; dylib.print_yellow(f"Thông báo của web sau khi đổi IP: {data_changeip}")
+
+    else:
+        dylib.print_yellow_and_send_message(user_id, f"Đổi IP thất bại\nThông báo của web: {data_changeip}")
+
+        driver.quit()
 
     # MỞ WEB LIVESTREAM
     driver.get('https://autolive.me/tiktok')
@@ -159,18 +160,22 @@ def doiip(message):
     # CHỜ ĐỢI THÔNG BÁO CỬ SỰ KIỆN ĐỔI THIẾT BỊ XUẤT HIỆN
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
 
-    # # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
-    # check_data_notify = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
-
-    # # CHUYỂN DỮ LIỆU THÀNH VĂN BẢN
-    # data_notify = check_data_notify.text.strip()
-
     data_changdevice = driver.execute_script('''
         // JavaScript code here
         // Đoạn mã JavaScript để lấy nội dung của phần tử
         var element = document.querySelector('div.text[data-notify-html="text"]');
         return element.textContent;
     ''')
+
+    if data_changdevice == "Thành công":
+
+        # DỮ LIỆU CỦA THÔNG BÁO ĐỔI IP
+        dylib.bot_reply(user_id, f"Đổi thiết bị thành công") ; dylib.print_yellow(f"Thông báo của web sau khi đổi thiết bị: {data_changdevice}")
+
+    else:
+        dylib.print_yellow_and_send_message(user_id, f"Đổi thiết bị thất bại\nThông báo của web: {data_changdevice}")
+
+        driver.quit()
 
     # DỮ LIỆU CỦA THÔNG BÁO ĐỔI THIẾT BỊ
     dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi THIẾT BỊ: {data_changdevice}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi THIẾT BỊ: {data_changdevice}")
