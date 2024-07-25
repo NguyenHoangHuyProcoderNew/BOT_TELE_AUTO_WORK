@@ -168,16 +168,10 @@ def doiip(message):
     ''')
 
     if data_changdevice == "Thành công":
-
         # DỮ LIỆU CỦA THÔNG BÁO ĐỔI IP
         dylib.bot_reply(user_id, f"Đổi thiết bị thành công") ; dylib.print_yellow(f"Thông báo của web sau khi đổi thiết bị: {data_changdevice}")
+        driver.quit()
 
     else:
         dylib.print_yellow_and_send_message(user_id, f"Đổi thiết bị thất bại\nThông báo của web: {data_changdevice}")
-
         driver.quit()
-
-    # DỮ LIỆU CỦA THÔNG BÁO ĐỔI THIẾT BỊ
-    dylib.bot_reply(user_id, f"Thông báo của web sau khi đổi THIẾT BỊ: {data_changdevice}") ; dylib.print_yellow(f"Thông báo của web sau khi đổi THIẾT BỊ: {data_changdevice}")
-
-    driver.quit()
