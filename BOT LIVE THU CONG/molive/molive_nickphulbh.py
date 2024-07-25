@@ -184,7 +184,7 @@ def phu_molive_nickphulbh(message):
         dylib.print_green("Click vào nút mở live") ; driver.find_element(By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']").click()
 
         # ĐỢI THÔNG BÁO MỞ LIVE THÀNH CÔNG XUẤT HIỆN
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#table-live > tbody > tr > td:nth-child(10) > span'))) ; 
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
 
         data_notify = driver.execute_script('''
         // JavaScript code here
@@ -193,7 +193,7 @@ def phu_molive_nickphulbh(message):
         return element.textContent;
     ''')
         
-        if data_notify == "Thành công":
+        if data_notify == "Success":
             dylib.print_yellow_and_send_message(user_id, "Mở live thành công")
         else:
             dylib.print_yellow_and_send_message(user_id, f"Mở live thất bại\nThông báo của web:\n{data_notify}")

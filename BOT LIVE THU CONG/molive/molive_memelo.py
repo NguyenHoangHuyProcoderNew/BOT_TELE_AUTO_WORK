@@ -151,6 +151,7 @@ def phu_molive_memelo(message):
     # CHỌN KIỂU LIVE
     dylib.print_green("Chọn kiểu live Mobile") ; driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[1]/div/div[3]/div/div/div/form/div[4]/div/div/div/button[2]/i").click()
 
+
     # NHẬP LINK NGUỒN
     dylib.print_green("Nhập link nguồn cho phiên live") ; driver.find_element(By.ID, "url_source").send_keys(linknguon)
 
@@ -183,7 +184,7 @@ def phu_molive_memelo(message):
         dylib.print_green("Click vào nút mở live") ; driver.find_element(By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']").click()
 
         # ĐỢI THÔNG BÁO MỞ LIVE THÀNH CÔNG XUẤT HIỆN
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#table-live > tbody > tr > td:nth-child(10) > span'))) ; dylib.print_yellow_and_send_message(user_id, "Mở live thành công")
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
 
         data_notify = driver.execute_script('''
         // JavaScript code here
@@ -192,7 +193,7 @@ def phu_molive_memelo(message):
         return element.textContent;
     ''')
         
-        if data_notify == "Thành công":
+        if data_notify == "Success":
             dylib.print_yellow_and_send_message(user_id, "Mở live thành công")
         else:
             dylib.print_yellow_and_send_message(user_id, f"Mở live thất bại\nThông báo của web:\n{data_notify}")
@@ -215,7 +216,8 @@ def phu_molive_memelo(message):
         dylib.bot_reply(user_id, "Tiến hành truy cập vào phiên live...") ; dylib.print_green("Mở phiên live") ; driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
         # TRUY CẬP PHIÊN LIVE THÀNH CÔNG
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a'))) ; dylib.bot_reply(user_id, "Truy cập phiên live thành công, khi nào phiên live diễn ra tôi sẽ thông báo cho bạn nhé ^-^") ; dylib.print_yellow("Truy cập phiên live thành công, tiến hành kiểm tra")
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a'))) ;
+        dylib.bot_reply(user_id, "Truy cập phiên live thành công, khi nào phiên live diễn ra tôi sẽ thông báo cho bạn nhé ^-^") ; dylib.print_yellow("Truy cập phiên live thành công, tiến hành kiểm tra")
     except TimeoutException:
         # IN RA MÀN HÌNH
         dylib.print_yellow_and_send_message(user_id, "Xảy ra sự cố khi truy cập phiên live, vui lòng kiểm tra lại kết nối internet")
