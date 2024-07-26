@@ -149,7 +149,7 @@ def phu_molive_memelo(message):
     dylib.print_green("Chọn chủ đề live") ; driver.find_element(By.CSS_SELECTOR, "#topic > option:nth-child(11)").click()
 
     # CHỌN KIỂU LIVE
-    dylib.print_green("Chọn kiểu live Mobile") ; driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[1]/div/div[3]/div/div/div/form/div[4]/div/div/div/button[2]/i").click()
+    dylib.print_green("Chọn kiểu live Mobile") ; driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(6) > div > div > div > button:nth-child(2) > i").click()
 
 
     # NHẬP LINK NGUỒN
