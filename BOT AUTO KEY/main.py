@@ -25,35 +25,28 @@ bot = telebot.TeleBot(API_TOKEN)
 
 chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
-# IMPORT CÁC CHỨC NĂNG TẠO KEY IOS
-
-# TẠO KEY IOS USER
-from IOS.ios_user import main_ios_user
-from IOS.ios_user import timekey_ios_user
-
-# TẠO KEY IOS VIP
-from IOS.ios_vip import main_ios_vip
-from IOS.ios_vip import timekey_ios_vip
-
-# TẠO KEY ANDROID
-from ANDROID.android import ask_user_timekey_android
-from ANDROID.android import main_create_key_android
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT TẠO KEY THÀNH CÔNG | =============")
 
 # CHỨC NĂNG TẠO KEY IOS USER
+from IOS.ios_user import ask_user_timekey_ios_user
+from IOS.ios_user import main_create_key_ios_user
 @bot.message_handler(commands=['ios_user'])
 def ios_user(message):
-    main_ios_user(message)
-    bot.register_next_step_handler(message, timekey_ios_user)
+    ask_user_timekey_ios_user(message)
+    bot.register_next_step_handler(message, main_create_key_ios_user)
 
 # CHỨC NĂNG TẠO KEY IOS VIP
+from IOS.ios_vip import main_ios_vip
+from IOS.ios_vip import timekey_ios_vip
 @bot.message_handler(commands=['ios_vip'])
 def ios_vip(message):
     main_ios_vip(message)
     bot.register_next_step_handler(message, timekey_ios_vip)
 
 # CHỨC NĂNG TẠO KEY ANDROID
+from ANDROID.android import ask_user_timekey_android
+from ANDROID.android import main_create_key_android
 @bot.message_handler(commands=['android'])
 def android(message):
     ask_user_timekey_android(message)

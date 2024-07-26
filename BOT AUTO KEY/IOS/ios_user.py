@@ -41,20 +41,23 @@ user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 timekey = None
 
-############################ CHỨC NĂNG CHÍNH ##########################
-def main_ios_user(message):
+# HÀM YÊU CẦU NGƯỜI DÙNG NHẬP THỜI GIAN SỬ DỤNG CỦA KEY
+def ask_user_timekey_ios_user(message):
 
-    # Yêu cầu người dùng nhập số ngày sử dụng key
-    bot.send_message(message.chat.id, "Xin vui lòng nhập số ngày sử dụng key:")
-    bot.register_next_step_handler(message, timekey_ios_user)
-
-def timekey_ios_user(message):
-    global timekey
-    timekey = message.text
     green_text = "TẠO KEY IOS USER"
 
         # IN RA MÀN HÌNH
     print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
+
+    # Yêu cầu người dùng nhập số ngày sử dụng key
+    dylib.print_red("Đang đợi người dùng nhập thời gian của key...") ; dylib.bot_reply(user_id, "Vui lòng nhập thời gian sử dụng key\nChỉ được nhập só nguyên từ 1-365:")
+
+    bot.register_next_step_handler(message, main_create_key_ios_user)
+
+# HÀM XỬ LÝ CÁC TÁC VỤ CHO VIỆC TẠO KEY
+def main_create_key_ios_user(message):
+    global timekey
+    timekey = message.text
 
      # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options)

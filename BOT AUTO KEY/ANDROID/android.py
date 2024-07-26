@@ -41,10 +41,7 @@ init()
 # LẤY THỜI GIAN HIỆN TẠI
 now = datetime.datetime.now()
 
-########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
-
-@bot.message_handler(commands=['android'])
-# HÀM HỎI NGƯỜI DÙNG THỜI GIAN CỦA KEY
+# HÀM YÊU CẦU NGƯỜI DÙNG NHẬP THỜI GIAN SỬ DỤNG CỦA KEY
 def ask_user_timekey_android(message):
     green_text = "TẠO KEY ANDROID"
     print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
