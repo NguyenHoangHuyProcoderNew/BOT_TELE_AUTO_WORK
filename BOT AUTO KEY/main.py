@@ -36,8 +36,8 @@ from IOS.ios_vip import main_ios_vip
 from IOS.ios_vip import timekey_ios_vip
 
 # TẠO KEY ANDROID
+from ANDROID.android import ask_user_timekey_android
 from ANDROID.android import main_create_key_android
-from ANDROID.android import timekey_android
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT TẠO KEY THÀNH CÔNG | =============")
 
@@ -56,8 +56,8 @@ def ios_vip(message):
 # CHỨC NĂNG TẠO KEY ANDROID
 @bot.message_handler(commands=['android'])
 def android(message):
-    main_create_key_android(message)
-    bot.register_next_step_handler(message, timekey_android)
+    ask_user_timekey_android(message)
+    bot.register_next_step_handler(message, main_create_key_android)
     
 ########################################################
 ####################### CHẠY BOT #######################

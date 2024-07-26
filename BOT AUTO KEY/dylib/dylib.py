@@ -47,6 +47,11 @@ def countdown(minutes):
         time.sleep(1)
     print("Đếm ngược hoàn tất, tiến hành kiểm tra trạng thái phiên live")
 
+# CHỈ GỬI TIN NHẮN CHO NGƯỜI DÙNG MÀ KHÔNG IN RA MÀN HÌNH
+def bot_reply(user_id, message):
+    # Gửi tin nhắn đến người dùng
+    bot.send_message(user_id, message)    
+
 # IN VĂN BẢN THÀNH MÀU ĐỎ
 def print_red(text):
     red_color_code = "\033[91m"
