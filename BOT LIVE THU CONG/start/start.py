@@ -67,70 +67,70 @@ from checklive.checklive import checklive
 from checklive.checkoff import ask_select_account_checkoff
 from checklive.checkoff import checkoff
 
-########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
-print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
+# ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
+# print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
 
-########################## BẮT ĐẦU CÁC CHỨC NĂNG MỞ LIVE ###############################
+# ########################## BẮT ĐẦU CÁC CHỨC NĂNG MỞ LIVE ###############################
 
-# CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ
-@bot.message_handler(commands=['molive_memelo'])
-def molive_memelo(message):
-    main_molive_memelo(message)
-    bot.register_next_step_handler(message, phu_molive_memelo)
+# # CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ
+# @bot.message_handler(commands=['molive_memelo'])
+# def molive_memelo(message):
+#     main_molive_memelo(message)
+#     bot.register_next_step_handler(message, phu_molive_memelo)
 
-# CHỨC NĂNG MỞ LIVE TÀI KHOẢN NICK-PHU-LBH
-@bot.message_handler(commands=['molive_nickphulbh'])
-def molive_nickphulbh(message):
-    main_molive_nickphulbh(message)
-    bot.register_next_step_handler(message, phu_molive_nickphulbh)
+# # CHỨC NĂNG MỞ LIVE TÀI KHOẢN NICK-PHU-LBH
+# @bot.message_handler(commands=['molive_nickphulbh'])
+# def molive_nickphulbh(message):
+#     main_molive_nickphulbh(message)
+#     bot.register_next_step_handler(message, phu_molive_nickphulbh)
 
-# CHỨC NĂNG MỞ LIVE TÀI KHOẢN VĂN BẢO
-@bot.message_handler(commands=['molive_vanbao'])
-def molive_vanbao(message):
-    main_molive_vanbao(message)
-    bot.register_next_step_handler(message, phu_molive_vanbao)
+# # CHỨC NĂNG MỞ LIVE TÀI KHOẢN VĂN BẢO
+# @bot.message_handler(commands=['molive_vanbao'])
+# def molive_vanbao(message):
+#     main_molive_vanbao(message)
+#     bot.register_next_step_handler(message, phu_molive_vanbao)
 
-########################## BẮT ĐẦU CÁC CHỨC NĂNG CHECK LIVE ###############################        
+# ########################## BẮT ĐẦU CÁC CHỨC NĂNG CHECK LIVE ###############################        
 
-# CHỨC NĂNG CHECK LIVE MEME LỎ
-@bot.message_handler(commands=['checklive_memelo'])
-def checklive_meme_lo(message):
-    main_checklive_memelo(message)
+# # CHỨC NĂNG CHECK LIVE MEME LỎ
+# @bot.message_handler(commands=['checklive_memelo'])
+# def checklive_meme_lo(message):
+#     main_checklive_memelo(message)
 
-# CHỨC NĂNG CHECK LIVE VĂN BẢO
-@bot.message_handler(commands=['checklive_vanbao'])
-def checklive_vanbao(message):
-    main_checklive_vanbao(message)
+# # CHỨC NĂNG CHECK LIVE VĂN BẢO
+# @bot.message_handler(commands=['checklive_vanbao'])
+# def checklive_vanbao(message):
+#     main_checklive_vanbao(message)
 
-# CHỨC NĂNG CHECK LIVE NICK PHU LBH
-@bot.message_handler(commands=['checklive_nickphulbh'])
-def checklive_nickphulbh(message):
-    main_checklive_nickphulbh(message)   
+# # CHỨC NĂNG CHECK LIVE NICK PHU LBH
+# @bot.message_handler(commands=['checklive_nickphulbh'])
+# def checklive_nickphulbh(message):
+#     main_checklive_nickphulbh(message)   
 
-############################## CHỨC NĂNG TẮT LIVE #######################################
-@bot.message_handler(commands=['tatlive'])
-def tatlive(message):
-    main_tatlive(message)
+# ############################## CHỨC NĂNG TẮT LIVE #######################################
+# @bot.message_handler(commands=['tatlive'])
+# def tatlive(message):
+#     main_tatlive(message)
 
-############################## CHỨC NĂNG ĐỔI IP & THIẾT BỊ #######################################
-@bot.message_handler(commands=['doiip'])
-def doiip_thietbi(message):
-    ask_select_account_doiip(message)
-    bot.register_next_step_handler(message, doiip)
+# ############################## CHỨC NĂNG ĐỔI IP & THIẾT BỊ #######################################
+# @bot.message_handler(commands=['doiip'])
+# def doiip_thietbi(message):
+#     ask_select_account_doiip(message)
+#     bot.register_next_step_handler(message, doiip)
 
-####################### CHỨC NĂNG CHECK LIVE ##############
-@bot.message_handler(commands=['checklive'])
-def main_checklive(message):
-    ask_select_account_checklive(message)
-    bot.register_next_step_handler(message, checklive)    
+# ####################### CHỨC NĂNG CHECK LIVE ##############
+# @bot.message_handler(commands=['checklive'])
+# def main_checklive(message):
+#     ask_select_account_checklive(message)
+#     bot.register_next_step_handler(message, checklive)    
 
-####################### CHỨC NĂNG CHECK OFF ##############
-@bot.message_handler(commands=['checkoff'])
-def main_checkoff(message):
-    ask_select_account_checkoff(message)
-    bot.register_next_step_handler(message, checkoff)
+# ####################### CHỨC NĂNG CHECK OFF ##############
+# @bot.message_handler(commands=['checkoff'])
+# def main_checkoff(message):
+#     ask_select_account_checkoff(message)
+#     bot.register_next_step_handler(message, checkoff)
 
-################ MENU BUTTON ###############
+# ################ MENU BUTTON ###############
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = types.ReplyKeyboardMarkup(row_width=3)
@@ -143,7 +143,8 @@ def start(message):
 @bot.message_handler(func=lambda message: message.text in ["Đổi IP", "Tắt live", "Mở live"])
 def xuly_start(message):
     if message.text == "Đổi IP":
-        doiip_thietbi(message)
+        from doiip.doiip import ask_select_account_doiip
+        ask_select_account_doiip(message)
     elif message.text == "Tắt live":
         bot.send_message(message.chat.id, "Bạn đã chọn 'hello'!")
     elif message.text == "Mở live":
@@ -155,13 +156,3 @@ def hello(message):
 def home(message):
     start(message)
     bot.register_next_step_handler(message, xuly_start)
-
-########################################################
-####################### CHẠY BOT #######################
-########################################################
-while True:
-    try:
-        bot.polling(none_stop=True)
-    except Exception as e:
-        logging.exception("LỖI")
-        time.sleep(5)

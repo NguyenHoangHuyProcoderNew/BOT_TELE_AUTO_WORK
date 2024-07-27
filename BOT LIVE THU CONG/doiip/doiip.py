@@ -44,16 +44,6 @@ user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 ip = None
 device = None
 
-def some_function():
-    from doiip.doiip import ask_select_account_doiip
-    # sử dụng ask_select_account_doiip
-
-# doiip.py
-def some_other_function(message):
-    from main import start
-
-    start(message)
-    # sử dụng start
 ############################ CHỨC NĂNG CHÍNH ##########################
 def ask_select_account_doiip(message):
 
@@ -76,6 +66,10 @@ def ask_select_account_doiip(message):
 
     bot.register_next_step_handler(message, doiip)
 
+def home(message):
+    from start.start import start
+    start(message)
+
 def doiip(message): 
     global ip
     global device
@@ -93,8 +87,7 @@ def doiip(message):
         ip = "ip-22733"
         device = "renew-22733"
     elif message.text == "Trở lại menu chính":
-        some_other_function(message)
-    else:
+        home(message)
         return
 
     dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_red("Mở website livestream")
