@@ -149,7 +149,7 @@ def xuly_start(message):
     elif message.text == "Mở live":
         bot.send_message(message.chat.id, "Tôi là một bot, cảm ơn bạn!")
 
-def hello(message):
+def hello(message): 
     bot.send_message(message.chat.id, "Bạn đã chọn 'hi'!")     
 
 ########################################################
