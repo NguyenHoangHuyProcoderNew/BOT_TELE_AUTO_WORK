@@ -76,7 +76,7 @@ def ask_select_account_doiip(message):
 
     bot.register_next_step_handler(message, doiip)
 
-def doiip(message):
+def doiip(message): 
     global ip
     global device
 
