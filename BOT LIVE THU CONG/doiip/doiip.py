@@ -19,6 +19,7 @@ import datetime
 now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
 from colorama import Fore, Style, init
+from telebot import types
 
 # NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
 from dylib import dylib
@@ -42,17 +43,29 @@ user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 ip = None
 device = None
-
+user_message_select = None
+def home(message):
+    from main import start
+    start(message)
 ############################ CHỨC NĂNG CHÍNH ##########################
 def ask_select_account_doiip(message):
-    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.bot_reply(user_id, "THỰC THI LỆNH THÀNH CÔNG")
 
     # IN RA MÀN HÌNH
     print(f"\n============= | YÊU CẦU NGƯỜI DÙNG CHỌN TÀI KHOẢN CẦN ĐỔI IP | =============")
 
     # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
-    dylib.print_red("Đang đợi người dùng chọn tài khoản cần đổi IP..."); dylib.bot_reply(user_id, "Vui lòng chọn tài khoản cần đổi IP\n1. Văn Bảo\n2.Nick phụ LBH\n3.Meme Lỏ\nNhập số 1-3 để chọn tài khoản")
+    dylib.print_red("Đang đợi người dùng chọn tài khoản cần đổi IP...")
+    
+
+    markup = types.ReplyKeyboardMarkup(row_width=3)
+    button_nickphulbh = types.KeyboardButton('Nick Phụ LBH')
+    button_nickchinhvanbao = types.KeyboardButton('Nick Chính Văn Bảo')
+    button_memelo = types.KeyboardButton('Nick MEME LỎ')
+    home = types.KeyboardButton('Trở lại menu chính')
+    markup.add(button_nickphulbh, button_nickchinhvanbao, button_memelo, home)
+
+    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
+    bot.send_message(message.chat.id, "Vui lòng chọn tài khoản cần đổi IP", reply_markup=markup)
 
     bot.register_next_step_handler(message, doiip)
 
@@ -60,21 +73,20 @@ def doiip(message):
     global ip
     global device
 
-    # NHẬN DỮ LIỆU MÀ NGƯỜI DÙNG NHẬP
-    user_message_select = message.text.strip()
-
-    if user_message_select == "1":
-        dylib.bot_reply(user_id, "Bạn đã chọn 1, tiến hành đổi IP & thiết bị cho tài khoản VĂN BẢO") ; dylib.print_green("Người dùng đã chọn 1") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản VĂN BẢO")
+    if message.text == "Nick Phụ LBH":
+        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH")
         ip = "ip-22680"
         device = "renew-22680"
-    elif user_message_select == "2":
-        dylib.bot_reply(user_id, "Bạn đã chọn 2, tiến hành đổi IP & thiết bị cho tài khoản nick phụ lbh") ; dylib.print_green("Người dùng đã chọn 2") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản nick phụ lbh")
+    elif message.text == "Nick Chính Văn Bảo":
+        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Chính Văn Bảo") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Chính Văn Bảo")
         ip = "ip-22679"
         device = "renew-22679"
-    elif user_message_select == "3":
-        dylib.bot_reply(user_id, "Bạn đã chọn 3, tiến hành đổi IP & thiết bị cho tài khoản MEME LỎ") ; dylib.print_green("Người dùng đã chọn 3") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản MEME LỎ")
+    elif message.text == "Nick MEME LỎ":
+        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ")
         ip = "ip-22733"
         device = "renew-22733"
+    else:
+        home(message)
 
     dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_red("Mở website livestream")
 

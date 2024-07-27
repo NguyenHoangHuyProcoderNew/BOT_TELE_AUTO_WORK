@@ -18,7 +18,8 @@ logging.basicConfig(level=logging.CRITICAL)  # Chỉ in thông báo lỗi nghiê
 import datetime
 now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
-
+from telebot import types
+from dylib import dylib
 # KHAI BÁO APT TOKEN BOT TELEGRAM
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
@@ -127,6 +128,28 @@ def main_checklive(message):
 def main_checkoff(message):
     ask_select_account_checkoff(message)
     bot.register_next_step_handler(message, checkoff)
+
+################ MENU BUTTON ###############
+@bot.message_handler(commands=['start'])
+def start(message):
+    markup = types.ReplyKeyboardMarkup(row_width=3)
+    button_doiip = types.KeyboardButton('Đổi IP')
+    button_tatlive = types.KeyboardButton('Tắt live')
+    button_molive = types.KeyboardButton('Mở live')
+    markup.add(button_doiip, button_tatlive, button_molive)
+    bot.send_message(message.chat.id, reply_markup=markup)
+
+@bot.message_handler(func=lambda message: message.text in ["Đổi IP", "Tắt live", "Mở live"])
+def xuly_start(message):
+    if message.text == "Đổi IP":
+        doiip_thietbi(message)
+    elif message.text == "Tắt live":
+        bot.send_message(message.chat.id, "Bạn đã chọn 'hello'!")
+    elif message.text == "Mở live":
+        bot.send_message(message.chat.id, "Tôi là một bot, cảm ơn bạn!")
+
+def hello(message):
+    bot.send_message(message.chat.id, "Bạn đã chọn 'hi'!")
 
 ########################################################
 ####################### CHẠY BOT #######################
