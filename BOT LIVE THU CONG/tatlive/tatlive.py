@@ -19,7 +19,7 @@ import datetime
 now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
 from colorama import Fore, Style, init
-
+from telebot import types
 # NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
 from dylib import dylib
 
@@ -46,88 +46,109 @@ green_text = "TẮT LIVE TÀI KHOẢN"
 init()
 
 ############################ CHỨC NĂNG CHÍNH ##########################
-def main_tatlive(message):
+def ask_user_tatlive(message):
+
     # IN RA MÀN HÌNH
-    print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
+    print(f"\n============= | YÊU CẦU NGƯỜI DÙNG XÁC NHẬN XEM CÓ MUỐN TẮT LIVE HAY KHÔNG | =============")
+
+    # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
+    dylib.print_red("Đang đợi người dùng xác nhận...")
+    
+
+    markup = types.ReplyKeyboardMarkup(row_width=3)
+    button_yes = types.KeyboardButton('Có')
+    button_no = types.KeyboardButton('Không')
+    markup.add(button_yes, button_no)
 
     # GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.bot_reply(user_id, "THỰC THI LỆNH THÀNH CÔNG")
+    bot.send_message(message.chat.id, "Bạn muốn tắt live đúng chứ?", reply_markup=markup)
 
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_green_and_send_message(user_id, "Tiến hành mở trang web livestream")    
+    bot.register_next_step_handler(message, main_tatlive)
 
-     # KHỞI TẠO WEB DRIVER
-    driver = webdriver.Chrome(service=service, options=options)
+def home(message):
+    from start.start import start
+    start(message)
 
-    # IN RA MÀN HÌNH
-    dylib.print_red("KHỞI TẠO WEB DRIVER\n")
+def main_tatlive(message):
+    if message.text == "Có":
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_green_and_send_message(user_id, "Tiến hành mở trang web livestream")    
 
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_green("Mở website livestream")
+        # KHỞI TẠO WEB DRIVER
+        driver = webdriver.Chrome(service=service, options=options)
 
-    # MỞ WEB LIVESTREAM
-    driver.get('https://autolive.me/tiktok')
-
-    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
-    try:
         # IN RA MÀN HÌNH
-        dylib.print_green("Đang load website...")
+        dylib.print_red("KHỞI TẠO WEB DRIVER\n")
 
-        # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
-        # SAU KHI PHẦN TỬ XUẤT HIỆN => KẾT LUẬN WEB ĐÃ LOAD XONG
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
+        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+        dylib.print_green("Mở website livestream")
 
-        # IN VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Mở website livestream thành công")
-    except TimeoutError:
-        # IN VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Mở website livestream thất bại")
+        # MỞ WEB LIVESTREAM
+        driver.get('https://autolive.me/tiktok')
 
-        # ĐÓNG CHROME
-        driver.quit()
-
-        # KẾT THÚC TIẾN TRÌNH
-        return
-
-    #  IN RA MÀN HÌNH
-    dylib.print_yellow_and_send_message(user_id, "Tiến hành tắt live...")
-
-    # KIỂM TRA SỰ KIỆN TẮT LIVE
-    try:
-        # Kiểm tra giá trị data-original-title của button 
-        # (Nếu là Dừng live thì mới click)
-        button_tatlive = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-original-title='Dừng live']"))
-    )
-        if button_tatlive.get_attribute("data-original-title") == "Dừng live":
-            
+        # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
+        try:
             # IN RA MÀN HÌNH
-            dylib.print_green("Click vào nút tắt live")
-            button_tatlive.click() # CLICK VÀO NÚT TẮT LIVE NẾU GIÁ TRỊ HỢP LỆ                                     
-    except:
-        dylib.print_red_and_send_message(user_id, "Hiện tại không có phiên live nào được mở")
-        driver.quit()
-        return
+            dylib.print_green("Đang load website...")
 
-    # KIỂM TRA SỰ KIỆN TẮT LIVE CÓ THÀNH CÔNG HAY KHÔNG
-    try:
-        # CHỜ DỢI THÔNG BÁO TẮT LIVE XUẤT HIỆN
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))) # ĐỢI THÔNG BÁO TẮT LIVE THÀNH CÔNG XUẤT HIỆN
+            # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
+            # SAU KHI PHẦN TỬ XUẤT HIỆN => KẾT LUẬN WEB ĐÃ LOAD XONG
+            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
 
-        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_yellow_and_send_message(user_id, "Tắt live thành công...!")
+            # IN VÀ GỬI TIN NHẮN
+            dylib.print_yellow_and_send_message(user_id, "Mở website livestream thành công")
+        except TimeoutError:
+            # IN VÀ GỬI TIN NHẮN
+            dylib.print_yellow_and_send_message(user_id, "Mở website livestream thất bại")
 
-        # ĐÓNG CHROME
-        driver.quit()
+            # ĐÓNG CHROME
+            driver.quit()
 
-        # KẾT THÚC TIẾN TRÌNH
-        return
-    except TimeoutException:
-        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Tắt live không thành công")
+            # KẾT THÚC TIẾN TRÌNH
+            return
 
-        # ĐÓNG CHROME
-        driver.quit()
+        #  IN RA MÀN HÌNH
+        dylib.print_yellow_and_send_message(user_id, "Tiến hành tắt live...")
 
-        # KẾT THÚC TIẾN TRÌNH
+        # KIỂM TRA SỰ KIỆN TẮT LIVE
+        try:
+            # Kiểm tra giá trị data-original-title của button 
+            # (Nếu là Dừng live thì mới click)
+            button_tatlive = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-original-title='Dừng live']"))
+        )
+            if button_tatlive.get_attribute("data-original-title") == "Dừng live":
+                
+                # IN RA MÀN HÌNH
+                dylib.print_green("Click vào nút tắt live")
+                button_tatlive.click() # CLICK VÀO NÚT TẮT LIVE NẾU GIÁ TRỊ HỢP LỆ                                     
+        except:
+            dylib.print_red_and_send_message(user_id, "Hiện tại không có phiên live nào được mở")
+            driver.quit()
+            return
+
+        # KIỂM TRA SỰ KIỆN TẮT LIVE CÓ THÀNH CÔNG HAY KHÔNG
+        try:
+            # CHỜ DỢI THÔNG BÁO TẮT LIVE XUẤT HIỆN
+            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))) # ĐỢI THÔNG BÁO TẮT LIVE THÀNH CÔNG XUẤT HIỆN
+
+            # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+            dylib.print_yellow_and_send_message(user_id, "Tắt live thành công...!")
+
+            # ĐÓNG CHROME
+            driver.quit()
+
+            # KẾT THÚC TIẾN TRÌNH
+            return
+        except TimeoutException:
+            # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
+            dylib.print_red_and_send_message(user_id, "Tắt live không thành công")
+
+            # ĐÓNG CHROME
+            driver.quit()
+
+            # KẾT THÚC TIẾN TRÌNH
+            return
+    elif message.text == "Không":
+        home(message)
         return

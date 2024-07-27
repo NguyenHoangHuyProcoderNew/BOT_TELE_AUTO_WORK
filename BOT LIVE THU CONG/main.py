@@ -54,6 +54,7 @@ from checklive.checklive_nickphulbh import main_checklive_nickphulbh
 
 # IMPORT CHỨC NĂNG TẮT LIVE
 from tatlive.tatlive import main_tatlive
+from tatlive.tatlive import ask_user_tatlive
 
 # IMPORT CHỨC NĂNG ĐỔI IP & THIẾT BỊ
 from doiip.doiip import ask_select_account_doiip
@@ -110,7 +111,8 @@ def checklive_nickphulbh(message):
 ############################## CHỨC NĂNG TẮT LIVE #######################################
 @bot.message_handler(commands=['tatlive'])
 def tatlive(message):
-    main_tatlive(message)
+    ask_user_tatlive(message)
+    bot.register_next_step_handler(message, main_tatlive)
 
 ############################## CHỨC NĂNG ĐỔI IP & THIẾT BỊ #######################################
 @bot.message_handler(commands=['doiip'])
@@ -145,7 +147,7 @@ def xuly_start(message):
     if message.text == "Đổi IP":
         doiip_thietbi(message)
     elif message.text == "Tắt live":
-        bot.send_message(message.chat.id, "Bạn đã chọn 'hello'!")
+        tatlive(message)
     elif message.text == "Mở live":
         bot.send_message(message.chat.id, "Tôi là một bot, cảm ơn bạn!")
 
