@@ -20,6 +20,7 @@ now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
 from telebot import types
 from dylib import dylib
+
 # KHAI BÁO APT TOKEN BOT TELEGRAM
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
@@ -137,7 +138,7 @@ def start(message):
     button_tatlive = types.KeyboardButton('Tắt live')
     button_molive = types.KeyboardButton('Mở live')
     markup.add(button_doiip, button_tatlive, button_molive)
-    bot.send_message(message.chat.id, reply_markup=markup)
+    bot.send_message(message.chat.id, "Các chức năng chính của bot: ", reply_markup=markup)
 
 @bot.message_handler(func=lambda message: message.text in ["Đổi IP", "Tắt live", "Mở live"])
 def xuly_start(message):

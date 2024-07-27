@@ -43,10 +43,17 @@ user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 ip = None
 device = None
-user_message_select = None
-def home(message):
+
+def some_function():
+    from doiip.doiip import ask_select_account_doiip
+    # sử dụng ask_select_account_doiip
+
+# doiip.py
+def some_other_function(message):
     from main import start
+
     start(message)
+    # sử dụng start
 ############################ CHỨC NĂNG CHÍNH ##########################
 def ask_select_account_doiip(message):
 
@@ -85,8 +92,10 @@ def doiip(message):
         dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ")
         ip = "ip-22733"
         device = "renew-22733"
+    elif message.text == "Trở lại menu chính":
+        some_other_function(message)
     else:
-        home(message)
+        return
 
     dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_red("Mở website livestream")
 
