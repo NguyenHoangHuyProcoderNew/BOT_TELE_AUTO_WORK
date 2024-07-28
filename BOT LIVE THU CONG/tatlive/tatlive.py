@@ -35,7 +35,7 @@ service_log_path = os.path.devnull
 service = Service(chromedriver_path, service_log_path=service_log_path)
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
+API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
 user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
@@ -60,7 +60,7 @@ def xacnhan_tatlive(message):
     # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
     dylib.print_red("Đang đợi người dùng xác nhận...")
     
-    xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True).add('Có').add('Không').add('Trở lại menu chính')
+    xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True).add('Có', 'Không').add('Trở lại menu chính')
 
     # GỬI TIN NHẮN CHO NGƯỜI DÙNG
     bot.send_message(message.chat.id, "Bạn muốn tắt live đúng chứ?", reply_markup=xacnhantatlive)

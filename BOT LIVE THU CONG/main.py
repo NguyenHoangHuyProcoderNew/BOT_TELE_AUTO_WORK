@@ -22,7 +22,7 @@ from telebot import types
 from dylib import dylib
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
+API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
 user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
