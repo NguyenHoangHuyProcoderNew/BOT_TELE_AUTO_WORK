@@ -19,7 +19,7 @@ import datetime
 now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
 from colorama import Fore, Style, init
-
+from telebot import types
 # NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
 from dylib import dylib
 
@@ -35,7 +35,7 @@ service_log_path = os.path.devnull
 service = Service(chromedriver_path, service_log_path=service_log_path)
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
+API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
 user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
@@ -49,32 +49,37 @@ select_account = "#tiktok_account > option:nth-child(2)"
 init()
 
 linknguon = None
-############################ CHỨC NĂNG CHÍNH ##########################
-def main_molive_nickphulbh(message):
-    # IN RA MÀN HÌNH
+
+########## TRỞ VỀ MENU CHÍNH #########
+home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live")
+def back_home(message):
+    text = "VUI LÒNG CHỌN 👇"
+    bot.send_message(message.chat.id, text, reply_markup=home)
+
+############# LỰA CHỌN NGUỒN LIVE & MỞ LIVE ############
+# HÀM YÊU CẦU NGƯỜI DÙNG CHỌN NGUỒN CHO PHIÊN LIVE
+def ask_source_live_nickphulbh(message):
     print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
-    # YÊU CẦU NGƯỜI DÙNG LỰA CHỌN NGUỒN CHO PHIÊN LIVE
-    dylib.print_yellow("Bot đang yêu cầu người dùng lựa chọn nguồn cho phiên live") ; bot.send_message(message.chat.id, "Xin vui lòng chọn nguồn cho phiên live\n1. Hồi chiêu full HD\n2.Quỳnh em chửi\nVui lòng nhập số 1 hoặc 2 để chọn\nNếu dữ liệu khác thì cứ nhập link")
+    dylib.print_yellow("Bot đang yêu cầu người dùng lựa chọn nguồn cho phiên live")
+    select_source_live = types.ReplyKeyboardMarkup(True).add('Live hồi chiêu').add('Live quỳnh em').add('Trở lại menu chính')
+    text = "Vui lòng lựa chọn nguồn cho phiên live"
+    bot.send_message(message.chat.id, text, reply_markup=select_source_live)
+    bot.register_next_step_handler(message, main_molive_nickphulbh)
 
-    bot.register_next_step_handler(message, phu_molive_nickphulbh)
-
-# hàm xử lý việc lựa chọn nguồn và mở live
-def phu_molive_nickphulbh(message):
+# HÀM MỞ LIVE
+def main_molive_nickphulbh(message):
     global linknguon
-    nhaplinknguon = message.text.strip()
-    if nhaplinknguon == "1":
-        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn | HỒI CHIÊU FULL HD | ")
-        dylib.print_green("Người dùng đã chọn 1 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | HỒI CHIÊU FULL HD |")
-        linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk"
-    elif nhaplinknguon == "2":
-        dylib.bot_reply(user_id, "Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn | QUỲNH EM CHỬI | ")
-        dylib.print_green("Người dùng đã chọn 2 => TIẾN HÀNH MỞ LIVE VỚI NGUỒN LIVE | QUỲNH EM CHỬI |")
-        linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing"
-    else:
-        dylib.bot_reply(user_id, f"Lựa chọn link nguồn cho phiên live thành công\nTiến hành mở phiên live với nguồn do người dùng cung cấp:\n{nhaplinknguon}")
-        dylib.print_green(f"Người dùng đã chọn nguồn tùy chỉnh => TIẾN HÀNH MỞ LIVE VỚI NGUỒN {nhaplinknguon}")
-        linknguon = nhaplinknguon
+
+    if message.text == "Live hồi chiêu":
+        linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk" # HỒI CHIÊU FULL HD
+        dylib.print_yellow_and_send_message(user_id, "Tiến hành mở live với nguồn hồi chiêu")
+    elif message.text == "Live quỳnh em chửi":
+        linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing" # QUỲNH EM CHỬI
+        dylib.print_yellow_and_send_message(user_id, "Tiến hành mở live với nguồn quỳnh em chửi")
+    elif message.text == "Trở lại menu chính":
+        back_home(message)
+        return
 
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.print_green_and_send_message(user_id, "Mở trang web livestream")

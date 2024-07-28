@@ -35,7 +35,7 @@ service_log_path = os.path.devnull
 service = Service(chromedriver_path, service_log_path=service_log_path)
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
+API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
 user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
@@ -45,8 +45,14 @@ green_text = "TẮT LIVE TÀI KHOẢN"
 # Khởi tạo colorama
 init()
 
-############################ CHỨC NĂNG CHÍNH ##########################
-def ask_user_tatlive(message):
+########## TRỞ VỀ MENU CHÍNH #########
+home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live")
+def back_home(message):
+    text = "VUI LÒNG CHỌN 👇"
+    bot.send_message(message.chat.id, text, reply_markup=home)
+
+# HÀM XÁC NHẬN TẮT LIVE
+def xacnhan_tatlive(message):
 
     # IN RA MÀN HÌNH
     print(f"\n============= | YÊU CẦU NGƯỜI DÙNG XÁC NHẬN XEM CÓ MUỐN TẮT LIVE HAY KHÔNG | =============")
@@ -54,21 +60,14 @@ def ask_user_tatlive(message):
     # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
     dylib.print_red("Đang đợi người dùng xác nhận...")
     
-
-    markup = types.ReplyKeyboardMarkup(row_width=3)
-    button_yes = types.KeyboardButton('Có')
-    button_no = types.KeyboardButton('Không')
-    markup.add(button_yes, button_no)
+    xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True).add('Có').add('Không').add('Quay về')
 
     # GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    bot.send_message(message.chat.id, "Bạn muốn tắt live đúng chứ?", reply_markup=markup)
+    bot.send_message(message.chat.id, "Bạn muốn tắt live đúng chứ?", reply_markup=xacnhantatlive)
 
     bot.register_next_step_handler(message, main_tatlive)
 
-def home(message):
-    from start.start import start
-    start(message)
-
+# HÀM THỰC HIỆN VIỆC TẮT LIVE
 def main_tatlive(message):
     if message.text == "Có":
         # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
@@ -150,5 +149,8 @@ def main_tatlive(message):
             # KẾT THÚC TIẾN TRÌNH
             return
     elif message.text == "Không":
-        home(message)
+        back_home(message)
+        return
+    elif message.text == "Quay về":
+        back_home(message)
         return

@@ -22,159 +22,74 @@ from telebot import types
 from dylib import dylib
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
+API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
-
-# IMPORT CHỨC NĂNG MỞ LIVE
-
-# MỞ LIVE TÀI KHOẢN MEME LỎ
-from molive.molive_memelo import main_molive_memelo
-from molive.molive_memelo import phu_molive_memelo
-
-# MỞ LIVE TÀI KHOẢN VĂN BẢO
-from molive.molive_vanbao import main_molive_vanbao
-from molive.molive_vanbao import phu_molive_vanbao
-
-# MỞ LIVE TÀI KHOẢN NICK PHU LBH
-from molive.molive_nickphulbh import main_molive_nickphulbh
-from molive.molive_nickphulbh import phu_molive_nickphulbh
-
-# IMPORT CHỨC NĂNG CHECKLIVE
-
-# CHECKLIVE MEME LỎ
-from checklive.checklive_memelo import main_checklive_memelo
-
-# CHECK LIVE VĂN BẢO
-from checklive.checklive_vanbao import main_checklive_vanbao
-
-# CHECK LIVE NICK PHU LBH
-from checklive.checklive_nickphulbh import main_checklive_nickphulbh
-
-# IMPORT CHỨC NĂNG TẮT LIVE
-from tatlive.tatlive import main_tatlive
-from tatlive.tatlive import ask_user_tatlive
-
-# IMPORT CHỨC NĂNG ĐỔI IP & THIẾT BỊ
-from doiip.doiip import ask_select_account_doiip
-from doiip.doiip import doiip
-
-# IMPORT CHỨC NĂNG CHECK LIVE
-from checklive.checklive import ask_select_account_checklive
-from checklive.checklive import checklive
-
-# IMPORT CHỨC NĂNG CHECK LIVE
-from checklive.checkoff import ask_select_account_checkoff
-from checklive.checkoff import checkoff
+user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
 
-########################## BẮT ĐẦU CÁC CHỨC NĂNG MỞ LIVE ###############################
+# CHỨC NĂNG /START
+start = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live")
+@bot.message_handler(commands=['start'])
+def handle_start(message):
+    text = "CHÀO MỪNG BẠN QUAY LẠI BOT, CHÚC BẠN NGÀY MỚI VUI VẺ"
+    bot.send_message(message.chat.id, text, reply_markup=start)
 
-# CHỨC NĂNG MỞ LIVE TÀI KHOẢN MEME LỎ
-@bot.message_handler(commands=['molive_memelo'])
-def molive_memelo(message):
-    main_molive_memelo(message)
-    bot.register_next_step_handler(message, phu_molive_memelo)
+# CHỨC NĂNG ĐỔI IP
+@bot.message_handler(func=lambda message: message.text == "Đổi IP")
+def handle_doiip(message):
+    from doiip.doiip import ask_select_account_doiip
+    from doiip.doiip import doiip_main
+    ask_select_account_doiip(message)
+    bot.register_next_step_handler(message, doiip_main)
 
-# CHỨC NĂNG MỞ LIVE TÀI KHOẢN NICK-PHU-LBH
-@bot.message_handler(commands=['molive_nickphulbh'])
-def molive_nickphulbh(message):
-    main_molive_nickphulbh(message)
-    bot.register_next_step_handler(message, phu_molive_nickphulbh)
+# CHỨC NĂNG TẮT LIVE
+@bot.message_handler(func=lambda message: message.text == "Tắt live")
+def handle_tatlive(message):
+    from tatlive.tatlive import xacnhan_tatlive
+    from tatlive.tatlive import main_tatlive
 
-# CHỨC NĂNG MỞ LIVE TÀI KHOẢN VĂN BẢO
-@bot.message_handler(commands=['molive_vanbao'])
-def molive_vanbao(message):
-    main_molive_vanbao(message)
-    bot.register_next_step_handler(message, phu_molive_vanbao)
-
-########################## BẮT ĐẦU CÁC CHỨC NĂNG CHECK LIVE ###############################        
-
-# CHỨC NĂNG CHECK LIVE MEME LỎ
-@bot.message_handler(commands=['checklive_memelo'])
-def checklive_meme_lo(message):
-    main_checklive_memelo(message)
-
-# CHỨC NĂNG CHECK LIVE VĂN BẢO
-@bot.message_handler(commands=['checklive_vanbao'])
-def checklive_vanbao(message):
-    main_checklive_vanbao(message)
-
-# CHỨC NĂNG CHECK LIVE NICK PHU LBH
-@bot.message_handler(commands=['checklive_nickphulbh'])
-def checklive_nickphulbh(message):
-    main_checklive_nickphulbh(message)   
-
-############################## CHỨC NĂNG TẮT LIVE #######################################
-@bot.message_handler(commands=['tatlive'])
-def tatlive(message):
-    ask_user_tatlive(message)
+    xacnhan_tatlive(message)
     bot.register_next_step_handler(message, main_tatlive)
 
-############################## CHỨC NĂNG ĐỔI IP & THIẾT BỊ #######################################
-@bot.message_handler(commands=['doiip'])
-def doiip_thietbi(message):
-    ask_select_account_doiip(message)
-    bot.register_next_step_handler(message, doiip)
+# CHỨC NĂNG MỞ LIVE
+@bot.message_handler(func=lambda message: message.text == "Mở live")
+def select_molive(message):
+    select_molive_button = types.ReplyKeyboardMarkup(True).add('Nick Chính Văn Bảo').add('Nick Phụ LBH').add("Nick Meme Lỏ").add('Trở lại menu chính')
+    text = "Vui lòng chọn tài khoản cần mở live"
+    bot.send_message(message.chat.id, text, reply_markup=select_molive_button)
 
-####################### CHỨC NĂNG CHECK LIVE ##############
-@bot.message_handler(commands=['checklive'])
-def main_checklive(message):
-    ask_select_account_checklive(message)
-    bot.register_next_step_handler(message, checklive)    
+# MỞ LIVE VĂN BẢO
+@bot.message_handler(func=lambda message: message.text == "Nick Chính Văn Bảo")
+def handle_molivevanbao(message):
+    from molive.molive_vanbao import ask_source_live_vanbao, main_molive_vanbao
+    ask_source_live_vanbao(message)
+    bot.register_next_step_handler(message, main_molive_vanbao)
 
-####################### CHỨC NĂNG CHECK OFF ##############
-@bot.message_handler(commands=['checkoff'])
-def main_checkoff(message):
-    ask_select_account_checkoff(message)
-    bot.register_next_step_handler(message, checkoff)
+# MỞ LIVE NICK PHỤ LBH
+@bot.message_handler(func=lambda message: message.text == "Nick Phụ LBH")
+def handle_molivenickphulbh(message):
+    from molive.molive_nickphulbh import ask_source_live_nickphulbh, main_molive_nickphulbh
+    ask_source_live_nickphulbh(message)
+    bot.register_next_step_handler(message, main_molive_nickphulbh)
 
-################ MENU BUTTON ###############
-@bot.message_handler(commands=['start'])
-def start(message):
-    markup = types.ReplyKeyboardMarkup(row_width=3)
-    button_doiip = types.KeyboardButton('Đổi IP')
-    button_tatlive = types.KeyboardButton('Tắt live')
-    button_molive = types.KeyboardButton('Mở live')
-    markup.add(button_doiip, button_tatlive, button_molive)
-    bot.send_message(message.chat.id, "Các chức năng chính của bot: ", reply_markup=markup)
+# MỞ LIVE MEME LỎ
+@bot.message_handler(func=lambda message: message.text == "Nick Meme Lỏ")
+def handle_molivenickphulbh(message):
+    from molive.molive_memelo import ask_source_live_memelo, main_molive_memelo
+    ask_source_live_memelo(message)
+    bot.register_next_step_handler(message, main_molive_memelo)   
 
-def menu_molive(message):
-    markup = types.ReplyKeyboardMarkup(row_width=1)
-    button_nickphulbh = types.KeyboardButton('Mở live Nick Phụ LBH')
-    button_vanbao = types.KeyboardButton('Mở live VĂN BẢO')
-    button_memelo = types.KeyboardButton('Mở live MEME LỎ')
-    home = types.KeyboardButton('Trở lại menu chính')
-    markup.add(button_nickphulbh, button_vanbao, button_memelo, home)
-    bot.send_message(message.chat.id, "Vui lòng chọn tài khoản càn mở live ", reply_markup=markup)
-    bot.register_next_step_handler(message, xuly_menumolive)
+# TRỞ LẠI MENU CHÍNH
+@bot.message_handler(func=lambda message: message.text == "Trở lại menu chính")
+def handle_back_home(message):
+    back_home(message)
 
-def xuly_menumolive(message):
-    if message.text == "Mở live Nick Phụ LBH":
-        molive_nickphulbh(message)
-    elif message.text == "Mở live VĂN BẢO":
-        molive_vanbao(message)
-    elif message.text == "Mở live MEME LỎ":
-        molive_memelo(message)
-    elif message.text == "Trở lại menu chính":
-        home(message)
-        return
-
-@bot.message_handler(func=lambda message: message.text in ["Đổi IP", "Tắt live", "Mở live"])
-def xuly_start(message):
-    if message.text == "Đổi IP":
-        doiip_thietbi(message)
-    elif message.text == "Tắt live":
-        tatlive(message)
-    elif message.text == "Mở live":
-        menu_molive(message)
-
-def home(message):
-    from start.start import start
-    start(message)
+def back_home(message):
+    text = "VUI LÒNG CHỌN 👇"
+    bot.send_message(message.chat.id, text, reply_markup=start)
 
 ########################################################
 ####################### CHẠY BOT #######################

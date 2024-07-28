@@ -22,7 +22,7 @@ from selenium.common.exceptions import TimeoutException
 from colorama import init, Fore
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
+API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
 # CẤU HÌNH WEBDRIVER

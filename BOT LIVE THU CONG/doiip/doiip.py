@@ -36,7 +36,7 @@ service_log_path = os.path.devnull
 service = Service(chromedriver_path, service_log_path=service_log_path)
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
+API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
 user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
@@ -44,7 +44,13 @@ user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 ip = None
 device = None
 
-############################ CHỨC NĂNG CHÍNH ##########################
+########## TRỞ VỀ MENU CHÍNH #########
+home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live")
+def back_home(message):
+    text = "VUI LÒNG CHỌN 👇"
+    bot.send_message(message.chat.id, text, reply_markup=home)
+
+# LỰA CHỌN TÀI KHOẢN CẦN MỞ LIVE
 def ask_select_account_doiip(message):
 
     # IN RA MÀN HÌNH
@@ -52,42 +58,31 @@ def ask_select_account_doiip(message):
 
     # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
     dylib.print_red("Đang đợi người dùng chọn tài khoản cần đổi IP...")
-    
 
-    markup = types.ReplyKeyboardMarkup(row_width=3)
-    button_nickphulbh = types.KeyboardButton('Nick Phụ LBH')
-    button_nickchinhvanbao = types.KeyboardButton('Nick Chính Văn Bảo')
-    button_memelo = types.KeyboardButton('Nick MEME LỎ')
-    home = types.KeyboardButton('Trở lại menu chính')
-    markup.add(button_nickphulbh, button_nickchinhvanbao, button_memelo, home)
+    select_account_doiip = telebot.types.ReplyKeyboardMarkup(True).add("Nick Phụ LBH").add("Nick Văn Bảo").add("Nick Meme Lỏ").add("Trở lại menu chính")
+    text = "Vui lòng chọn tài khoản cần đổi IP"
+    bot.send_message(message.chat.id, text, reply_markup=select_account_doiip)
+    bot.register_next_step_handler(message, doiip_main)
 
-    # GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    bot.send_message(message.chat.id, "Vui lòng chọn tài khoản cần đổi IP", reply_markup=markup)
-
-    bot.register_next_step_handler(message, doiip)
-
-def home(message):
-    from start.start import start
-    start(message)
-
-def doiip(message): 
+# THỰC HIỆN ĐỔI IP
+def doiip_main(message): 
     global ip
     global device
 
-    if message.text == "Nick Phụ LBH":
-        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH")
+    if message.text == "Nick Văn Bảo":
+        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Văn Bảo") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Văn Bảo")
         ip = "ip-22680"
         device = "renew-22680"
-    elif message.text == "Nick Chính Văn Bảo":
-        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Chính Văn Bảo") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Chính Văn Bảo")
+    elif message.text == "Nick Phụ LBH":
+        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH")
         ip = "ip-22679"
         device = "renew-22679"
-    elif message.text == "Nick MEME LỎ":
+    elif message.text == "Nick Meme Lỏ":
         dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ")
         ip = "ip-22733"
         device = "renew-22733"
     elif message.text == "Trở lại menu chính":
-        home(message)
+        back_home(message)
         return
 
     dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_red("Mở website livestream")
