@@ -60,7 +60,7 @@ def xacnhan_tatlive(message):
     # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
     dylib.print_red("Đang đợi người dùng xác nhận...")
     
-    xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True).add('Có').add('Không').add('Quay về')
+    xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True).add('Có').add('Không').add('Trở lại menu chính')
 
     # GỬI TIN NHẮN CHO NGƯỜI DÙNG
     bot.send_message(message.chat.id, "Bạn muốn tắt live đúng chứ?", reply_markup=xacnhantatlive)
@@ -151,6 +151,6 @@ def main_tatlive(message):
     elif message.text == "Không":
         back_home(message)
         return
-    elif message.text == "Quay về":
+    elif message.text == "Trở lại menu chính":
         back_home(message)
         return
