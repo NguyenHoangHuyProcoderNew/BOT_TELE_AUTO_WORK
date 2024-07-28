@@ -142,6 +142,27 @@ def start(message):
     markup.add(button_doiip, button_tatlive, button_molive)
     bot.send_message(message.chat.id, "Các chức năng chính của bot: ", reply_markup=markup)
 
+def menu_molive(message):
+    markup = types.ReplyKeyboardMarkup(row_width=1)
+    button_nickphulbh = types.KeyboardButton('Mở live Nick Phụ LBH')
+    button_vanbao = types.KeyboardButton('Mở live VĂN BẢO')
+    button_memelo = types.KeyboardButton('Mở live MEME LỎ')
+    home = types.KeyboardButton('Trở lại menu chính')
+    markup.add(button_nickphulbh, button_vanbao, button_memelo, home)
+    bot.send_message(message.chat.id, "Vui lòng chọn tài khoản càn mở live ", reply_markup=markup)
+    bot.register_next_step_handler(message, xuly_menumolive)
+
+def xuly_menumolive(message):
+    if message.text == "Mở live Nick Phụ LBH":
+        molive_nickphulbh(message)
+    elif message.text == "Mở live VĂN BẢO":
+        molive_vanbao(message)
+    elif message.text == "Mở live MEME LỎ":
+        molive_memelo(message)
+    elif message.text == "Trở lại menu chính":
+        home(message)
+        return
+
 @bot.message_handler(func=lambda message: message.text in ["Đổi IP", "Tắt live", "Mở live"])
 def xuly_start(message):
     if message.text == "Đổi IP":
@@ -149,14 +170,11 @@ def xuly_start(message):
     elif message.text == "Tắt live":
         tatlive(message)
     elif message.text == "Mở live":
-        bot.send_message(message.chat.id, "Tôi là một bot, cảm ơn bạn!")
-
-def hello(message): 
-    bot.send_message(message.chat.id, "Bạn đã chọn 'hi'!") 
+        menu_molive(message)
 
 def home(message):
+    from start.start import start
     start(message)
-    bot.register_next_step_handler(message, xuly_start)
 
 ########################################################
 ####################### CHẠY BOT #######################
