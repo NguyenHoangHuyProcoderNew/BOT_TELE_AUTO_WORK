@@ -54,10 +54,10 @@ def back_home(message):
 def ask_select_account_doiip(message):
 
     # IN RA MÀN HÌNH
-    print(f"\n============= | YÊU CẦU NGƯỜI DÙNG CHỌN TÀI KHOẢN CẦN ĐỔI IP | =============")
+    print(f"\n============= | NGƯỜI DÙNG YÊU CẦU ĐỔI IP TÀI KHOẢN | =============")
 
     # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
-    dylib.print_red("Đang đợi người dùng chọn tài khoản cần đổi IP...")
+    dylib.print_green("Đang đợi người dùng chọn tài khoản cần đổi IP...")
 
     select_account_doiip = telebot.types.ReplyKeyboardMarkup(True).add("Nick Phụ LBH").add("Nick Văn Bảo").add("Nick Meme Lỏ").add("Trở lại menu chính")
     text = "Vui lòng chọn tài khoản cần đổi IP"
@@ -70,25 +70,25 @@ def doiip_main(message):
     global device
 
     if message.text == "Nick Văn Bảo":
-        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Văn Bảo") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Văn Bảo")
+        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Văn Bảo") ; dylib.print_red("Tiến hành đổi IP & thiết bị cho tài khoản Nick Văn Bảo")
         ip = "ip-22680"
         device = "renew-22680"
     elif message.text == "Nick Phụ LBH":
-        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH")
+        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH") ; dylib.print_red("Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH")
         ip = "ip-22679"
         device = "renew-22679"
     elif message.text == "Nick Meme Lỏ":
-        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ") ; dylib.print_green("Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ")
+        dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ") ; dylib.print_red("Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ")
         ip = "ip-22733"
         device = "renew-22733"
     elif message.text == "Trở lại menu chính":
         back_home(message)
         return
 
-    dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_red("Mở website livestream")
-
     # KHỞI TẠO WEB DRIVER
     driver = webdriver.Chrome(service=service, options=options) ; dylib.print_green("Khởi tạo chrome web driver")
+    
+    dylib.bot_reply(user_id, "Tiến hành mở website livestream") ; dylib.print_green("Mở website livestream")
 
     # MỞ WEB LIVESTREAM
     driver.get('https://autolive.me/tiktok')

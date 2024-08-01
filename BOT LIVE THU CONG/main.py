@@ -29,6 +29,7 @@ user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
+dylib.print_yellow("Bot đang chờ lệnh từ người dùng...")
 
 # CHỨC NĂNG /START
 start = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live")

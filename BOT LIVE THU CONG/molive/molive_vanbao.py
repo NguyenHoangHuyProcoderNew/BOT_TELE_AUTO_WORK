@@ -64,8 +64,8 @@ def back_home(message):
 def ask_source_live_vanbao(message):
     print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
 
-    dylib.print_yellow("Bot đang yêu cầu người dùng lựa chọn nguồn cho phiên live")
-    select_source_live = types.ReplyKeyboardMarkup(True).add('Live hồi chiêu').add('Live quỳnh em').add('Trở lại menu chính')
+    dylib.print_red("Đang đợi người dùng chọn nguồn cho phiên live...")
+    select_source_live = types.ReplyKeyboardMarkup(True).add('HỒI CHIÊU').add('QUỲNH EM').add('Trở lại menu chính')
     text = "Vui lòng lựa chọn nguồn cho phiên live"
     bot.send_message(message.chat.id, text, reply_markup=select_source_live)
     bot.register_next_step_handler(message, main_molive_vanbao)
@@ -74,21 +74,21 @@ def ask_source_live_vanbao(message):
 def main_molive_vanbao(message):
     global linknguon
 
-    if message.text == "Live hồi chiêu":
-        linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk" # HỒI CHIÊU FULL HD
-        dylib.print_yellow_and_send_message(user_id, "Tiến hành mở live với nguồn hồi chiêu")
-    elif message.text == "Live quỳnh em chửi":
-        linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing" # QUỲNH EM CHỬI
-        dylib.print_yellow_and_send_message(user_id, "Tiến hành mở live với nguồn quỳnh em chửi")
+    if message.text == "HỒI CHIÊU":
+        linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk" # NGUỒN HỒI CHIÊU
+        dylib.print_red("Người dùng đã chọn nguồn HỒI CHIÊU, tiến hành mở phiên live với nguồn HỒI CHIÊU"); dylib.bot_reply(user_id, f"Tiến hành mở phiên live tài khoản {ten_tai_khoan} với nguồn HỒI CHIÊU")
+    elif message.text == "QUỲNH EM":
+        linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing" # NGUỒN QUỲNH EM
+        dylib.print_red("Người dùng đã chọn nguồn QUỲNH EM, tiến hành mở phiên live với nguồn QUỲNH EM"); dylib.bot_reply(user_id, f"Tiến hành mở phiên live tài khoản {ten_tai_khoan} với nguồn QUỲNH EM")
     elif message.text == "Trở lại menu chính":
         back_home(message)
         return
 
+    # KHỞI TẠO WEB DRIVER
+    driver = webdriver.Chrome(service=service, options=options) ; dylib.print_green("KHỞI TẠO WEB DRIVER")
+
     # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
     dylib.print_green_and_send_message(user_id, "Mở trang web livestream")
-
-    # KHỞI TẠO WEB DRIVER
-    driver = webdriver.Chrome(service=service, options=options) ; dylib.print_red("KHỞI TẠO WEB DRIVER\n")
 
     # MỞ WEB LIVESTREAM
     driver.get('https://autolive.me/tiktok')
@@ -184,7 +184,7 @@ def main_molive_vanbao(message):
         dylib.print_red_and_send_message(user_id, "Lưu cấu hình thất bại, vui lòng kiểm tra lại kết nối internet máy chủ")
 
     # MỞ LIVE
-    dylib.print_yellow_and_send_message(user_id, "Tiến hành mở live")
+    dylib.print_red_and_send_message(user_id, "Tiến hành mở live")
 
     # KIỂM TRA XEM CÓ MỞ LIVE THÀNH CÔNG HAY KHÔNG
     try:
