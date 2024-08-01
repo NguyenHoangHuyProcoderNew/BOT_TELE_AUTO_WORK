@@ -27,6 +27,7 @@ chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 print(f"============= | KHỞI ĐỘNG BOT TẠO KEY THÀNH CÔNG | =============")
+print("Bot đang đợi lệnh từ người dùng...")
 
 # CHỨC NĂNG TẠO KEY IOS USER
 from IOS.ios_user import ask_user_timekey_ios_user
@@ -37,12 +38,12 @@ def ios_user(message):
     bot.register_next_step_handler(message, main_create_key_ios_user)
 
 # CHỨC NĂNG TẠO KEY IOS VIP
-from IOS.ios_vip import main_ios_vip
-from IOS.ios_vip import timekey_ios_vip
+from IOS.ios_vip import ask_user_timekey_ios_vip
+from IOS.ios_vip import main_create_key_ios_vip
 @bot.message_handler(commands=['ios_vip'])
 def ios_vip(message):
-    main_ios_vip(message)
-    bot.register_next_step_handler(message, timekey_ios_vip)
+    ask_user_timekey_ios_vip(message)
+    bot.register_next_step_handler(message, main_create_key_ios_vip)
 
 # CHỨC NĂNG TẠO KEY ANDROID
 from ANDROID.android import ask_user_timekey_android

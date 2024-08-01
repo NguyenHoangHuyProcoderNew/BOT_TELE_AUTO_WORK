@@ -23,6 +23,8 @@ from colorama import Fore, Style, init
 # NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
 from dylib import dylib
 
+import json
+
 # CẤU HÌNH WEBDRIVER
 chromedriver_path = r'D:\\BOT_TELE_AUTO_WORK\\BOT AUTO KEY\\chrome_driver\\chromedriver.exe'
 
@@ -41,17 +43,222 @@ user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
 
 timekey = None
 
-############################ CHỨC NĂNG CHÍNH ##########################
-def main_ios_vip(message):
+# HÀM YÊU CẦU NGƯỜI DÙNG NHẬP THỜI GIAN SỬ DỤNG CỦA KEY
+def ask_user_timekey_ios_vip(message):
+    green_text = "TẠO KEY IOS VIP"
+    print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
 
-    # Yêu cầu người dùng nhập số ngày sử dụng key
-    bot.send_message(message.chat.id, "Xin vui lòng nhập số ngày sử dụng key:")
-    bot.register_next_step_handler(message, timekey_ios_vip)
+    # YÊU CẦU NGƯỜI DÙNG NHẬP THỜI GIAN CỦA KEY
+    dylib.print_red("Đang đợi người dùng nhập thời gian của key...") ; dylib.bot_reply(user_id, "Vui lòng nhập thời gian sử dụng key\nChỉ được nhập số nguyên từ 1-365:")
 
-def timekey_ios_vip(message):
+    bot.register_next_step_handler(message, main_create_key_ios_vip)
+
+def main_create_key_ios_vip(message):
+    global timekey
+    timekey = int(message.text)
+    dylib.bot_reply(user_id, f"Tiến hành tạo: 01 key\nThiết bị: IOS\nServer: IOS VIP\nThời gian sử dụng key: {timekey} ngày")
+    if timekey == 1:
+        create_key_1day(message)
+    elif timekey == 7:
+        create_key_7day(message)
+    elif timekey == 30:
+        create_key_30day(message)
+    elif timekey == 365:
+        create_key_365day(message)
+    elif timekey not in [1, 7, 30, 365]:
+        create_key_not_in_select(message)
+    else:
+        return
+
+# HÀM TẠO KEY 1 NGÀY
+def create_key_1day(message):
+    # KHỞI TẠO WEB DRIVER
+    dylib.print_green("KHỞI TẠO WEB DRIVER\n")
+    driver = webdriver.Chrome(service=service, options=options)
+
+    # MỞ WEB TẠO KEY
+    dylib.print_red_and_send_message(user_id, "Đang tạo key...")
+    driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=127&email=nguyenhoanghuyprocoder@gmail.com&token=rvyGhdjTJiXK3M1QI7gUfUxBqmrzUsRUcmP7cAZ5FQcLMlmfIbvTBJ6o9BzBcpNOYmF3gj7b96907fAQQMqVr5ciRTEfuHQBM9zy&loaikey=1day&luotdung=1')
+
+    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
+    try:
+        dylib.print_green_and_send_message(user_id, "Tạo key thành công")
+        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM TẠO KEY THÀNH CÔNG HAY CHƯA
+        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
+        # THÔNG BÁO TẠO KEY THÀNH CÔNG
+        dylib.print_yellow("Tạo key thành công")
+    except TimeoutError:
+        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
+        dylib.print_red_and_send_message(user_id, "Tạo key thất bại") 
+
+    try:
+        # ĐỢI PHẦN TỬ CHỨA KEY XUẤT HIỆN
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '#keyDiv'))
+        )
+        
+        # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA KEY
+        element = driver.find_element(By.ID, 'keyDiv')
+        data = driver.execute_script("return arguments[0].textContent;", element).strip()   
+
+        # LỌC BỎ NHỮNG DỮ LIỆU KHÔNG CẦN THIẾT, CHỈ LẤY DỮ LIỆU CHỨA KEY
+        json_str = data
+        data = json.loads(json_str)
+        value = data['key']
+
+        # GỬI KEY CHO NGƯỜI DÙNG
+        dylib.print_green("Gửi key cho người dùng")
+        dylib.bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{value}")
+    except Exception as e:
+        dylib.print_yellow_and_send_message(user_id, "Tạo key thất bại")
+
+    # THÔNG BÁO GỬI KEY THÀNH CÔNG CHO NGƯỜI DÙNG
+    dylib.print_yellow("Gửi key cho người dùng thành công")
+
+    driver.quit()
+
+def create_key_7day(message):
+    # KHỞI TẠO WEB DRIVER
+    dylib.print_green("KHỞI TẠO WEB DRIVER\n")
+    driver = webdriver.Chrome(service=service, options=options)
+
+    # MỞ WEB TẠO KEY
+    dylib.print_red_and_send_message(user_id, "Đang tạo key...")
+    driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=127&email=nguyenhoanghuyprocoder@gmail.com&token=rvyGhdjTJiXK3M1QI7gUfUxBqmrzUsRUcmP7cAZ5FQcLMlmfIbvTBJ6o9BzBcpNOYmF3gj7b96907fAQQMqVr5ciRTEfuHQBM9zy&loaikey=7day&luotdung=1')
+
+    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
+    try:
+        dylib.print_green_and_send_message(user_id, "Tạo key thành công")
+        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM TẠO KEY THÀNH CÔNG HAY CHƯA
+        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
+        # THÔNG BÁO TẠO KEY THÀNH CÔNG
+        dylib.print_yellow("Tạo key thành công")
+    except TimeoutError:
+        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
+        dylib.print_red_and_send_message(user_id, "Tạo key thất bại") 
+
+    try:
+        # ĐỢI PHẦN TỬ CHỨA KEY XUẤT HIỆN
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '#keyDiv'))
+        )
+        
+        # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA KEY
+        element = driver.find_element(By.ID, 'keyDiv')
+        data = driver.execute_script("return arguments[0].textContent;", element).strip()   
+
+        # LỌC BỎ NHỮNG DỮ LIỆU KHÔNG CẦN THIẾT, CHỈ LẤY DỮ LIỆU CHỨA KEY
+        json_str = data
+        data = json.loads(json_str)
+        value = data['key']
+
+        # GỬI KEY CHO NGƯỜI DÙNG
+        dylib.print_green("Gửi key cho người dùng")
+        dylib.bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{value}")
+    except Exception as e:
+        dylib.print_yellow_and_send_message(user_id, "Tạo key thất bại")
+
+    # THÔNG BÁO GỬI KEY THÀNH CÔNG CHO NGƯỜI DÙNG
+    dylib.print_yellow("Gửi key cho người dùng thành công")
+
+    driver.quit()
+
+def create_key_30day(message):
+    # KHỞI TẠO WEB DRIVER
+    dylib.print_green("KHỞI TẠO WEB DRIVER\n")
+    driver = webdriver.Chrome(service=service, options=options)
+
+    # MỞ WEB TẠO KEY
+    dylib.print_red_and_send_message(user_id, "Đang tạo key...")
+    driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=127&email=nguyenhoanghuyprocoder@gmail.com&token=rvyGhdjTJiXK3M1QI7gUfUxBqmrzUsRUcmP7cAZ5FQcLMlmfIbvTBJ6o9BzBcpNOYmF3gj7b96907fAQQMqVr5ciRTEfuHQBM9zy&loaikey=30day&luotdung=1')
+
+    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
+    try:
+        dylib.print_green_and_send_message(user_id, "Tạo key thành công")
+        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM TẠO KEY THÀNH CÔNG HAY CHƯA
+        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
+        # THÔNG BÁO TẠO KEY THÀNH CÔNG
+        dylib.print_yellow("Tạo key thành công")
+    except TimeoutError:
+        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
+        dylib.print_red_and_send_message(user_id, "Tạo key thất bại") 
+
+    try:
+        # ĐỢI PHẦN TỬ CHỨA KEY XUẤT HIỆN
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '#keyDiv'))
+        )
+        
+        # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA KEY
+        element = driver.find_element(By.ID, 'keyDiv')
+        data = driver.execute_script("return arguments[0].textContent;", element).strip()   
+
+        # LỌC BỎ NHỮNG DỮ LIỆU KHÔNG CẦN THIẾT, CHỈ LẤY DỮ LIỆU CHỨA KEY
+        json_str = data
+        data = json.loads(json_str)
+        value = data['key']
+
+        # GỬI KEY CHO NGƯỜI DÙNG
+        dylib.print_green("Gửi key cho người dùng")
+        dylib.bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{value}")
+    except Exception as e:
+        dylib.print_yellow_and_send_message(user_id, "Tạo key thất bại")
+
+    # THÔNG BÁO GỬI KEY THÀNH CÔNG CHO NGƯỜI DÙNG
+    dylib.print_yellow("Gửi key cho người dùng thành công")
+
+    driver.quit()
+
+def create_key_365day(message):
+    # KHỞI TẠO WEB DRIVER
+    dylib.print_green("KHỞI TẠO WEB DRIVER\n")
+    driver = webdriver.Chrome(service=service, options=options)
+
+    # MỞ WEB TẠO KEY
+    dylib.print_red_and_send_message(user_id, "Đang tạo key...")
+    driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=127&email=nguyenhoanghuyprocoder@gmail.com&token=rvyGhdjTJiXK3M1QI7gUfUxBqmrzUsRUcmP7cAZ5FQcLMlmfIbvTBJ6o9BzBcpNOYmF3gj7b96907fAQQMqVr5ciRTEfuHQBM9zy&loaikey=365day&luotdung=1')
+
+    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
+    try:
+        dylib.print_green_and_send_message(user_id, "Tạo key thành công")
+        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM TẠO KEY THÀNH CÔNG HAY CHƯA
+        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
+        # THÔNG BÁO TẠO KEY THÀNH CÔNG
+        dylib.print_yellow("Tạo key thành công")
+    except TimeoutError:
+        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
+        dylib.print_red_and_send_message(user_id, "Tạo key thất bại") 
+
+    try:
+        # ĐỢI PHẦN TỬ CHỨA KEY XUẤT HIỆN
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '#keyDiv'))
+        )
+        
+        # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA KEY
+        element = driver.find_element(By.ID, 'keyDiv')
+        data = driver.execute_script("return arguments[0].textContent;", element).strip()   
+
+        # LỌC BỎ NHỮNG DỮ LIỆU KHÔNG CẦN THIẾT, CHỈ LẤY DỮ LIỆU CHỨA KEY
+        json_str = data
+        data = json.loads(json_str)
+        value = data['key']
+
+        # GỬI KEY CHO NGƯỜI DÙNG
+        dylib.print_green("Gửi key cho người dùng")
+        dylib.bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{value}")
+    except Exception as e:
+        dylib.print_yellow_and_send_message(user_id, "Tạo key thất bại")
+
+    # THÔNG BÁO GỬI KEY THÀNH CÔNG CHO NGƯỜI DÙNG
+    dylib.print_yellow("Gửi key cho người dùng thành công")
+
+    driver.quit()
+
+def create_key_not_in_select(message):
     global timekey
     timekey = message.text
-    green_text = "TẠO KEY IOS VIP"
+    green_text = "TẠO KEY IOS USER"
 
         # IN RA MÀN HÌNH
     print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
@@ -61,9 +268,6 @@ def timekey_ios_vip(message):
 
     # IN RA MÀN HÌNH
     dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
-
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_yellow_and_send_message(user_id, f"Tiến hành tạo: 01 key\nTHÔNG TIN KEY\nThiết bị hỗ trợ: IOS\nSố lượng thiết bị sử dụng: 01 thiết bị\nServer: IOS VIP\nThời gian sử dụng key: {timekey} ngày")
 
     dylib.print_yellow_and_send_message(user_id, "Vui lòng chờ...")
 
@@ -199,4 +403,4 @@ def timekey_ios_vip(message):
     # IN RA MÀN HÌNH
     dylib.print_yellow("Gửi key cho người dùng thành công")
 
-    driver.quit()
+    driver.quit()    
