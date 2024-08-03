@@ -59,25 +59,26 @@ def ask_select_account_doiip(message):
     # YÊU CẦU NGƯỜI DÙNH CHỌN TÀI KHOẢN
     dylib.print_green("Đang đợi người dùng chọn tài khoản cần đổi IP...")
 
-    select_account_doiip = telebot.types.ReplyKeyboardMarkup(True).add("Nick Phụ LBH").add("Nick Văn Bảo").add("Nick Meme Lỏ").add("Trở lại menu chính")
+    select_account_doiip = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP Nick Phụ LBH").add("Đổi IP Nick Văn Bảo").add("Đổi IP Nick Meme Lỏ").add("Trở lại menu chính")
     text = "Vui lòng chọn tài khoản cần đổi IP"
     bot.send_message(message.chat.id, text, reply_markup=select_account_doiip)
     bot.register_next_step_handler(message, doiip_main)
 
 # THỰC HIỆN ĐỔI IP
+@bot.message_handler(func=lambda message: message.text in ["Đổi IP Nick Phụ LBH", "Đổi IP Nick Văn Bảo", "Đổi IP Nick Meme Lỏ"])
 def doiip_main(message): 
     global ip
     global device
 
-    if message.text == "Nick Văn Bảo":
+    if message.text == "Đổi IP Nick Văn Bảo":
         dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Văn Bảo") ; dylib.print_red("Tiến hành đổi IP & thiết bị cho tài khoản Nick Văn Bảo")
         ip = "ip-22680"
         device = "renew-22680"
-    elif message.text == "Nick Phụ LBH":
+    elif message.text == "Đổi IP Nick Phụ LBH":
         dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH") ; dylib.print_red("Tiến hành đổi IP & thiết bị cho tài khoản Nick Phụ LBH")
         ip = "ip-22679"
         device = "renew-22679"
-    elif message.text == "Nick Meme Lỏ":
+    elif message.text == "Đổi IP Nick Meme Lỏ":
         dylib.bot_reply(user_id, "Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ") ; dylib.print_red("Tiến hành đổi IP & thiết bị cho tài khoản Nick Meme Lỏ")
         ip = "ip-22733"
         device = "renew-22733"

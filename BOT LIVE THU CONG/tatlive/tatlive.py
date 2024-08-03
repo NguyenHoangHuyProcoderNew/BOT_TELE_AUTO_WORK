@@ -58,7 +58,7 @@ def xacnhan_tatlive(message):
 
     # Tạo bàn phím xác nhận
     xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True)
-    xacnhantatlive.add('Có', 'Không')
+    xacnhantatlive.add('Có', 'Không').add('Trở lại menu chính')
 
     # Gửi tin nhắn yêu cầu xác nhận
     bot.send_message(message.chat.id, "Xác nhận tắt phiên live hiện tại?", reply_markup=xacnhantatlive)
@@ -112,13 +112,10 @@ def main_tatlive(message):
                 EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))
             )
             dylib.print_yellow_and_send_message(user_id, "Tắt live thành công...!")
-            back_home(message) # SAU KHI TẮT LIVE THÀNH CÔNG TRỞ VỀ MENU CHÍNH
         except TimeoutException:
             dylib.print_red_and_send_message(user_id, "Tắt live không thành công")
-            back_home(message) # SAU KHI TẮT LIVE KHÔNG THÀNH CÔNG TRỞ VỀ MENU CHÍNH
         finally:
             driver.quit()
             return
-
     elif message.text in ["Không", "Trở lại menu chính"]:
         back_home(message)
