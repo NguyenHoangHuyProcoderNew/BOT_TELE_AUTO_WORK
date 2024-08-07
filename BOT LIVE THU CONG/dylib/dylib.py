@@ -22,7 +22,7 @@ from selenium.common.exceptions import TimeoutException
 from colorama import init, Fore
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
+API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
 # CẤU HÌNH WEBDRIVER
@@ -36,7 +36,8 @@ service = Service(chromedriver_path)
 service_log_path = os.path.devnull
 service = Service(chromedriver_path, service_log_path=service_log_path)
 
-# user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+user_id = "5634845912"
+username = "@Davidmmo68"
 
 # HÀM ĐẾM NGƯỢC SỐ PHÚT
 def countdown(minutes):

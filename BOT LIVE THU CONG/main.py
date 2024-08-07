@@ -16,31 +16,39 @@ import pyperclip
 from selenium.common.exceptions import NoSuchElementException
 logging.basicConfig(level=logging.CRITICAL)  # Chỉ in thông báo lỗi nghiêm trọng
 import datetime
-now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
 from telebot import types
+# GỌI CÁC CHỨC NĂNG CỦA FILE DYLIB
 from dylib import dylib
 
-# KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
+# CÁC CHỨC NĂNG IN RA MÀN HÌNH
+from print_logger.print_logger import log_info, log_warning, log_error
+
+# KHAI BÁO API TOKEN BOT TELEGRAM
+API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+from dylib.dylib import user_id
+from dylib.dylib import username
 
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
-print(f"============= | KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG | =============")
-dylib.print_yellow("Bot đang chờ lệnh từ người dùng...")
+log_info(f"KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG - ĐANG CHỜ LỆNH TỪ NGƯỜI DÙNG...")
 
-# CHỨC NĂNG /START
-start = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live")
+# CHỨC NĂNG START
 @bot.message_handler(commands=['start'])
-def handle_start(message):
+def start(message):   
+    log_info(f"Người dùng {username} - ID: {user_id} đã sử dụng lệnh /start")
+    # TẠO NÚT CHO CHỨC NĂNG START
+    button_start = telebot.types.ReplyKeyboardMarkup(True)
+    button_start.add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
     text = "CHÀO MỪNG BẠN QUAY LẠI BOT, CHÚC BẠN NGÀY MỚI VUI VẺ"
-    bot.send_message(message.chat.id, text, reply_markup=start)
+    bot.send_message(message.chat.id, text, reply_markup=button_start)
 
-# CHỨC NĂNG ĐỔI IP
+# ĐỔI IP
 @bot.message_handler(func=lambda message: message.text == "Đổi IP")
 def handle_doiip(message):
+    log_info(f"Người dùng {username} - ID: {user_id} đã chọn đổi IP từ menu chính")
+    # GỌI HÀM ĐỔI IP TRONG FILE DOIIP.PY TRONG FOLDER DOIIP
     from doiip.doiip import ask_select_account_doiip
     from doiip.doiip import doiip_main
     ask_select_account_doiip(message)
@@ -91,6 +99,13 @@ def handle_back_home(message):
 def back_home(message):
     text = "VUI LÒNG CHỌN 👇"
     bot.send_message(message.chat.id, text, reply_markup=start)
+@bot.message_handler(func=lambda message: message.text == "Check view")
+def checkview(message):
+    from checkview.checkview import ask_select_account_checkview
+    from checkview.checkview import checkview_main
+
+    ask_select_account_checkview(message)
+    bot.register_next_step_handler(message, checkview_main)
 
 ########################################################
 ####################### CHẠY BOT #######################

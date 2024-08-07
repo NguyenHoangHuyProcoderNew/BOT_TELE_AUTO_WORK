@@ -35,7 +35,7 @@ service_log_path = os.path.devnull
 service = Service(chromedriver_path, service_log_path=service_log_path)
 
 # KHAI BÁO APT TOKEN BOT TELEGRAM
-API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
+API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
 user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
@@ -46,7 +46,7 @@ green_text = "TẮT LIVE TÀI KHOẢN"
 init()
 
 ########## TRỞ VỀ MENU CHÍNH #########
-home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live")
+home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
 def back_home(message):
     text = "VUI LÒNG CHỌN 👇"
     bot.send_message(message.chat.id, text, reply_markup=home)
@@ -58,7 +58,7 @@ def xacnhan_tatlive(message):
 
     # Tạo bàn phím xác nhận
     xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True)
-    xacnhantatlive.add('Có', 'Không').add('Trở lại menu chính')
+    xacnhantatlive.add('Cóo', 'Không').add('Trở lại menu chính')
 
     # Gửi tin nhắn yêu cầu xác nhận
     bot.send_message(message.chat.id, "Xác nhận tắt phiên live hiện tại?", reply_markup=xacnhantatlive)
