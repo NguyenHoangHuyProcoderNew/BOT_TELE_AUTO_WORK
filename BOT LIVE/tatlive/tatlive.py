@@ -20,12 +20,11 @@ now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
 from colorama import Fore, Style, init
 from telebot import types
-# NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
-from dylib import dylib
 
-# CẤU HÌNH WEBDRIVER
+# Đường dẫn đến chrome driver
 chromedriver_path = r'D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\chrome_driver\\chromedriver.exe'
 
+# Cấu hình chrome driver
 options = Options()
 options.add_argument('--log-level=3')  # Vô hiệu hóa thông báo của Selenium
 options.add_argument('--user-data-dir=D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\du lieu trinh duyet')
@@ -38,12 +37,14 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+# CÁC CHỨC NĂNG IN RA MÀN HÌNH
+from print_logger.print_logger import log_info, log_warning, log_error, log_success
 
-green_text = "TẮT LIVE TÀI KHOẢN"
+# Nhập chức năng bot phản hồi lại người dùng
+from dylib.dylib import bot_reply
 
-# Khởi tạo colorama
-init()
+from dylib.dylib import user_id
+from dylib.dylib import username
 
 ########## TRỞ VỀ MENU CHÍNH #########
 home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
@@ -51,71 +52,84 @@ def back_home(message):
     text = "VUI LÒNG CHỌN 👇"
     bot.send_message(message.chat.id, text, reply_markup=home)
 
-# HÀM YÊU CẦU NGƯỜI DÙNG XÁC NHẬN TẮT PHIÊN LIVE (HỎI XEM NGƯỜI DÙNG CÓ MUỐN TẮT PHIÊN LIVE HIỆN TẠI KHÔNG?)
+# Hàm xác nhận tắt live
 def xacnhan_tatlive(message):
-    print("\n============= | NGƯỜI DÙNG YÊU CẦU TẮT PHIÊN LIVE HIỆN TẠI | =============")
-    dylib.print_red("Đang đợi người dùng xác nhận...")
-
-    # Tạo bàn phím xác nhận
+    # Tạo nút xác nhận tắt live
     xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True)
-    xacnhantatlive.add('Cóo', 'Không').add('Trở lại menu chính')
-
-    # Gửi tin nhắn yêu cầu xác nhận
+    xacnhantatlive.add('Có', 'Không').add('Trở lại menu chính')
+    log_info(f"Bot đang yêu cầu người dùng {username} xác nhận tắt phiên live")
     bot.send_message(message.chat.id, "Xác nhận tắt phiên live hiện tại?", reply_markup=xacnhantatlive)
 
-    # Đăng ký xử lý bước tiếp theo
+    # Sau khi người dùng xác nhận gọi hàm main_tatlive để xử lý
     bot.register_next_step_handler(message, main_tatlive)
 
 # HÀM THỰC HIỆN VIỆC TẮT LIVE
 def main_tatlive(message):
     if message.text == "Có":
-        dylib.print_green_and_send_message(user_id, "Tiến hành mở trang web livestream")
+        log_info("Người dùng đã xác nhận tắt phiên live")
 
-        # KHỞI TẠO WEB DRIVER
+        log_info("Khởi tạo chrome driver")
         driver = webdriver.Chrome(service=service, options=options)
-        dylib.print_green("KHỞI TẠO WEB DRIVER")
-
-        # MỞ WEB LIVESTREAM
-        dylib.print_green("Mở website livestream")
+        
+        bot_reply(user_id, "Tiến hành mở trang web livestream")
+        log_info("Đang mở trang web livestream")
         driver.get('https://autolive.me/tiktok')
 
-        # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
         try:
-            dylib.print_green("Đang load website...")
+            bot_reply(user_id, "Đang load trang web livestream...")
+            log_info("Đang load trang web livestream")
+
             WebDriverWait(driver, 100).until(
                 EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b'))
             )
-            dylib.print_yellow_and_send_message(user_id, "Mở website livestream thành công")
+            
+            bot_reply(user_id, "Load trang web livestream thành công")
+            log_success("Load trang web livestram thành công")
         except TimeoutError:
-            dylib.print_yellow_and_send_message(user_id, "Mở website livestream thất bại")
-            driver.quit()
-            return
+            bot_reply(user_id, "Load trang web livestream thất bại, vui lòng kiểm tra lại đường truyền internet")
+            log_error("Xảy ra lỗi khi load trang web livestream, do sự cố đường truyền internet")
 
-        dylib.print_red_and_send_message(user_id, "Tiến hành tắt live...")
+        bot_reply(user_id, "Tiến hành tắt live")
+        log_info("Tiến hành tắt phiên live")
 
-        # KIỂM TRA SỰ KIỆN TẮT LIVE
         try:
             button_tatlive = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-original-title='Dừng live']"))
             )
             if button_tatlive.get_attribute("data-original-title") == "Dừng live":
-                dylib.print_green("Click vào nút tắt live")
+                log_info("Click vào nút tắt live")
+                bot_reply(user_id, "Đang tắt phiên live...")
                 button_tatlive.click()
         except:
-            dylib.print_red_and_send_message(user_id, "Hiện tại không có phiên live nào được mở")
+            bot_reply(user_id, "Hiện không có phiên live nào được mở")
+            log_info("Hiện không có phiên live nào được mở")
+
+            log_info("Đóng trình duyệt chrome")
             driver.quit()
+
+            log_info("Kết thúc tiến trình")
             return
 
-        # KIỂM TRA SỰ KIỆN TẮT LIVE CÓ THÀNH CÔNG HAY KHÔNG
-        try:
-            WebDriverWait(driver, 100).until(
+        log_info("Đang kiểm tra có tắt phiên live thành công hay không")
+
+        # Đợi thông báo sau khi tắt live xuất hiện
+        WebDriverWait(driver, 100).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))
-            )
-            dylib.print_yellow_and_send_message(user_id, "Tắt live thành công...!")
-        except TimeoutException:
-            dylib.print_red_and_send_message(user_id, "Tắt live không thành công")
-        finally:
-            driver.quit()
-            return
+        )
+            
+        log_info("Đang lấy dữ liệu thông báo của web sau khi tắt live")
+        notify_tatlive = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
+
+        log_info("Đang chuyển dữ liệu thông báo của web sau khi tắt live thành văn bản")
+        data_notify_tatlive = notify_tatlive.text
+
+        log_info("Đang kiểm tra dữ liệu thông báo của web")
+        if data_notify_tatlive == "Success":
+            bot_reply(user_id, "Tắt live thành công")
+            log_success(f"Thông báo của web là {data_notify_tatlive} - Tắt live thành công")
+        else:
+            bot_reply(user_id, f"Tắt live không thành công - Thông báo từ trang web: {data_notify_tatlive}")
+            log_error(f"Tắt live không thành công - Nguyên nhân: {data_notify_tatlive}")
+     
     elif message.text in ["Không", "Trở lại menu chính"]:
         back_home(message)

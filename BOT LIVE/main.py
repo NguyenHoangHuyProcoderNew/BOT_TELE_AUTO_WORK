@@ -59,6 +59,7 @@ def handle_doiip(message):
 # CHỨC NĂNG TẮT LIVE
 @bot.message_handler(func=lambda message: message.text == "Tắt live")
 def handle_tatlive(message):
+    log_info(f"Người dùng {username} - ID: {user_id} đã chọn Tắt live từ menu chính")
     from tatlive.tatlive import xacnhan_tatlive
     from tatlive.tatlive import main_tatlive
 
@@ -98,6 +99,7 @@ def handle_molivenickphulbh(message):
 @bot.message_handler(func=lambda message: message.text in ["Trở lại menu chính", "Không, trở về menu chính"])
 def handle_back_home(message):
     # Gọi hàm xử lý việc trở lại menu chính
+    log_info("Người dùng đã chọn Trở Lại Menu Chính")
     back_home(message)
 
 # Hàm xử lý việc trở lại menu chính

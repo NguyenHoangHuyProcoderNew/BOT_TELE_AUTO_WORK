@@ -20,21 +20,11 @@ now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
 from colorama import Fore, Style, init
 from telebot import types
-# NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
-from dylib import dylib
 
-# CÁC CHỨC NĂNG IN RA MÀN HÌNH
-from print_logger.print_logger import log_info, log_warning, log_error, log_success
-
-# Nhập chức năng bot phản hồi lại người dùng
-from dylib.dylib import bot_reply
-
-from dylib.dylib import user_id
-from dylib.dylib import username
-
-# CẤU HÌNH WEBDRIVER
+# Đường dẫn đến chrome driver
 chromedriver_path = r'D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\chrome_driver\\chromedriver.exe'
 
+# Cấu hình chrome driver
 options = Options()
 options.add_argument('--log-level=3')  # Vô hiệu hóa thông báo của Selenium
 options.add_argument('--user-data-dir=D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\du lieu trinh duyet')
@@ -47,16 +37,21 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+# CÁC CHỨC NĂNG IN RA MÀN HÌNH
+from print_logger.print_logger import log_info, log_warning, log_error, log_success
+
+# Nhập chức năng bot phản hồi lại người dùng
+from dylib.dylib import bot_reply
+
+from dylib.dylib import user_id
+from dylib.dylib import username
 
 # THÔNG TIN TÀI KHOẢN LIVE
 ten_tai_khoan = "VĂN BẢO"
 id_tiktok = "vanbao165201"
 select_account = "#tiktok_account > option:nth-child(3)"
 
-# Khởi tạo colorama
-init()
-
+# Link nguồn
 linknguon = None
 
 # Trở về menu chính
@@ -124,7 +119,7 @@ def main_molive_vanbao(message):
     log_info("Xóa cấu hình cũ")
     try:
         log_info("Click vào nút xóa cấu hình")
-        driver.find_element(By.XPATH, '//button[@class="btn btn-circle btn-dark btn-sm waves-effect waves-light btn-status-live" and @data-status="-1" and @data-toggle="tooltip"]').click() ; dylib.print_green("Click vào nút xóa cấu hình")
+        driver.find_element(By.XPATH, '//button[@class="btn btn-circle btn-dark btn-sm waves-effect waves-light btn-status-live" and @data-status="-1" and @data-toggle="tooltip"]').click()
 
         log_info("Đang đợi thông báo của web sau khi xóa cấu hình cũ...")
 
@@ -143,7 +138,7 @@ def main_molive_vanbao(message):
         log_info("Đang kiểm tra dữ liệu của thông báo")
         if data_notify_xoacauhinh == "Bạn phải dừng luồng live trước khi xóa":
             bot_reply(user_id, "Hiện đang có 1 luồng live đang được mở, vui lòng dừng luồng live rồi thử lại")
-            log_error("Không thể xóa cấu hình cũ do có 1 luồng live đang được chạy")
+            log_error(f"Không thể xóa cấu hình cũ - Thông báo từ web: {data_notify_xoacauhinh}")
             
             log_info("Đóng trình duyệt chrome")
             driver.quit()
@@ -194,101 +189,96 @@ def main_molive_vanbao(message):
         log_info("Đang làm mới lại trang web để lưu cấu hình...")
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[1]')))
 
-        bot_reply(user_id, "")
-        log_info("")
-        # THÔNG BÁO TẠO CẤU HÌNH MỚI THÀNH CÔNG
-        dylib.print_yellow_and_send_message(user_id, "Cấu hình đã được lưu thành công")
+        bot_reply(user_id, "Tạo cấu hình mới hoàn tất")
+        log_info("Lưu cấu hình thành công")
     except TimeoutError:
-        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Lưu cấu hình thất bại, vui lòng kiểm tra lại kết nối internet máy chủ")
+        bot_reply(user_id, "Tạo cấu hình mới thất bại")
+        log_info("Tạo cấu hình mới thất bại")
 
-    # MỞ LIVE
-    dylib.print_red_and_send_message(user_id, "Tiến hành mở live")
+    bot_reply(user_id, "Đang mở live...")
+    log_info("Tiến hành mở phiên live")
 
-    # KIỂM TRA XEM CÓ MỞ LIVE THÀNH CÔNG HAY KHÔNG
     try:
-        # CLICK VÀO NÚT MỞ LIVE
-        dylib.print_green("Click vào nút mở live") ; driver.find_element(By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']").click()
+        log_info("Click vào nút mở phiên live")
+        driver.find_element(By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']").click()
 
-        # ĐỢI THÔNG BÁO MỞ LIVE THÀNH CÔNG XUẤT HIỆN
+        log_info("Đang đợi thông báo của web sau khi click vào nút mở phiên live xuất hiện")
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
 
-        data_notify = driver.execute_script('''
+        log_info("Đang lấy dữ liệu của thông báo của web sau khi mở phiên live")
+        notify_openlive = driver.execute_script('''
         // JavaScript code here
         // Đoạn mã JavaScript để lấy nội dung của phần tử
         var element = document.querySelector('div.text[data-notify-html="text"]');
         return element.textContent;
     ''')
         
-        if data_notify == "Success":
-            dylib.print_yellow_and_send_message(user_id, "Mở live thành công")
+        if notify_openlive == "Success":
+            bot_reply(user_id, "Mở phiên live thành công")
+            log_info(f"Thông báo của web là {notify_openlive} - Mở live thành công")
         else:
-            dylib.print_yellow_and_send_message(user_id, f"Mở live thất bại\nThông báo của web:\n{data_notify}")
-            driver.quit()
-            return
+            bot_reply(user_id, f"Mở phiên live thất bại\nThông báo từ web: {notify_openlive}")
+            log_error(f"Mở phiên live thất bại - Thông báo từ web: {notify_openlive}")
     except TimeoutError:
-        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Mở live thất bại, vui lòng kiểm tra lại kết nối internet máy chủ")
-        
-        # ĐÓNG CHROME
-        driver.quit()
-
-        # KẾT THÚC TIẾN TRÌNH
-        return
+        bot_reply(user_id, "Mở phiên live thất bại\nNguyên nhân: sự cố kết nối từ máy chủ")
+        log_error("Không thể mở phiên live - Sự cố kết nối từ máy chủ")
     
-    # KIỂM TRA THỜI ĐIỂM PHIÊN LIVE ĐƯỢC DIỄN RA
-    dylib.print_red_and_send_message(user_id, "Tiến hành kiểm tra thời điểm phiên live được diễn ra")
+    
+    bot_reply(user_id, "Tiến hành kiểm tra khi nào phiên live được mở")
+    log_info("Tiến hành kiểm tra thời điểm phiên live diễn ra")
     try:
-        # MỞ PHIÊN LIVE
-        dylib.bot_reply(user_id, "Tiến hành truy cập vào phiên live...") ; dylib.print_green("Mở phiên live") ; driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
+        bot_reply(user_id, "Đang truy cập vào phiên live")
+        log_info("Đang mở phiên live")
+        driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
-        # TRUY CẬP PHIÊN LIVE THÀNH CÔNG
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a'))) ;
-        dylib.bot_reply(user_id, "Truy cập phiên live thành công, khi nào phiên live diễn ra tôi sẽ thông báo cho bạn nhé ^-^") ; dylib.print_yellow("Truy cập phiên live thành công, tiến hành kiểm tra")
+        log_info("Đang load phiên live")
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
+
+        bot_reply(user_id, "Truy cập phiên live thành công, khi nào phiên live diễn ra tôi sẽ thông báo cho bạn")
     except TimeoutException:
-        # IN RA MÀN HÌNH
-        dylib.print_yellow_and_send_message(user_id, "Xảy ra sự cố khi truy cập phiên live, vui lòng kiểm tra lại kết nối internet")
+        bot_reply(user_id, "Không thể truy cập phiên live, xảy ra sự cố kết nối internet")
+        log_info("Không thể truy cập phiên live do kết nối internet")
 
-        # ĐÓNG CHROME
+        log_info("Đóng trình duyệt chrome")
         driver.quit()
 
-        # KẾT THÚC TIẾN TRÌNH
+        log_info("Kết thúc tiến trình")
         return
     
     # HÀM KIỂM TRA PHIÊN LIVE
     while True:
-        now = datetime.datetime.now()
+        now = datetime.datetime.now() # Biến lấy ngày giờ hiện tại của hệ thống
         try:
-            # KIỂM TRA PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM
-
-            # SỬ DỤNG WebDriverWait, NẾU TRONG 1 GIÂY MÀ PHẦN TỬ XUẤT HIỆN THÌ PHIÊN LIVE ĐÃ ĐƯỢC MỞ
+            log_info("Đang check view...")
             checkview = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div"))
             )
-            dylib.print_yellow_and_send_message(user_id, f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
             
-            # ĐÓNG TRÌNH DUYỆT CHROME
+            bot_reply(user_id, f"Check live hoàn tất, phiên live đã được mở vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            log_info(f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
+
+            log_info("Đóng trình duyệt chrome")
             driver.quit()
 
-            # KẾT THÚC TIẾN TRÌNH
+            log_info("Kết thúc tiến trình")
             return
         except TimeoutException:
-            # IN RA MÀN HÌNH
-            dylib.print_green(f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live chưa dược diễn ra => TIẾP TỤC KIỂM TRA")
+            log_info("Phiên live chưa được diễn ra")
 
-            # LÀM MỚI LẠI PHIÊN LIVE
+            log_info("Làm mới lại phiên live")
             driver.refresh()
 
-            # KIỂM TRA XEM PHIÊN LIVE CÓ ĐƯỢC LÀM MỚI THÀNH CÔNG HAY KHÔNG SAU KHI LÀM MỚI
+            # Kiểm tra xem có làm mới lại phiên live thành công hay không
             try:
                 WebDriverWait(driver, 100).until(
                     EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/main/div[3]/div/div[1]/a"))
                 )
             except TimeoutException:
-                # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-                dylib.print_yellow_and_send_message(user_id, "Có lỗi sảy ra khi kiểm tra phiên live, vui lòng kiểm tra lại kết nối internet")
+                bot_reply(user_id, "Kiểm tra phiên live thất bại do có sự cố kết nối internet, vui lòng kiểm tra lại đường truyền")
+                log_error("Kiểm tra phiên live thất bại do có sự cố về kết nối internet")
 
-                # ĐÓNG CHROME
+                log_info("Đóng trình duyệt chrome")
                 driver.quit()
 
-                return # KẾT THÚC TIẾN TRÌNH
+                log_info("Kết thúc tiến trình")
+                return
