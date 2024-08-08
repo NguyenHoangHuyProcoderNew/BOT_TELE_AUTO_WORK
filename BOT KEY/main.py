@@ -44,11 +44,12 @@ def create_key_ios_user(message):
     ask_user_timekey_ios_user(message)
     bot.register_next_step_handler(message, main_create_key_ios_user)
 
-# CHỨC NĂNG TẠO KEY IOS VIP
-from IOS.ios_vip import ask_user_timekey_ios_vip
-from IOS.ios_vip import main_create_key_ios_vip
+# Tạo key IOS server VIP
 @bot.message_handler(commands=['ios_vip'])
 def ios_vip(message):
+    log_info(f"Người dùng {username} đã sử dụng lệnh /ios_vip")
+    from IOS.ios_vip import ask_user_timekey_ios_vip
+    from IOS.ios_vip import main_create_key_ios_vip
     ask_user_timekey_ios_vip(message)
     bot.register_next_step_handler(message, main_create_key_ios_vip)
 
@@ -57,6 +58,7 @@ from ANDROID.android import ask_user_timekey_android
 from ANDROID.android import main_create_key_android
 @bot.message_handler(commands=['android'])
 def android(message):
+    log_info(f"Người dùng {username} đã sử dụng lệnh /android")
     ask_user_timekey_android(message)
     bot.register_next_step_handler(message, main_create_key_android)
     
