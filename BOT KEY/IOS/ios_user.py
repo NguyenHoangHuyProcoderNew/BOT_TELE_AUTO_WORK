@@ -48,6 +48,8 @@ from dylib.dylib import bot_reply
 from dylib.dylib import user_id
 from dylib.dylib import username
 
+timekey = None
+
 # Hàm yêu cầu người dùng nhập thời gian của key
 def ask_user_timekey_ios_user(message):
     bot_reply(user_id, "Vui lòng nhập thời gian của key\nChỉ được nhập dữ liệu là số nguyên và trong khoảng từ 1-365:")
@@ -83,324 +85,360 @@ def create_key_1day(message):
     driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=128&email=nguyenhoanghuyprocoder@gmail.com&token=LOzCeWYL0Ffqj6o9w4zOWuY9NcbkyJ0zytzj8HzkQdCMTQ0ubBYz9R5K5MvxJjNDDWkNQBlo8idLJpZDjxyh7TAJ0BylLELdxRli&loaikey=1day&luotdung=1')
 
     try:
-        bot_reply("Đang tạo key...")
+        bot_reply(user_id, "Đang tạo key...")
+        log_info("Đang tạo key bằng API...")
+
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
-        # THÔNG BÁO TẠO KEY THÀNH CÔNG
-        dylib.print_yellow("Tạo key thành công")
+
+        bot_reply(user_id, "Tạo key thành công")
+        log_success("Tạo thành công 1 key")
     except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại") 
+        bot_reply(user_id, "Tạo key không thành công, xảy ra sự cố kết nối internet")
+        log_info("Tạo key thất bại do sự cố kết nối internet")
 
     try:
-        # ĐỢI PHẦN TỬ CHỨA KEY XUẤT HIỆN
+        # Đợi phần tử chứa key xuất hiện
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, '#keyDiv'))
         )
         
-        # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA KEY
-        element = driver.find_element(By.ID, 'keyDiv')
-        data = driver.execute_script("return arguments[0].textContent;", element).strip()   
+        # Lấy dữ liệu của phần tử chứa key
+        check_key = driver.find_element(By.ID, 'keyDiv')
 
-        # LỌC BỎ NHỮNG DỮ LIỆU KHÔNG CẦN THIẾT, CHỈ LẤY DỮ LIỆU CHỨA KEY
-        json_str = data
-        data = json.loads(json_str)
-        value = data['key']
+        # Chuyển dữ liệu của phần tử chứa key thành văn bản
+        key = driver.execute_script("return arguments[0].textContent;", check_key).strip()   
 
-        # GỬI KEY CHO NGƯỜI DÙNG
-        dylib.print_green("Gửi key cho người dùng")
-        dylib.bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{value}")
+        # Lọc bỏ những dữ liệu không cần thiết
+        clean_datakey = json.loads(key)
+        key_final = clean_datakey['key']
+
+        log_info("Gửi key đã tạo cho người dùng")
+        bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{key_final}")
+
+        log_success("Gửi key cho người dùng thành công")
+
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
+
+        log_info("Kết thúc tiến trình")
+        return
     except Exception as e:
-        dylib.print_yellow_and_send_message(user_id, "Tạo key thất bại")
+        log_error("Tạo key thất bại, xảy ra sự cố kết nối internet")
+        bot_reply(user_id, "Tạo key thất bại, vui lòng kiểm tra lại đường truyền của máy chủ")
 
-    # THÔNG BÁO GỬI KEY THÀNH CÔNG CHO NGƯỜI DÙNG
-    dylib.print_yellow("Gửi key cho người dùng thành công")
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
 
-    driver.quit()
+        log_info("Kết thúc tiến trình")
+        return
+
 
 def create_key_7day(message):
-    # KHỞI TẠO WEB DRIVER
-    dylib.print_green("KHỞI TẠO WEB DRIVER\n")
+    log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
-    # MỞ WEB TẠO KEY
-    dylib.print_red_and_send_message(user_id, "Đang tạo key...")
+    # Tạo key bằng API của web có sẵn
     driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=128&email=nguyenhoanghuyprocoder@gmail.com&token=LOzCeWYL0Ffqj6o9w4zOWuY9NcbkyJ0zytzj8HzkQdCMTQ0ubBYz9R5K5MvxJjNDDWkNQBlo8idLJpZDjxyh7TAJ0BylLELdxRli&loaikey=7day&luotdung=1')
 
-    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
-        dylib.print_green_and_send_message(user_id, "Tạo key thành công")
-        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM TẠO KEY THÀNH CÔNG HAY CHƯA
+        bot_reply(user_id, "Đang tạo key...")
+        log_info("Đang tạo key bằng API...")
+
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
-        # THÔNG BÁO TẠO KEY THÀNH CÔNG
-        dylib.print_yellow("Tạo key thành công")
+
+        bot_reply(user_id, "Tạo key thành công")
+        log_success("Tạo thành công 1 key")
     except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại") 
+        bot_reply(user_id, "Tạo key không thành công, xảy ra sự cố kết nối internet")
+        log_info("Tạo key thất bại do sự cố kết nối internet")
 
     try:
-        # ĐỢI PHẦN TỬ CHỨA KEY XUẤT HIỆN
+        # Đợi phần tử chứa key xuất hiện
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, '#keyDiv'))
         )
         
-        # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA KEY
-        element = driver.find_element(By.ID, 'keyDiv')
-        data = driver.execute_script("return arguments[0].textContent;", element).strip()   
+        # Lấy dữ liệu của phần tử chứa key
+        check_key = driver.find_element(By.ID, 'keyDiv')
 
-        # LỌC BỎ NHỮNG DỮ LIỆU KHÔNG CẦN THIẾT, CHỈ LẤY DỮ LIỆU CHỨA KEY
-        json_str = data
-        data = json.loads(json_str)
-        value = data['key']
+        # Chuyển dữ liệu của phần tử chứa key thành văn bản
+        key = driver.execute_script("return arguments[0].textContent;", check_key).strip()   
 
-        # GỬI KEY CHO NGƯỜI DÙNG
-        dylib.print_green("Gửi key cho người dùng")
-        dylib.bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{value}")
+        # Lọc bỏ những dữ liệu không cần thiết
+        clean_datakey = json.loads(key)
+        key_final = clean_datakey['key']
+
+        log_info("Gửi key đã tạo cho người dùng")
+        bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{key_final}")
+
+        log_success("Gửi key cho người dùng thành công")
+
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
+
+        log_info("Kết thúc tiến trình")
+        return
     except Exception as e:
-        dylib.print_yellow_and_send_message(user_id, "Tạo key thất bại")
+        log_error("Tạo key thất bại, xảy ra sự cố kết nối internet")
+        bot_reply(user_id, "Tạo key thất bại, vui lòng kiểm tra lại đường truyền của máy chủ")
 
-    # THÔNG BÁO GỬI KEY THÀNH CÔNG CHO NGƯỜI DÙNG
-    dylib.print_yellow("Gửi key cho người dùng thành công")
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
 
-    driver.quit()
+        log_info("Kết thúc tiến trình")
+        return        
 
 def create_key_30day(message):
-    # KHỞI TẠO WEB DRIVER
-    dylib.print_green("KHỞI TẠO WEB DRIVER\n")
+    log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
-    # MỞ WEB TẠO KEY
-    dylib.print_red_and_send_message(user_id, "Đang tạo key...")
+    # Tạo key bằng API của web có sẵn
     driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=128&email=nguyenhoanghuyprocoder@gmail.com&token=LOzCeWYL0Ffqj6o9w4zOWuY9NcbkyJ0zytzj8HzkQdCMTQ0ubBYz9R5K5MvxJjNDDWkNQBlo8idLJpZDjxyh7TAJ0BylLELdxRli&loaikey=30day&luotdung=1')
 
-    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
-        dylib.print_green_and_send_message(user_id, "Tạo key thành công")
-        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM TẠO KEY THÀNH CÔNG HAY CHƯA
+        bot_reply(user_id, "Đang tạo key...")
+        log_info("Đang tạo key bằng API...")
+
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
-        # THÔNG BÁO TẠO KEY THÀNH CÔNG
-        dylib.print_yellow("Tạo key thành công")
+
+        bot_reply(user_id, "Tạo key thành công")
+        log_success("Tạo thành công 1 key")
     except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại") 
+        bot_reply(user_id, "Tạo key không thành công, xảy ra sự cố kết nối internet")
+        log_info("Tạo key thất bại do sự cố kết nối internet")
 
     try:
-        # ĐỢI PHẦN TỬ CHỨA KEY XUẤT HIỆN
+        # Đợi phần tử chứa key xuất hiện
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, '#keyDiv'))
         )
         
-        # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA KEY
-        element = driver.find_element(By.ID, 'keyDiv')
-        data = driver.execute_script("return arguments[0].textContent;", element).strip()   
+        # Lấy dữ liệu của phần tử chứa key
+        check_key = driver.find_element(By.ID, 'keyDiv')
 
-        # LỌC BỎ NHỮNG DỮ LIỆU KHÔNG CẦN THIẾT, CHỈ LẤY DỮ LIỆU CHỨA KEY
-        json_str = data
-        data = json.loads(json_str)
-        value = data['key']
+        # Chuyển dữ liệu của phần tử chứa key thành văn bản
+        key = driver.execute_script("return arguments[0].textContent;", check_key).strip()   
 
-        # GỬI KEY CHO NGƯỜI DÙNG
-        dylib.print_green("Gửi key cho người dùng")
-        dylib.bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{value}")
+        # Lọc bỏ những dữ liệu không cần thiết
+        clean_datakey = json.loads(key)
+        key_final = clean_datakey['key']
+
+        log_info("Gửi key đã tạo cho người dùng")
+        bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{key_final}")
+
+        log_success("Gửi key cho người dùng thành công")
+
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
+
+        log_info("Kết thúc tiến trình")
+        return
     except Exception as e:
-        dylib.print_yellow_and_send_message(user_id, "Tạo key thất bại")
+        log_error("Tạo key thất bại, xảy ra sự cố kết nối internet")
+        bot_reply(user_id, "Tạo key thất bại, vui lòng kiểm tra lại đường truyền của máy chủ")
 
-    # THÔNG BÁO GỬI KEY THÀNH CÔNG CHO NGƯỜI DÙNG
-    dylib.print_yellow("Gửi key cho người dùng thành công")
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
 
-    driver.quit()
+        log_info("Kết thúc tiến trình")
+        return        
 
 def create_key_365day(message):
-    # KHỞI TẠO WEB DRIVER
-    dylib.print_green("KHỞI TẠO WEB DRIVER\n")
+    log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
-    # MỞ WEB TẠO KEY
-    dylib.print_red_and_send_message(user_id, "Đang tạo key...")
+    # Tạo key bằng API của web có sẵn
     driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=128&email=nguyenhoanghuyprocoder@gmail.com&token=LOzCeWYL0Ffqj6o9w4zOWuY9NcbkyJ0zytzj8HzkQdCMTQ0ubBYz9R5K5MvxJjNDDWkNQBlo8idLJpZDjxyh7TAJ0BylLELdxRli&loaikey=365day&luotdung=1')
 
-    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
-        dylib.print_green_and_send_message(user_id, "Tạo key thành công")
-        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM TẠO KEY THÀNH CÔNG HAY CHƯA
+        bot_reply(user_id, "Đang tạo key...")
+        log_info("Đang tạo key bằng API...")
+
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
-        # THÔNG BÁO TẠO KEY THÀNH CÔNG
-        dylib.print_yellow("Tạo key thành công")
+
+        bot_reply(user_id, "Tạo key thành công")
+        log_success("Tạo thành công 1 key")
     except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại") 
+        bot_reply(user_id, "Tạo key không thành công, xảy ra sự cố kết nối internet")
+        log_info("Tạo key thất bại do sự cố kết nối internet")
 
     try:
-        # ĐỢI PHẦN TỬ CHỨA KEY XUẤT HIỆN
+        # Đợi phần tử chứa key xuất hiện
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, '#keyDiv'))
         )
         
-        # LẤY DỮ LIỆU CỦA PHẦN TỬ CHỨA KEY
-        element = driver.find_element(By.ID, 'keyDiv')
-        data = driver.execute_script("return arguments[0].textContent;", element).strip()   
+        # Lấy dữ liệu của phần tử chứa key
+        check_key = driver.find_element(By.ID, 'keyDiv')
 
-        # LỌC BỎ NHỮNG DỮ LIỆU KHÔNG CẦN THIẾT, CHỈ LẤY DỮ LIỆU CHỨA KEY
-        json_str = data
-        data = json.loads(json_str)
-        value = data['key']
+        # Chuyển dữ liệu của phần tử chứa key thành văn bản
+        key = driver.execute_script("return arguments[0].textContent;", check_key).strip()   
 
-        # GỬI KEY CHO NGƯỜI DÙNG
-        dylib.print_green("Gửi key cho người dùng")
-        dylib.bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{value}")
+        # Lọc bỏ những dữ liệu không cần thiết
+        clean_datakey = json.loads(key)
+        key_final = clean_datakey['key']
+
+        log_info("Gửi key đã tạo cho người dùng")
+        bot_reply(user_id, "Key của bạn là:"); dylib.bot_reply(user_id, f"{key_final}")
+
+        log_success("Gửi key cho người dùng thành công")
+
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
+
+        log_info("Kết thúc tiến trình")
+        return
     except Exception as e:
-        dylib.print_yellow_and_send_message(user_id, "Tạo key thất bại")
+        log_error("Tạo key thất bại, xảy ra sự cố kết nối internet")
+        bot_reply(user_id, "Tạo key thất bại, vui lòng kiểm tra lại đường truyền của máy chủ")
 
-    # THÔNG BÁO GỬI KEY THÀNH CÔNG CHO NGƯỜI DÙNG
-    dylib.print_yellow("Gửi key cho người dùng thành công")
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
 
-    driver.quit()
+        log_info("Kết thúc tiến trình")
+        return        
 
 def create_key_not_in_select(message):
     global timekey
     timekey = message.text
-    green_text = "TẠO KEY IOS USER"
+    
+    log_info(f"Người dùng đã yêu cầu tạo 1 key {timekey} ngày")
 
-        # IN RA MÀN HÌNH
-    print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
-
-     # KHỞI TẠO WEB DRIVER
+    log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("KHỞI TẠO WEB DRIVER\n")
-
-    dylib.print_yellow_and_send_message(user_id, "Vui lòng chờ...")
-
-    # IN RA MÀN HÌNH
-    dylib.print_green("Mở website tạo key")
-    # MỞ WEBSITE TẠO KEY
+    bot_reply(user_id, "Mở trang web tạo key")
+    log_info("Mở trang web tạo key")
     driver.get('https://v3.ppapikey.xyz/pages/signIn')
 
-    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
-        # IN RA MÀN HÌNH
-        dylib.print_green("Đang tải website tạo key...")
+        bot_reply(user_id, "Đang load trang web tạo key...")
+        log_info("Đang load trang web tạo key")
 
-        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM WEB LOAD XONG CHƯA
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/nav/div')))
 
-        # IN RA MÀN HÌNH
-        dylib.print_green("Tải website tạo key thành công")
+        bot_reply(user_id, "Load trang web tạo key thành công")
+        log_success("Load trang web tạo key thành công")
     except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại")        
+        bot_reply(user_id, "Load trang web tạo key thất bại, vui lòng kiểm tra lại kết nối internet")
+        log_error("Load trang web tạo key không thành công - xảy ra sự cố kết nối internet")
 
-    # ĐĂNG NHẬP VÀO WEB
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
+
+        log_info("Kết thúc tiến trình")
+        return        
+
+    bot_reply(user_id, "Đăng nhập vào web tạo key")
+    log_info("Tiến hành dăng nhập vào web tạo key")
     
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Đăng nhập vào web tạo key")
-
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập tài khoản")
-
-    # NHẬP TÀI KHOẢN
+    log_info("Đang nhập tài khoản")
     driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[1]/input").send_keys('nguyenhoanghuyprocoder@gmail.com')
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập mật khẩu")
-
-    # NHẬP MẬT KHẨU
+    log_info("Đang nhập mật khẩu")
     driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[2]/input").send_keys('123321Huy')
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Click vào nút đăng nhập")
-
-    # CLICK VÀO NÚT ĐĂNG NHẬP
+    log_info("Click vào nút đăng nhập")
     driver.find_element(By.XPATH, "/html/body/main/div[2]/div/div/div/div/div[2]/form/div[4]/button").click()
 
     try:
-        # KIỂM TRA XEM CÓ ĐĂNG NHẬP THÀNH CÔNG HAY KHÔNG
+        log_info("Đang đăng nhập...")
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/nav/div/div[1]/nav/a/h6')))
 
-        # IN RA MÀN HÌNH
-        dylib.print_yellow("Đăng nhập thành công")
+        bot_reply(user_id, "Đăng nhập thành công")
+        log_success("Đăng nhập thành công")
     except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại")
+        bot_reply(user_id, "Đăng nhập thất bại, vui lòng kiểm tra lại kết nối internet")
+        log_error("Đăng nhập thất bại - xảy ra sự cố kết nối internet")
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Truy cập trang tạo key")
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
 
-    # MỞ TRANG TẠO KEY
+        log_info("Kết thúc tiến trình")
+        return        
+
+    bot_reply(user_id, "Truy cập vào trang listkey")
+    log_info("Đang truy cập vào trang listkey")
     driver.get('https://v3.ppapikey.xyz/pages/keys')
 
     try:
+        bot_reply(user_id, "Đang load trang listkey...")
+        log_info("Đang load trang listkey")
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/nav/div/div[1]/nav/a/h6')))
-        # IN RA MÀN HÌNH
-        dylib.print_yellow("Truy cập trang tạo key thành công")
+        
+        bot_reply(user_id, "Truy cập vào trang listkey thành công")
+        log_success("Truy cập vào trang listkey thành công")
     except TimeoutError:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_red_and_send_message(user_id, "Tạo key thất bại")        
+        bot_reply(user_id, "Truy cập trang listkey thất bại")
+        log_error("Truy cập trang listkey thất bại")
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Click vào nút TẠO KEY ĐỘNG")
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
 
-    # CLICK VÀO NÚT TẠO KEY ĐỘNG
+        log_info("Kết thúc tiến trình")
+        return
+
+    log_info("Click vào nút tạo key động")
     driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[4]/button[2]").click()
 
     #### ĐIỀN THÔNG TIN KEY ####
+    bot_reply(user_id, "Tiến hành điền thông tin của key")
+    log_info("Điền thông tin key")
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Điền thông tin key")
-
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập số lượng key")
-
-    # NHẬP SỐ LƯỢNG KEY
+    log_info("Đang nhập số lượng key")
     driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[1]/div[1]/div/input").send_keys("1")
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập số lượng thiết bị")
-    
-    # NHẬP SỐ LƯỢNG THIẾT BỊ
+    log_info("Đang nhập số lượng thiết bị")
     driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[1]/div[2]/div/input").send_keys("1")
 
-    # IN RA MÀN HÌNH
-    dylib.print_green("Nhập thời gian của key")
-
-    # NHẬP THỜI GIAN CỦA KEY
+    log_info("Đang nhập thời gian của key")
     driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[3]/div/div/input").send_keys(timekey)
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Click vào nút TẠO KEY")
-
-    # CLICK VÀO NÚT TẠO KEY
+    log_info("Click vào nút tạo key")
     driver.find_element(By.XPATH, "/html/body/main/div/div/div/div/div/div[2]/form/div[4]/div/button").click()
 
     try:
-        # KIỂM TRA XEM KEY CÓ TẠO THÀNH CÔNG HAY KHÔNG
+        bot_reply(user_id, "Điền thông tin của key hoàn tất, đang tạo key...")
+        log_info("Key đang được tạo...")
+
         WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'swal2-title')))
         
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_yellow_and_send_message(user_id, "Tạo key thành công")
+        bot_reply(user_id, "Tạo key thành công")
+        log_success("Tạo key thành công")
     except TimeoutError:
-        dylib.print_red_and_send_message(user_id, "Tạo key không thành công")
+        bot_reply(user_id, "Tạo key thất bại, vui lòng kiểm tra lại kết nối internet")
+        log_error("Tạo key thất bại - xảy ra sự cố kết nối internet")
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Gửi key cho người dùng")
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
 
-    # IN VÀ GỬI TIN NHẮN
-    dylib.print_green_and_send_message(user_id, "Key của bạn:")
+        log_info("Kết thúc tiến trình")
+        return        
 
+    bot_reply(user_id, "Key của bạn là:")
     try:
-        # Đợi cho đến khi phần tử xuất hiện
+        log_info("Đợi phần tử chứa key xuất hiện")
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CLASS_NAME, 'swal2-html-container'))
         )
         
-        # Sử dụng JavaScript để lấy dữ liệu của phần tử
-        data = driver.execute_script("return document.querySelector('.swal2-html-container').innerText;")
+        log_info("Đang lấy dữ liệu của key")
+        key = driver.execute_script("return document.querySelector('.swal2-html-container').innerText;")
         
-        dylib.print_yellow_and_send_message(user_id, f"{data}")
+        bot_reply(user_id, f"{key}")
+        log_info("Gửi key cho người dùng")
+
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
+
+        log_info("Kết thúc tiến trình")
+        return
     except Exception as e:
-        print("Phần tử không xuất hiện trong thời gian chờ:", e)
+        bot_reply(user_id, "Tạo key thất bại, vui lòng kiểm tra lại kết nối internet")
+        log_error("Tạo key thất bại - xảy ra sự cố kết nối internet")
 
-    # IN RA MÀN HÌNH
-    dylib.print_yellow("Gửi key cho người dùng thành công")
+        log_info("Đóng trình duyệt chrome")
+        driver.quit()
 
-    driver.quit()    
+        log_info("Kết thúc tiến trình")
+        return

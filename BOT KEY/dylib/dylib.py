@@ -39,6 +39,21 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 user_id = "5634845912"
 username = "@Davidmmo68"
 
+import psutil
+def close_existing_browser():
+    # Danh sách tên của trình duyệt cần kiểm tra (có thể thêm các trình duyệt khác như firefox.exe)
+    browser_names = ['chrome.exe', 'chromedriver.exe']
+    
+    # Kiểm tra các process đang chạy
+    for process in psutil.process_iter():
+        try:
+            # Kiểm tra nếu process thuộc về trình duyệt
+            if process.name().lower() in browser_names:
+                process.terminate()  # Đóng process trình duyệt
+                process.wait()  # Đợi cho process đóng hoàn toàn
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass    
+        
 # HÀM ĐẾM NGƯỢC SỐ PHÚT
 def countdown(minutes):
     total_seconds = minutes * 60
