@@ -35,11 +35,7 @@ service = Service(chromedriver_path)
 service_log_path = os.path.devnull
 service = Service(chromedriver_path, service_log_path=service_log_path)
 
-# CHỨC NĂNG IN RA MÀN HÌNH MÀU ĐỎ
-from dylib.dylib import print_red, print_yellow, print_green, print_red_and_send_message, print_yellow_and_send_message, print_green_and_send_message, handle_restart
-from dylib import dylib
-
-# NHẬP CHỨC NĂNG BOT PHẢN HỒI LẠI NGƯỜI DÙNG
+# Nhập chức năng bot phản hồi lại người dùng
 from dylib.dylib import bot_reply
 
 # Nhập các hàm thực hiện việc in ra màn hình
@@ -58,6 +54,7 @@ ip = None
 device = None
 
 # TRỞ VỀ MENU CHÍNH
+@bot.message_handler(func=lambda message: message.text in ["Trở lại menu chính", "Không, trở về menu chính"])
 def back_home(message):
     # TẠO NÚT TRỞ VỀ MENU CHÍNH
     button_back_home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
@@ -157,11 +154,13 @@ def doiip_main(message):
     else:
         log_error(f"Đổi IP thất bại - Nguyên nhân: {data_notify_after_changeip}")
         bot_reply(user_id, f"Đổi IP thất bại - {data_notify_after_changeip}")
+        ask_retry_doiip(message) # Hàm hỏi người dùng có muốn tiếp tục không hoặc về menu chính
 
-        log_info("Đóng trình duyệt chrome")
         driver.quit()
+        log_info("Đóng trình duyệt chrome")
 
-        log_info("Kết thúc tiến trình")
+        log_info("Đang hỏi người dùng có muốn tiếp tục không hay về menu chính")
+        
         return
 
     # Đổi thiết bị
@@ -223,5 +222,12 @@ def doiip_main(message):
         log_info("Đóng trình duyệt chrome")
         driver.quit()
 
-        log_info("Kết thúc tiến trình")
+        log_info("Đang hỏi người dùng có muốn tiếp tục không hay về menu chính")
+        ask_retry_doiip(message) # Hàm hỏi người dùng có muốn tiếp tục không hoặc về menu chính
+
         return
+# Hàm hỏi người dùng tiếp tục hoặc trở lại menu chính
+def ask_retry_doiip(message):
+    # TẠO NÚT HỎI NGƯỜI DÙNG CÓ MUỐN THỬ LẠI KHÔNG
+    button_retry = telebot.types.ReplyKeyboardMarkup(True).add("Có, tiếp tục đổi IP").add("Không, trở về menu chính")
+    bot.send_message(message.chat.id, "Bạn có muốn tiếp tục nữa không?", reply_markup=button_retry)

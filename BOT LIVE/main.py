@@ -21,17 +21,19 @@ from telebot import types
 # GỌI CÁC CHỨC NĂNG CỦA FILE DYLIB
 from dylib import dylib
 
-# CÁC CHỨC NĂNG IN RA MÀN HÌNH
-from print_logger.print_logger import log_info, log_warning, log_error
-
 # KHAI BÁO API TOKEN BOT TELEGRAM
 API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
+# CÁC CHỨC NĂNG IN RA MÀN HÌNH
+from print_logger.print_logger import log_info, log_warning, log_error, log_success
+
+# Nhập chức năng bot phản hồi lại người dùng
+from dylib.dylib import bot_reply
+
 from dylib.dylib import user_id
 from dylib.dylib import username
 
-########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
 log_info(f"KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG - ĐANG CHỜ LỆNH TỪ NGƯỜI DÙNG...")
 
 # CHỨC NĂNG START
@@ -45,7 +47,7 @@ def start(message):
     bot.send_message(message.chat.id, text, reply_markup=button_start)
 
 # ĐỔI IP
-@bot.message_handler(func=lambda message: message.text == "Đổi IP")
+@bot.message_handler(func=lambda message: message.text in ["Đổi IP", "Có, tiếp tục đổi IP"])
 def handle_doiip(message):
     log_info(f"Người dùng {username} - ID: {user_id} đã chọn đổi IP từ menu chính")
     # GỌI HÀM ĐỔI IP TRONG FILE DOIIP.PY TRONG FOLDER DOIIP
@@ -66,6 +68,7 @@ def handle_tatlive(message):
 # CHỨC NĂNG MỞ LIVE
 @bot.message_handler(func=lambda message: message.text == "Mở live")
 def select_molive(message):
+    log_info(f"Người dùng {username} - ID: {user_id} đã chọn Mở live từ menu chính")
     select_molive_button = types.ReplyKeyboardMarkup(True).add('Nick Chính Văn Bảo').add('Nick Phụ LBH').add("Nick Meme Lỏ").add('Trở lại menu chính')
     text = "Vui lòng chọn tài khoản cần mở live"
     bot.send_message(message.chat.id, text, reply_markup=select_molive_button)
@@ -91,14 +94,21 @@ def handle_molivenickphulbh(message):
     ask_source_live_memelo(message)
     bot.register_next_step_handler(message, main_molive_memelo)   
 
-# TRỞ LẠI MENU CHÍNH
-@bot.message_handler(func=lambda message: message.text == "Trở lại menu chính")
+### Trở lại menu chính ###
+@bot.message_handler(func=lambda message: message.text in ["Trở lại menu chính", "Không, trở về menu chính"])
 def handle_back_home(message):
+    # Gọi hàm xử lý việc trở lại menu chính
     back_home(message)
 
+# Hàm xử lý việc trở lại menu chính
 def back_home(message):
     text = "VUI LÒNG CHỌN 👇"
-    bot.send_message(message.chat.id, text, reply_markup=start)
+    # TẠO NÚT CHO CHỨC NĂNG TRỞ VỀ MENU CHÍNH
+    button_backhome = telebot.types.ReplyKeyboardMarkup(True)
+    button_backhome.add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
+    bot.send_message(message.chat.id, text, reply_markup=button_backhome)
+
+# Check view
 @bot.message_handler(func=lambda message: message.text == "Check view")
 def checkview(message):
     from checkview.checkview import ask_select_account_checkview

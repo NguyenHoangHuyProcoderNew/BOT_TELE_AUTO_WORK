@@ -23,6 +23,15 @@ from telebot import types
 # NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
 from dylib import dylib
 
+# CÁC CHỨC NĂNG IN RA MÀN HÌNH
+from print_logger.print_logger import log_info, log_warning, log_error, log_success
+
+# Nhập chức năng bot phản hồi lại người dùng
+from dylib.dylib import bot_reply
+
+from dylib.dylib import user_id
+from dylib.dylib import username
+
 # CẤU HÌNH WEBDRIVER
 chromedriver_path = r'D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\chrome_driver\\chromedriver.exe'
 
@@ -45,138 +54,148 @@ ten_tai_khoan = "VĂN BẢO"
 id_tiktok = "vanbao165201"
 select_account = "#tiktok_account > option:nth-child(3)"
 
-# # LINK NGUỒN CHO PHIÊN LIVE 
-# from nguonlive.linknguon import linknguon
-
 # Khởi tạo colorama
 init()
 
 linknguon = None
 
-########## TRỞ VỀ MENU CHÍNH #########
+# Trở về menu chính
 home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
 def back_home(message):
     text = "VUI LÒNG CHỌN 👇"
     bot.send_message(message.chat.id, text, reply_markup=home)
 
-############# LỰA CHỌN NGUỒN LIVE & MỞ LIVE ############
-# HÀM YÊU CẦU NGƯỜI DÙNG CHỌN NGUỒN CHO PHIÊN LIVE
+# Hàm yêu cầu người dùng chọn nguồn cho phiên live
 def ask_source_live_vanbao(message):
-    print(f"\n============= MỞ LIVE TÀI KHOẢN | {Fore.GREEN}{ten_tai_khoan}{Style.RESET_ALL} | ID Tiktok: {id_tiktok} =============")
-
-    dylib.print_red("Đang đợi người dùng chọn nguồn cho phiên live...")
-    select_source_live = types.ReplyKeyboardMarkup(True).add('HỒI CHIÊU').add('QUỲNH EM').add('Trở lại menu chính')
-    text = "Vui lòng lựa chọn nguồn cho phiên live"
-    bot.send_message(message.chat.id, text, reply_markup=select_source_live)
+    # Tạo nút chọn nguồn cho phiên live
+    button_select_source_live = types.ReplyKeyboardMarkup(True).add('HỒI CHIÊU').add('QUỲNH EM').add('Trở lại menu chính')
+    bot.send_message(message.chat.id, "Bạn muốn sử dụng nguồn live nào cho phiên live?", reply_markup=button_select_source_live)
+    log_info("Đang yêu cầu người dùng chọn nguồn cho phiên live")
+    
     bot.register_next_step_handler(message, main_molive_vanbao)
 
-# HÀM MỞ LIVE
+# Hàm thực hiện việc mở phiên live
 def main_molive_vanbao(message):
     global linknguon
 
     if message.text == "HỒI CHIÊU":
         linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk" # NGUỒN HỒI CHIÊU
-        dylib.print_red("Người dùng đã chọn nguồn HỒI CHIÊU, tiến hành mở phiên live với nguồn HỒI CHIÊU"); dylib.bot_reply(user_id, f"Tiến hành mở phiên live tài khoản {ten_tai_khoan} với nguồn HỒI CHIÊU")
+        bot_reply(user_id, "Tiến hành mở phiên live với nguồn HỒI CHIÊU")
+        log_info(f"Người dùng {username} đã chọn nguồn live HỒI CHIÊU")
     elif message.text == "QUỲNH EM":
         linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing" # NGUỒN QUỲNH EM
-        dylib.print_red("Người dùng đã chọn nguồn QUỲNH EM, tiến hành mở phiên live với nguồn QUỲNH EM"); dylib.bot_reply(user_id, f"Tiến hành mở phiên live tài khoản {ten_tai_khoan} với nguồn QUỲNH EM")
+        bot_reply(user_id, "Tiến hành mở phiên live với nguồn QUỲNH EM")
+        log_info(user_id, "Tiến hành mở phiên live với nguồn QUỲNH EM")
     elif message.text == "Trở lại menu chính":
+        log_info(f"Người dùng {username} đã chọn Trở lại menu chính")
         back_home(message)
         return
 
-    # KHỞI TẠO WEB DRIVER
-    driver = webdriver.Chrome(service=service, options=options) ; dylib.print_green("KHỞI TẠO WEB DRIVER")
+    # Khởi tạo chrome driver
+    driver = webdriver.Chrome(service=service, options=options)
+    log_info("Khởi tạo chrome driver")
 
-    # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-    dylib.print_green_and_send_message(user_id, "Mở trang web livestream")
-
-    # MỞ WEB LIVESTREAM
-    driver.get('https://autolive.me/tiktok')
-
-    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
-        # IN RA MÀN HÌNH
-        dylib.print_green_and_send_message(user_id, "Đang load trang web livestream...")
+        # Mở trang web livestream
+        bot_reply(user_id, "Đang mở trang web livestream")
+        log_info("Mở trang web livestream")
+        driver.get('https://autolive.me/tiktok')
+        
+        bot_reply(user_id, "Đang load trang web livestream...")
+        log_info("Đang load trang web livestream")
 
-        # ĐỢI PHẦN TỬ CỦA WEB XUẤT HIỆN
-        # SAU KHI PHẦN TỬ XUẤT HIỆN => GỬI TIN NHẮN CHO NGƯỜI DÙNG VÀ IN RA MÀN HÌNH ĐỂ THÔNG BÁO
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b'))) ; dylib.print_yellow_and_send_message(user_id, "Load website livestream thành công")
+        # Kiểm tra xem trang web đã load xong chưa
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
+
+        bot_reply(user_id, "Load trang web livestream thành công")
+        log_success("Load trang web livestream thành công")
     except TimeoutError:
-        # IN VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG NẾU THẤT BẠI
-        dylib.print_green_and_send_message(user_id, "Có lỗi xảy ra khi truy cập vào trang web livestream, vui lòng kiểm tra lại kết nối internet của máy chủ.")
+        bot_reply(user_id, "Load trang web livestream thất bại\nNguyên nhân: đường truyền internet quá yếu hoặc trang web sử dụng băng thông nước ngoài dẫn đến lỗi, kiểm tra lại kết nối internet của máy chủ")
+        log_error("Load trang web livestream thất bại")
 
-        # ĐÓNG CHROME
+        log_info("Đóng trình duyệt chrome")
         driver.quit()
 
-        # KẾT THÚC TIẾN TRÌNH
+        log_info("Kết thúc tiến trình")
         return
 
-    # THÔNG BÁO XÓA CẤU HÌNH HIỆN TẠI
-    dylib.print_red_and_send_message(user_id, "Tiến hành xóa cấu hình cũ")
-
     # XÓA CẤU HÌNH CŨ
+    bot_reply(user_id, "Tiến hành xóa cấu hình cũ")
+    log_info("Xóa cấu hình cũ")
     try:
-        # CLICK VÀO NÚT XÓA CẤU HÌNH
+        log_info("Click vào nút xóa cấu hình")
         driver.find_element(By.XPATH, '//button[@class="btn btn-circle btn-dark btn-sm waves-effect waves-light btn-status-live" and @data-status="-1" and @data-toggle="tooltip"]').click() ; dylib.print_green("Click vào nút xóa cấu hình")
 
-        # ĐỢI CẤU HÌNH ĐƯỢC XÓA
-        dylib.print_green_and_send_message(user_id, "Đang đợi cấu hình được xóa...") ; WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
+        log_info("Đang đợi thông báo của web sau khi xóa cấu hình cũ...")
 
-        # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO KHI CLICK VÀO NÚT XÓA CẤU HÌNH
-        # LẤY DỮ LIỆU CỦA THÔNG BÁO XÓA CẤU HÌNH
-        check_xoacauhinh = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
+        # Đợi thông báo sau khi xóa cấu hình cũ xuất hiện
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "body > div.notifyjs-corner > div > div.notifyjs-container > div")))
 
-        # CHUYỂN DỮ LIỆU CHECK ĐƯỢC THÀNH VĂN BẢN
-        data_xoacauhinh = check_xoacauhinh.text
+        # Lấy dữ liệu của thông báo xóa cấu hình cũ
+        log_info("Thông báo của web sau khi xóa cấu hình cũ đã xuất hiện, đang lấy dữ liệu của thông báo...")
+        notify_xoacauhinh = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
+
+        # Chuyển dữ liệu của thông báo xóa cấu hình cũ thành văn bản
+        log_info("Đang chuyển dữ liệu của thông báo thành văn bản...")
+        data_notify_xoacauhinh = notify_xoacauhinh.text
 
         # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
-        if data_xoacauhinh == "Bạn phải dừng luồng live trước khi xóa":
-            dylib.print_yellow_and_send_message(user_id, "Không thể xóa cấu hình vì có 1 luồng live đang được chạy, vui lòng dừng live bằng lệnh /tatlive rồi thử lại sau")
-
-            # ĐÓNG CHROME
+        log_info("Đang kiểm tra dữ liệu của thông báo")
+        if data_notify_xoacauhinh == "Bạn phải dừng luồng live trước khi xóa":
+            bot_reply(user_id, "Hiện đang có 1 luồng live đang được mở, vui lòng dừng luồng live rồi thử lại")
+            log_error("Không thể xóa cấu hình cũ do có 1 luồng live đang được chạy")
+            
+            log_info("Đóng trình duyệt chrome")
             driver.quit()
 
-            # DỪNG TIẾN TRÌNH
+            log_info("Kết thúc tiến trình")
             return
         else:
-            dylib.print_yellow_and_send_message(user_id, "Xóa cấu hình thành công")
+            bot_reply(user_id, "Xóa cấu hình thành công")
+            log_info("Xóa cấu hình thành công")
     except NoSuchElementException:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN
-        dylib.print_yellow_and_send_message(user_id, "Hiện tại không có cấu hình")
+        bot_reply(user_id, "Hiện tại không có cấu hình cũ nào")
+        log_info("Hiện tại không có cấu hình")
 
     # TẠO CẤU HÌNH MỚI
-    dylib.print_red_and_send_message(user_id, "Tạo cấu hình mới")
+    bot_reply(user_id, "Tiến hành tạo cấu hình mới")
+    log_info("Tạo cấu hình live mới")
 
     # CHỌN TÀI KHOẢN LIVE
-    dylib.print_green("Chọn tài khoản") ; driver.find_element(By.CSS_SELECTOR, f"{select_account}").click()
+    log_info("Đang chọn tài khoản live")
+    driver.find_element(By.CSS_SELECTOR, f"{select_account}").click()
 
     # NHẬP TIÊU ĐỀ LIVE
-    dylib.print_green("Nhập tiêu đề live") ; driver.find_element(By.ID, "title").send_keys('kéo rank Liên Quân')
+    log_info("Đang nhập tiêu đề live")
+    driver.find_element(By.ID, "title").send_keys('kéo rank Liên Quân')
 
     # CHỌN CHỦ ĐỀ LIVE
-    dylib.print_green("Chọn chủ đề live") ; driver.find_element(By.CSS_SELECTOR, "#topic > option:nth-child(11)").click()
+    log_info("Đang chọn chủ đề live")
+    driver.find_element(By.CSS_SELECTOR, "#topic > option:nth-child(11)").click()
 
     # CHỌN KIỂU LIVE
-    dylib.print_green("Chọn kiểu live Mobile") ; driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(6) > div > div > div > button:nth-child(2) > i").click()
-
+    log_info("Đang chọn kiểu live")
+    driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(6) > div > div > div > button:nth-child(2) > i").click()
 
     # NHẬP LINK NGUỒN
-    dylib.print_green("Nhập link nguồn cho phiên live") ; driver.find_element(By.ID, "url_source").send_keys(linknguon)
+    log_info("Đang nhập link nguồn cho phiên live")
+    driver.find_element(By.ID, "url_source").send_keys(linknguon)
 
     # LƯU CẤU HÌNH
-    dylib.print_green("Lưu cấu hình")
+    log_info("Cấu hình hoàn tất, tiến hành lưu lại cấu hình")
 
-    # KIỂM TRA XEM CẤU HÌNH CÓ ĐƯỢC LƯU THÀNH CÔNG HAY KHÔNG
     try:
-        # CLICK VÀO NÚT LƯU CẤU HÌNH
-        dylib.print_green("Click vào nút lưu cấu hình") ; driver.find_element(By.CSS_SELECTOR, "#formLive > button").click()
+        log_info("Click vào nút lưu cấu hình")
+        driver.find_element(By.CSS_SELECTOR, "#formLive > button").click()
 
-        # CHO LOAD LẠI TRANG WEB
+        log_info("Làm mới lại trang web")
         driver.refresh()
 
-        # CHỜ CẤU HÌNH ĐƯỢC LƯU LẠI
-        dylib.bot_reply(user_id, "Cấu hình hoàn tất, đang đợi cấu hình được lưu lại...") ; WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[1]')))
+        log_info("Đang làm mới lại trang web để lưu cấu hình...")
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[1]')))
 
+        bot_reply(user_id, "")
+        log_info("")
         # THÔNG BÁO TẠO CẤU HÌNH MỚI THÀNH CÔNG
         dylib.print_yellow_and_send_message(user_id, "Cấu hình đã được lưu thành công")
     except TimeoutError:
