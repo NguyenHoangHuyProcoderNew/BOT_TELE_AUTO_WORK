@@ -1,4 +1,4 @@
-# IMPORT CÁC THƯ VIỆN CẦN THIẾT
+# Import các thư viện cần thiết
 import os
 import time
 import logging
@@ -39,24 +39,28 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 API_TOKEN = '6555297922:AAF7DFvu9c-gi10-wBtwa_3jKa3TeyInNQ8'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+# CÁC CHỨC NĂNG IN RA MÀN HÌNH
+from print_logger.print_logger import log_info, log_warning, log_error, log_success
 
-timekey = None
+# Nhập chức năng bot phản hồi lại người dùng
+from dylib.dylib import bot_reply
 
-# HÀM YÊU CẦU NGƯỜI DÙNG NHẬP THỜI GIAN SỬ DỤNG CỦA KEY
+from dylib.dylib import user_id
+from dylib.dylib import username
+
+# Hàm yêu cầu người dùng nhập thời gian của key
 def ask_user_timekey_ios_user(message):
-    green_text = "TẠO KEY IOS USER"
-    print(f"\n============= | {Fore.GREEN}{green_text}{Style.RESET_ALL} | =============")
-
-    # YÊU CẦU NGƯỜI DÙNG NHẬP THỜI GIAN CỦA KEY
-    dylib.print_red("Đang đợi người dùng nhập thời gian của key...") ; dylib.bot_reply(user_id, "Vui lòng nhập thời gian sử dụng key\nChỉ được nhập số nguyên từ 1-365:")
+    bot_reply(user_id, "Vui lòng nhập thời gian của key\nChỉ được nhập dữ liệu là số nguyên và trong khoảng từ 1-365:")
+    log_info("Bot đang yêu cầu người dùng nhập thời gian của key...")
 
     bot.register_next_step_handler(message, main_create_key_ios_user)
 
+# Hàm thực hiện việc tạo key
 def main_create_key_ios_user(message):
     global timekey
     timekey = int(message.text)
-    dylib.bot_reply(user_id, f"Tiến hành tạo: 01 key\nThiết bị: IOS\nServer: IOS USER\nThời gian sử dụng key: {timekey} ngày")
+    bot_reply(user_id, f"Tiến hành tạo: 01 key\nThiết bị: IOS\nServer: IOS USER\nThời gian sử dụng key: {timekey} ngày")
+    log_info(f"Người dùng đã yêu cầu tạo 1 key {timekey} ngày")
     if timekey == 1:
         create_key_1day(message)
     elif timekey == 7:
@@ -72,18 +76,14 @@ def main_create_key_ios_user(message):
 
 # HÀM TẠO KEY 1 NGÀY
 def create_key_1day(message):
-    # KHỞI TẠO WEB DRIVER
-    dylib.print_green("KHỞI TẠO WEB DRIVER\n")
+    log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
-    # MỞ WEB TẠO KEY
-    dylib.print_red_and_send_message(user_id, "Đang tạo key...")
+    # Tạo key bằng API của web có sẵn
     driver.get('https://v3.ppapikey.xyz/pages/get-key?idgoi=128&email=nguyenhoanghuyprocoder@gmail.com&token=LOzCeWYL0Ffqj6o9w4zOWuY9NcbkyJ0zytzj8HzkQdCMTQ0ubBYz9R5K5MvxJjNDDWkNQBlo8idLJpZDjxyh7TAJ0BylLELdxRli&loaikey=1day&luotdung=1')
 
-    # KIỂM TRA XEM TRANG WEB LOAD XONG CHƯA
     try:
-        dylib.print_green_and_send_message(user_id, "Tạo key thành công")
-        # ĐỢI PHẦN TỬ CỦA WEBSITE XUẤT HIỆN ĐỂ KIỂM TRA XEM TẠO KEY THÀNH CÔNG HAY CHƯA
+        bot_reply("Đang tạo key...")
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/button')))
         # THÔNG BÁO TẠO KEY THÀNH CÔNG
         dylib.print_yellow("Tạo key thành công")

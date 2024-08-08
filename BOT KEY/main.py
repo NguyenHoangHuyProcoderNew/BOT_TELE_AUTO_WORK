@@ -23,17 +23,24 @@ from selenium.common.exceptions import TimeoutException
 API_TOKEN = '6555297922:AAF7DFvu9c-gi10-wBtwa_3jKa3TeyInNQ8'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-chat_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+# CÁC CHỨC NĂNG IN RA MÀN HÌNH
+from print_logger.print_logger import log_info, log_warning, log_error, log_success
+
+# Nhập chức năng bot phản hồi lại người dùng
+from dylib.dylib import bot_reply
+
+from dylib.dylib import user_id
+from dylib.dylib import username
 
 ########################### BẮT ĐẦU CÁC CHỨC NĂNG CỦA BOT ###########################
-print(f"============= | KHỞI ĐỘNG BOT TẠO KEY THÀNH CÔNG | =============")
-print("Bot đang đợi lệnh từ người dùng...")
+log_info("Khởi động bot tạo key thành công, đang đợi lệnh từ người dùng...")
 
-# CHỨC NĂNG TẠO KEY IOS USER
-from IOS.ios_user import ask_user_timekey_ios_user
-from IOS.ios_user import main_create_key_ios_user
+# Tạo key IOS server USER
 @bot.message_handler(commands=['ios_user'])
-def ios_user(message):
+def create_key_ios_user(message):
+    from IOS.ios_user import ask_user_timekey_ios_user
+    from IOS.ios_user import main_create_key_ios_user
+    log_info(f"Người dùng {username} đã sử dụng lệnh /ios_user")
     ask_user_timekey_ios_user(message)
     bot.register_next_step_handler(message, main_create_key_ios_user)
 

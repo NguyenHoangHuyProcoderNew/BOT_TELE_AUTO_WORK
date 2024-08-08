@@ -70,6 +70,7 @@ def ask_source_live_memelo(message):
 
 # Hàm thực hiện việc mở phiên live
 def main_molive_memelo(message):
+    from dylib.dylib import close_existing_browser # Nhập hàm đóng tất cả các phiên trình duyệt chrome đang chạy
     global linknguon
 
     if message.text == "HỒI CHIÊU":
@@ -85,6 +86,8 @@ def main_molive_memelo(message):
         back_home(message)
         return
 
+    log_info("Đang chạy hàm kiểm tra các phiên trình duyệt đang chạy, nếu có phiên trình duyệt nào đang được sẽ đóng trình duyệt")
+    close_existing_browser() # Đóng tất cả các phiên trình duyệt đang chạy
     # Khởi tạo chrome driver
     driver = webdriver.Chrome(service=service, options=options)
     log_info("Khởi tạo chrome driver")

@@ -65,9 +65,12 @@ def xacnhan_tatlive(message):
 
 # HÀM THỰC HIỆN VIỆC TẮT LIVE
 def main_tatlive(message):
+    from dylib.dylib import close_existing_browser # Nhập hàm đóng tất cả các phiên trình duyệt chrome đang chạy
     if message.text == "Có":
         log_info("Người dùng đã xác nhận tắt phiên live")
 
+        log_info("Đang chạy hàm kiểm tra các phiên trình duyệt đang chạy, nếu có phiên trình duyệt nào đang được sẽ đóng trình duyệt")
+        close_existing_browser() # Đóng tất cả các phiên trình duyệt đang chạy
         log_info("Khởi tạo chrome driver")
         driver = webdriver.Chrome(service=service, options=options)
         
