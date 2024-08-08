@@ -42,7 +42,7 @@ from dylib.dylib import bot_reply
 from print_logger.print_logger import log_info, log_warning, log_error, log_success
 
 # Khai báo API token telegram
-API_TOKEN = '7371036517:AAEB8PtQRtSrvDOxQUUW2su7ObGso6ltq8w'  # Thay token của bot vào đây
+API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # Thay token của bot vào đây
 bot = telebot.TeleBot(API_TOKEN)
 
 # Nhập giá trị của user_id ADMIN và user_name của ADMIN từ file dylib trong folder dylib
