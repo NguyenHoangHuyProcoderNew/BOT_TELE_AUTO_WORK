@@ -47,28 +47,28 @@ from dylib.dylib import user_id
 from dylib.dylib import username
 
 # THÔNG TIN TÀI KHOẢN LIVE
-ten_tai_khoan = "VĂN BẢO"
-id_tiktok = "vanbao165201"
-select_account = "#tiktok_account > option:nth-child(3)"
+id_tiktok = "meme.l810"
+select_account = "#tiktok_account > option:nth-child(4)"
 
 # Link nguồn
 linknguon = None
 
-########## TRỞ VỀ MENU CHÍNH #########
+# Trở về menu chính
 home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
 def back_home(message):
     text = "VUI LÒNG CHỌN 👇"
     bot.send_message(message.chat.id, text, reply_markup=home)
 
-# HÀM YÊU CẦU NGƯỜI DÙNG CHỌN NGUỒN CHO PHIÊN LIVE
+# Hàm yêu cầu người dùng chọn nguồn cho phiên live
 def ask_source_live_memelo(message):
     # Tạo nút chọn nguồn cho phiên live
     button_select_source_live = types.ReplyKeyboardMarkup(True).add('HỒI CHIÊU').add('QUỲNH EM').add('Trở lại menu chính')
     bot.send_message(message.chat.id, "Bạn muốn sử dụng nguồn live nào cho phiên live?", reply_markup=button_select_source_live)
     log_info("Đang yêu cầu người dùng chọn nguồn cho phiên live")
+    
     bot.register_next_step_handler(message, main_molive_memelo)
 
-# HÀM MỞ LIVE
+# Hàm thực hiện việc mở phiên live
 def main_molive_memelo(message):
     global linknguon
 
@@ -137,7 +137,7 @@ def main_molive_memelo(message):
         log_info("Đang kiểm tra dữ liệu của thông báo")
         if data_notify_xoacauhinh == "Bạn phải dừng luồng live trước khi xóa":
             bot_reply(user_id, "Hiện đang có 1 luồng live đang được mở, vui lòng dừng luồng live rồi thử lại")
-            log_error("log_error(f"Không thể xóa cấu hình cũ - Thông báo từ web: {data_notify_xoacauhinh}")")
+            log_error(f"Không thể xóa cấu hình cũ - Thông báo từ web: {data_notify_xoacauhinh}")
             
             log_info("Đóng trình duyệt chrome")
             driver.quit()
