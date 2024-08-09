@@ -20,12 +20,11 @@ now = datetime.datetime.now()
 from selenium.common.exceptions import TimeoutException
 from colorama import Fore, Style, init
 from telebot import types
-# NHẬP FILE DYLIB CHỨA CÁC HÀM QUAN TRỌNG
-from dylib import dylib
 
-# CẤU HÌNH WEBDRIVER
+# Đường dẫn đến chrome driver
 chromedriver_path = r'D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\chrome_driver\\chromedriver.exe'
 
+# Cấu hình chrome driver
 options = Options()
 options.add_argument('--log-level=3')  # Vô hiệu hóa thông báo của Selenium
 options.add_argument('--user-data-dir=D:\\BOT_TELE_AUTO_WORK\\BOT LIVE THU CONG\\du lieu trinh duyet')
@@ -38,7 +37,14 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 API_TOKEN = '7329003333:AAF7GhjivbGnk0jSGE8XfefFh_-shHAFsGc'  # TOKEN CỦA BOT
 bot = telebot.TeleBot(API_TOKEN)
 
-user_id = '5634845912' # ID CỦA NGƯỜI DÙNG
+# CÁC CHỨC NĂNG IN RA MÀN HÌNH
+from print_logger.print_logger import log_info, log_warning, log_error, log_success
+
+# Nhập chức năng bot phản hồi lại người dùng
+from dylib.dylib import bot_reply
+
+from dylib.dylib import user_id
+from dylib.dylib import username
 
 id_tiktok = None
 
@@ -50,12 +56,9 @@ def back_home(message):
     bot.send_message(message.chat.id, text, reply_markup=home)
     
 def ask_select_account_checkview(message):
-    print(f"============= | CHECK VIEW | =============")
-    # HỎI NGƯỜI DÙNG MUỐN VIEW TÀI KHOẢN NÀO?
-    dylib.print_red("Bot đang đợi người dùng chọn tài khoản cần check view...")
+    log_info("Bot đang yêu cầu người dùng chọn tài khoản cần check view")
     button_select_account_checkview = telebot.types.ReplyKeyboardMarkup(True).add("Nick Văn Bảo").add("Nick Phụ LBH").add("Nick MEME Lỏ").add("Trở lại menu chính")
-    text = "Vui lòng chọn tài khoản cần check view"
-    bot.send_message(message.chat.id, text, reply_markup=button_select_account_checkview)
+    bot.send_message(message.chat.id, "Vui lòng chọn tài khoản cần check view", reply_markup=button_select_account_checkview)
 
     bot.register_next_step_handler(message, checkview_main)
 
@@ -64,53 +67,68 @@ def checkview_main(message):
 
     if message.text == "Nick Văn Bảo":
         id_tiktok = "vanbao165201"
-        dylib.print_red_and_send_message(user_id, "Tiến hành check view cho tài khoản Văn Bảo")
+        bot_reply(user_id, "Tiến hành check view cho Nick Văn Bảo")
+        log_info("Người dùng đã chọn tài khoản Văn Bảo")
     elif message.text == "Nick Phụ LBH":
         id_tiktok = "nammapsang_keorank"
-        dylib.print_red_and_send_message(user_id, "Tiến hành check view cho tài khoản Nick Phụ LBH")
+        bot_reply(user_id, "Tiến hành check view cho Nick Phụ LBH")
+        log_info("Người dùng đã chọn Nick Phụ LBH")
     elif message.text == "Nick MEME Lỏ":
         id_tiktok = "meme.l810"
-        dylib.print_red_and_send_message(user_id, "Tiến hành check view cho tài khoản MEME Lỏ")
+        bot_reply(user_id, "Tiến hành check view cho Nick Meme Lỏ")
+    elif message.text == "Trở lại menu chính":
+        log_info("Người dùng đã chọn Trở Lại Menu Chính")
+        back_home(message)
+        return
 
-    # KHỞI TẠO WEB DRIVER
+    log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
-    dylib.print_green("KHỞI TẠO WEB DRIVER")
-
-    # MỞ PHIÊN LIVE
-    dylib.print_green_and_send_message(user_id, "Đang mở phiên live...")
+    
+    bot_reply(user_id, "Tiến hành truy cập vào phiên live")
+    log_info("Mở phiên livestream")
     driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
-    # BIẾN LẤY THỜI GIAN HIỆN TẠI
-    now = datetime.datetime.now()
-
-    # KIỂM TRA XEM PHIÊN LIVE CÓ LOAD THÀNH CÔNG HAY KHÔNG
     try:
+        log_info("Đang load phiên live...")
+
         WebDriverWait(driver, 100).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/main/div[3]/div/div[1]/a"))
         )
+
+        bot_reply(user_id, "Truy cập phiên live thành công")
+        log_info("Load phiên live thành công")
     except TimeoutException:
-        # IN RA MÀN HÌNH VÀ GỬI TIN NHẮN CHO NGƯỜI DÙNG
-        dylib.print_yellow_and_send_message(user_id, "Có lỗi sảy ra khi kiểm tra phiên live, vui lòng kiểm tra lại kết nối internet")
+        bot_reply(user_id, "Truy cập phiên livestream thất bại\nNguyên nhân: đường truyền internet quá yếu hoặc trang web sử dụng băng thông nước ngoài dẫn đến lỗi, kiểm tra lại kết nối internet của máy chủ")
+        log_error("Load trang web livestream thất bại")
 
-        # ĐÓNG CHROME
+        log_info("Đóng trình duyệt chrome")
         driver.quit()
 
-        return # KẾT THÚC TIẾN TRÌNH
+        log_info("Kết thúc tiến trình")
+        return
     
-    # ĐỢI PHẦN TỬ CHỨA SỐ LƯỢNG NGƯỜI XEM LIVE XUẤT HIỆN
-    checkview = WebDriverWait(driver, 3).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "#tiktok-live-main-container-id > div.css-1fxlgrb-DivBodyContainer.etwpsg30 > div.css-l1npsx-DivLiveContentContainer.etwpsg31 > div > div.css-wl3qaw-DivLiveContent.e1nhv3vq1 > div.css-1kgwg7s-DivLiveRoomPlayContainer.e1nhv3vq2 > div.css-jvdmd-DivLiveRoomBanner.e10bhxlw0 > div.css-1s7wqxh-DivUserHoverProfileContainer.e19m376d0 > div > div > div.css-1j46cc2-DivExtraContainer.e1571njr9 > div.css-9aznci-DivLivePeopleContainer.e1571njr10 > div > div"))
-    )
+    bot_reply(user_id, "Tiến hành check view...")
+    log_info("Đang check view...")
 
-    # CHUYỂN SỐ LƯỢNG NGƯỜI XEM THÀNH VĂN BẢN
-    view = checkview.text
+    try:
+        log_info("Đang đợi phần tử chứa số lượng người xem xuất hiện")
+        # Đợi phần tử chứa số lượng người xem xuất hiện và kiểm tra dữ liệu của phần tử
+        WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
 
-    if int(view) >= 0:
-        # GỬI SỐ LƯỢNG NGƯỜI XEM CHO NGƯỜI DÙNG
-        dylib.print_green("Gửi số lượng người xem cho người dùng")
-        dylib.bot_reply(user_id, f"{now.strftime('%d/%m/%Y %H:%M:%S')} Phiên live đã live được , hiện tại đang có {view} người xem")
+        log_info("Phần tử đã xuất hiện, tiến hành check view")
 
-        # ĐÓNG TRÌNH DUYỆT
+        checkview = driver.find_element(By.XPATH, "/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div")
+        # Chuyển dữ liệu của phần tử chứa số lượng người xem thành văn bản
+        view = checkview.text
+
+        log_success("Check view thành công")
+        if int(view) >= 0:
+            log_info("Gửi dữ liệu cho người dùng")
+            bot_reply(user_id, f"{now.strftime('%d/%m/%Y %H:%M:%S')} - Phiên live hiện tại đang có {view} người xem")
+    except TimeoutException:
+        bot_reply(user_id, "Phiên live này hiện tại không được mở")
+        log_error("Phần tử chứa số lượng người xem không xuất hiện, phiên live chưa được mở")
+    finally:
+        log_info("Đóng trình duyệt chrome")
         driver.quit()
-    else:
-        dylib.bot_reply(user_id, "Phiên live này hiện tại không được mở")
+        log_info("Kết thúc tiến trình")

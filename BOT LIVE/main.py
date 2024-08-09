@@ -42,7 +42,7 @@ def start(message):
     log_info(f"Người dùng {username} - ID: {user_id} đã sử dụng lệnh /start")
     # TẠO NÚT CHO CHỨC NĂNG START
     button_start = telebot.types.ReplyKeyboardMarkup(True)
-    button_start.add("Đổi IP").add("Mở live").add("Tắt live")
+    button_start.add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
     text = "CHÀO MỪNG BẠN QUAY LẠI BOT, CHÚC BẠN NGÀY MỚI VUI VẺ"
     bot.send_message(message.chat.id, text, reply_markup=button_start)
 

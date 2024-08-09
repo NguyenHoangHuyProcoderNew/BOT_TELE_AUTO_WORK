@@ -126,7 +126,19 @@ def doiip_main(message):
         # KẾT THÚC TIẾN TRÌNH
         log_info("Kết thúc tiến trình hiện tại")
         return
+    
+    try:
+        log_info("Đang đợi thông báo gia hạn xuất hiện")
+        # Đợi thông báo gia hạn xuất hiện
+        WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
 
+        log_success("Thông báo gia hạn đã xuất hiện")
+
+        log_info("Tắt thông báo gia hạn")
+        driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
+
+    except TimeoutException:
+        log_error("Không có thông báo gia hạn")
     # Click vào nút Đổi TK Web
     log_info("Click vào nút Đổi TK Web")
     driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(3) > div.col-md-3 > div > div > button:nth-child(2) > i").click()
@@ -176,6 +188,19 @@ def doiip_main(message):
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
 
         log_success("Tải lại trang web livestream thành công")
+
+        try:
+            log_info("Đang đợi thông báo gia hạn xuất hiện")
+            # Đợi thông báo gia hạn xuất hiện
+            WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
+
+            log_success("Thông báo gia hạn đã xuất hiện")
+
+            log_info("Tắt thông báo gia hạn")
+            driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
+
+        except TimeoutException:
+            log_error("Không có thông báo gia hạn")
     except TimeoutError:
         log_error("Load trang web livestream thất bại")
 

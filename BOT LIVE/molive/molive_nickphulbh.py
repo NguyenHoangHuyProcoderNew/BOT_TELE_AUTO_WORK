@@ -116,6 +116,19 @@ def main_molive_nickphulbh(message):
         log_info("Kết thúc tiến trình")
         return
 
+    try:
+        log_info("Đang đợi thông báo gia hạn xuất hiện")
+        # Đợi thông báo gia hạn xuất hiện
+        WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
+
+        log_success("Thông báo gia hạn đã xuất hiện")
+
+        log_info("Tắt thông báo gia hạn")
+        driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
+
+    except TimeoutException:
+        log_error("Không có thông báo gia hạn")
+
     # XÓA CẤU HÌNH CŨ
     bot_reply(user_id, "Tiến hành xóa cấu hình cũ")
     log_info("Xóa cấu hình cũ")
@@ -193,6 +206,19 @@ def main_molive_nickphulbh(message):
 
         bot_reply(user_id, "Tạo cấu hình mới hoàn tất")
         log_info("Lưu cấu hình thành công")
+
+        try:
+            log_info("Đang đợi thông báo gia hạn xuất hiện")
+            # Đợi thông báo gia hạn xuất hiện
+            WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
+
+            log_success("Thông báo gia hạn đã xuất hiện")
+
+            log_info("Tắt thông báo gia hạn")
+            driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
+
+        except TimeoutException:
+            log_error("Không có thông báo gia hạn")
     except TimeoutError:
         bot_reply(user_id, "Tạo cấu hình mới thất bại")
         log_info("Tạo cấu hình mới thất bại")
