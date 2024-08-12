@@ -59,14 +59,17 @@ def ask_user_timekey_android(message):
 
 # HÀM CHÍNH XỬ LÝ CÁC TÁC VỤ ĐỂ TẠO KEY
 def main_create_key_android(message):
+    from dylib.dylib import close_existing_browser
     global timekey
     timekey = int(message.text)
 
     bot_reply(user_id, f"Tiến hành tạo: 01 key\nTHÔNG TIN KEY\nThiết bị hỗ trợ: ANDROID\nSố lượng thiết bị sử dụng: 01 thiết bị\nThời gian sử dụng key: {timekey} ngày")
     log_info(f"Người dùng đã yêu cầu tạo 1 key {timekey} ngày")
 
-    from dylib.dylib import close_existing_browser
-    close_existing_browser(message)
+
+    log_info("Đang chạy hàm kiểm tra các phiên trình duyệt đang chạy, nếu có phiên trình duyệt nào đang được sẽ đóng trình duyệt")
+    close_existing_browser() # Đóng tất cả các phiên trình duyệt đang chạy
+    
     log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
