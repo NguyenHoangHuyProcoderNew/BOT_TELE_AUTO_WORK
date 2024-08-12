@@ -36,6 +36,11 @@ from dylib.dylib import username
 
 log_info(f"KHỞI ĐỘNG BOT LIVESTREAM THÀNH CÔNG - ĐANG CHỜ LỆNH TỪ NGƯỜI DÙNG...")
 
+@bot.message_handler(commands=['test'])
+def test(message):
+    from thunghiem.test import main_test
+    main_test(message)
+    
 # CHỨC NĂNG START
 @bot.message_handler(commands=['start'])
 def start(message):   

@@ -65,6 +65,8 @@ def main_create_key_android(message):
     bot_reply(user_id, f"Tiến hành tạo: 01 key\nTHÔNG TIN KEY\nThiết bị hỗ trợ: ANDROID\nSố lượng thiết bị sử dụng: 01 thiết bị\nThời gian sử dụng key: {timekey} ngày")
     log_info(f"Người dùng đã yêu cầu tạo 1 key {timekey} ngày")
 
+    from dylib.dylib import close_existing_browser
+    close_existing_browser(message)
     log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 

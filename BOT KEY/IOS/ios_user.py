@@ -78,6 +78,10 @@ def main_create_key_ios_user(message):
 
 # HÀM TẠO KEY 1 NGÀY
 def create_key_1day(message):
+
+    from dylib.dylib import close_existing_browser
+    close_existing_browser(message)
+
     log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -134,6 +138,10 @@ def create_key_1day(message):
 
 
 def create_key_7day(message):
+
+    from dylib.dylib import close_existing_browser
+    close_existing_browser(message)
+
     log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -189,6 +197,10 @@ def create_key_7day(message):
         return        
 
 def create_key_30day(message):
+
+    from dylib.dylib import close_existing_browser
+    close_existing_browser(message)
+
     log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -244,6 +256,10 @@ def create_key_30day(message):
         return        
 
 def create_key_365day(message):
+
+    from dylib.dylib import close_existing_browser
+    close_existing_browser(message)
+
     log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -303,6 +319,9 @@ def create_key_not_in_select(message):
     timekey = message.text
     
     log_info(f"Người dùng đã yêu cầu tạo 1 key {timekey} ngày")
+
+    from dylib.dylib import close_existing_browser
+    close_existing_browser(message)    
 
     log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
