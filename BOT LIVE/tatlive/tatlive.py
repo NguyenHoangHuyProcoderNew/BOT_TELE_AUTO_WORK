@@ -143,9 +143,17 @@ def main_tatlive(message):
         if data_notify_tatlive == "Success":
             bot_reply(user_id, "Tắt live thành công")
             log_success(f"Thông báo của web là {data_notify_tatlive} - Tắt live thành công")
+
+            log_info("Đóng trình duyệt chrome")
+            driver.quit()
+            log_info("Kết thúc tiến trình")
         else:
             bot_reply(user_id, f"Tắt live không thành công - Thông báo từ trang web: {data_notify_tatlive}")
             log_error(f"Tắt live không thành công - Nguyên nhân: {data_notify_tatlive}")
+
+            log_info("Đóng trình duyệt chrome")
+            driver.quit()
+            log_info("Kết thúc tiến trình")
      
     elif message.text in ["Không", "Trở lại menu chính"]:
         back_home(message)
