@@ -80,7 +80,7 @@ def main_molive_memelo(message):
     elif message.text == "QUỲNH EM":
         linknguon = "https://drive.google.com/file/d/1QEX0hXjZZEvY6IjAaBzP7hhuzRop05Gz/view?usp=sharing" # NGUỒN QUỲNH EM
         bot_reply(user_id, "Tiến hành mở phiên live với nguồn QUỲNH EM")
-        log_info(user_id, "Tiến hành mở phiên live với nguồn QUỲNH EM")
+        log_info("Tiến hành mở phiên live với nguồn QUỲNH EM")
     elif message.text == "Trở lại menu chính":
         log_info(f"Người dùng {username} đã chọn Trở lại menu chính")
         back_home(message)
