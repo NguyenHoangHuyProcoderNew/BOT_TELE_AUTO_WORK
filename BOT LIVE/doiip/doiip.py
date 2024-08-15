@@ -127,18 +127,32 @@ def doiip_main(message):
         log_info("Kết thúc tiến trình hiện tại")
         return
     
-    try:
-        log_info("Đang đợi thông báo gia hạn xuất hiện")
-        # Đợi thông báo gia hạn xuất hiện
-        WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
+    # try:
+    #     log_info("Đang đợi thông báo gia hạn xuất hiện")
+    #     # Đợi thông báo gia hạn xuất hiện
+    #     WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[2]/div/div/div')))
 
-        log_success("Thông báo gia hạn đã xuất hiện")
+    #     log_success("Thông báo gia hạn đã xuất hiện")
 
-        log_info("Tắt thông báo gia hạn")
-        driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
+    #     log_info("Tắt thông báo gia hạn")
+    #     driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[2]/div/div/div/div[1]/button").click()
 
-    except TimeoutException:
-        log_error("Không có thông báo gia hạn")
+    # except TimeoutException:
+    #     log_error("Không có thông báo gia hạn")
+
+    # try:
+    #     log_info("Đang đợi thông báo gia hạn xuất hiện")
+    #     # Đợi thông báo gia hạn xuất hiện
+    #     WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
+
+    #     log_success("Thông báo gia hạn đã xuất hiện")
+
+    #     log_info("Tắt thông báo gia hạn")
+    #     driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
+
+    # except TimeoutException:
+    #     log_error("Không có thông báo gia hạn")
+
     # Click vào nút Đổi TK Web
     log_info("Click vào nút Đổi TK Web")
     driver.find_element(By.CSS_SELECTOR, "#formLive > div:nth-child(3) > div.col-md-3 > div > div > button:nth-child(2) > i").click()
@@ -169,14 +183,6 @@ def doiip_main(message):
     else:
         log_error(f"Đổi IP thất bại - Nguyên nhân: {data_notify_after_changeip}")
         bot_reply(user_id, f"Đổi IP thất bại - {data_notify_after_changeip}")
-        ask_retry_doiip(message) # Hàm hỏi người dùng có muốn tiếp tục không hoặc về menu chính
-
-        driver.quit()
-        log_info("Đóng trình duyệt chrome")
-
-        log_info("Đang hỏi người dùng có muốn tiếp tục không hay về menu chính")
-        
-        return
 
     # Đổi thiết bị
     log_info("Làm mới lại trang web livestream")
@@ -189,18 +195,32 @@ def doiip_main(message):
 
         log_success("Tải lại trang web livestream thành công")
 
-        try:
-            log_info("Đang đợi thông báo gia hạn xuất hiện")
-            # Đợi thông báo gia hạn xuất hiện
-            WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
+        # try:
+        #     log_info("Đang đợi thông báo gia hạn xuất hiện")
+        #     # Đợi thông báo gia hạn xuất hiện
+        #     WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[2]/div/div/div')))
 
-            log_success("Thông báo gia hạn đã xuất hiện")
+        #     log_success("Thông báo gia hạn đã xuất hiện")
 
-            log_info("Tắt thông báo gia hạn")
-            driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
+        #     log_info("Tắt thông báo gia hạn")
+        #     driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[2]/div/div/div/div[1]/button").click()
 
-        except TimeoutException:
-            log_error("Không có thông báo gia hạn")
+        # except TimeoutException:
+        #     log_error("Không có thông báo gia hạn")
+
+        # try:
+        #     log_info("Đang đợi thông báo gia hạn xuất hiện")
+        #     # Đợi thông báo gia hạn xuất hiện
+        #     WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
+
+        #     log_success("Thông báo gia hạn đã xuất hiện")
+
+        #     log_info("Tắt thông báo gia hạn")
+        #     driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
+
+        # except TimeoutException:
+        #     log_error("Không có thông báo gia hạn")
+
     except TimeoutError:
         log_error("Load trang web livestream thất bại")
 
@@ -241,17 +261,25 @@ def doiip_main(message):
 
     if data_notify_after_changedevice == "Thành công":
         log_success("Đổi Thiết Bị thành công") ; bot_reply(user_id, "Đổi Thiết Bị thành công")
+
+        ask_retry_doiip(message) # Hàm hỏi người dùng có muốn tiếp tục không hoặc về menu chính
+        log_info("Đang hỏi người dùng có muốn tiếp tục không hay về menu chính")
+        
         log_info("Đóng trình duyệt chrome")
         driver.quit()
+
+        return
+
     else:
         log_error(f"Đổi Thiết Bị thất bại - Nguyên nhân: {data_notify_after_changedevice}")
         bot_reply(user_id, f"Đổi Thiết Bị thất bại - {data_notify_after_changedevice}")
 
+        ask_retry_doiip(message) # Hàm hỏi người dùng có muốn tiếp tục không hoặc về menu chính
+        log_info("Đang hỏi người dùng có muốn tiếp tục không hay về menu chính")
+
         log_info("Đóng trình duyệt chrome")
         driver.quit()
 
-        log_info("Đang hỏi người dùng có muốn tiếp tục không hay về menu chính")
-        ask_retry_doiip(message) # Hàm hỏi người dùng có muốn tiếp tục không hoặc về menu chính
 
         return
 # Hàm hỏi người dùng tiếp tục hoặc trở lại menu chính
