@@ -73,6 +73,7 @@ def main_molive_memelo(message):
     from dylib.dylib import close_existing_browser # Nhập hàm đóng tất cả các phiên trình duyệt chrome đang chạy
     global linknguon
 
+    # Kiểm tra xem người dùng chọn nguồn live nào
     if message.text == "HỒI CHIÊU":
         linknguon = "https://drive.google.com/file/d/1PrRqUCTGm0nseYKJwARZYuCmsxMc-T7k/view?usp=drivesdk" # NGUỒN HỒI CHIÊU
         bot_reply(user_id, "Tiến hành mở phiên live với nguồn HỒI CHIÊU")
@@ -85,19 +86,28 @@ def main_molive_memelo(message):
         log_info(f"Người dùng {username} đã chọn Trở lại menu chính")
         back_home(message)
         return
+    else:
+        bot_reply(user_id, "Lựa chọn không hợp lệ")
+        back_home(message)
+        log_error("Lựa chọn không hợp lệ - trở về menu chính")
+        return
 
+    # Đóng các phiên trình duyệt cũ, để không gây xung đột driver chrome
+    bot_reply(user_id, "Đang đóng các phiên trình duyệt cũ")
     log_info("Đang chạy hàm kiểm tra các phiên trình duyệt đang chạy, nếu có phiên trình duyệt nào đang được sẽ đóng trình duyệt")
-    close_existing_browser() # Đóng tất cả các phiên trình duyệt đang chạy
+    close_existing_browser() # Hàm kiểm tra và đóng các phiên trình duyệt chrome cũ nếu có
+
     # Khởi tạo chrome driver
     driver = webdriver.Chrome(service=service, options=options)
     log_info("Khởi tạo chrome driver")
 
+    # Mở trang web livestream
+    bot_reply(user_id, "Đang mở trang web livestream")
+    log_info("Mở trang web livestream")
+    driver.get('https://autolive.me/tiktok')
+
+    # Kiểm tra xem có load trang web livestream thành công hay không
     try:
-        # Mở trang web livestream
-        bot_reply(user_id, "Đang mở trang web livestream")
-        log_info("Mở trang web livestream")
-        driver.get('https://autolive.me/tiktok')
-        
         bot_reply(user_id, "Đang load trang web livestream...")
         log_info("Đang load trang web livestream")
 
@@ -116,35 +126,10 @@ def main_molive_memelo(message):
         log_info("Kết thúc tiến trình")
         return
 
-    # try:
-    #     log_info("Đang đợi thông báo gia hạn xuất hiện")
-    #     # Đợi thông báo gia hạn xuất hiện
-    #     WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[2]/div/div/div')))
-
-    #     log_success("Thông báo gia hạn đã xuất hiện")
-
-    #     log_info("Tắt thông báo gia hạn")
-    #     driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[2]/div/div/div/div[1]/button").click()
-
-    # except TimeoutException:
-    #     log_error("Không có thông báo gia hạn")
-
-    # try:
-    #     log_info("Đang đợi thông báo gia hạn xuất hiện")
-    #     # Đợi thông báo gia hạn xuất hiện
-    #     WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
-
-    #     log_success("Thông báo gia hạn đã xuất hiện")
-
-    #     log_info("Tắt thông báo gia hạn")
-    #     driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
-
-    # except TimeoutException:
-    #     log_error("Không có thông báo gia hạn")
-
-    # XÓA CẤU HÌNH CŨ
-    bot_reply(user_id, "Tiến hành xóa cấu hình cũ")
     log_info("Xóa cấu hình cũ")
+    bot_reply(user_id, "Tiến hành xóa cấu hình cũ")
+
+    # Kiểm tra sự kiện xóa cấu hình cũ
     try:
         log_info("Click vào nút xóa cấu hình")
         driver.find_element(By.XPATH, '//button[@class="btn btn-circle btn-dark btn-sm waves-effect waves-light btn-status-live" and @data-status="-1" and @data-toggle="tooltip"]').click()
@@ -164,21 +149,15 @@ def main_molive_memelo(message):
 
         # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
         log_info("Đang kiểm tra dữ liệu của thông báo")
-        if data_notify_xoacauhinh == "Bạn phải dừng luồng live trước khi xóa":
-            bot_reply(user_id, "Hiện đang có 1 luồng live đang được mở, vui lòng dừng luồng live rồi thử lại")
-            log_error(f"Không thể xóa cấu hình cũ - Thông báo từ web: {data_notify_xoacauhinh}")
-            
-            log_info("Đóng trình duyệt chrome")
-            driver.quit()
-
-            log_info("Kết thúc tiến trình")
-            return
+        if data_notify_xoacauhinh == "Success":
+            bot_reply(user_id, "Xóa cấu hình cũ thành công")
+            log_success(f"Xóa cấu hình cũ thành công - Thông báo của web: {data_notify_xoacauhinh}")
         else:
-            bot_reply(user_id, "Xóa cấu hình thành công")
-            log_info("Xóa cấu hình thành công")
+            bot_reply(user_id, f"Xóa cấu hình cũ thất bại - Thông báo từ web: {data_notify_xoacauhinh}")
+            log_error(f"Xóa cấu hình cũ thất bại - Thông báo từ web: {data_notify_xoacauhinh}")
     except NoSuchElementException:
-        bot_reply(user_id, "Hiện tại không có cấu hình cũ nào")
-        log_info("Hiện tại không có cấu hình")
+        bot_reply(user_id, "Hiện tại không có cấu hình cũ")
+        log_info("Hiện tại không có cấu hình cũ")
 
     # TẠO CẤU HÌNH MỚI
     bot_reply(user_id, "Tiến hành tạo cấu hình mới")
@@ -205,51 +184,33 @@ def main_molive_memelo(message):
     driver.find_element(By.ID, "url_source").send_keys(linknguon)
 
     # LƯU CẤU HÌNH
+    bot_reply(user_id, "Cấu hình hoàn tất, tiến hành lưu lại cấu hình")
     log_info("Cấu hình hoàn tất, tiến hành lưu lại cấu hình")
 
+    # Kiểm tra xem cấu hình có được lưu thành công hay không
     try:
-        log_info("Click vào nút lưu cấu hình")
         driver.find_element(By.CSS_SELECTOR, "#formLive > button").click()
+        log_info("Click vào nút lưu cấu hình")
 
-        log_info("Làm mới lại trang web")
         driver.refresh()
+        log_info("Làm mới lại trang web để lưu cấu hình")
 
-        log_info("Đang làm mới lại trang web để lưu cấu hình...")
+        # Chờ web load sau khi refesh
         WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[1]')))
 
-        bot_reply(user_id, "Tạo cấu hình mới hoàn tất")
-        log_info("Lưu cấu hình thành công")
-
-        # try:
-        #     log_info("Đang đợi thông báo gia hạn xuất hiện")
-        #     # Đợi thông báo gia hạn xuất hiện
-        #     WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[2]/div/div/div')))
-
-        #     log_success("Thông báo gia hạn đã xuất hiện")
-
-        #     log_info("Tắt thông báo gia hạn")
-        #     driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[2]/div/div/div/div[1]/button").click()
-
-        # except TimeoutException:
-        #     log_error("Không có thông báo gia hạn")
-
-        # try:
-        #     log_info("Đang đợi thông báo gia hạn xuất hiện")
-        #     # Đợi thông báo gia hạn xuất hiện
-        #     WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div[3]/div/div/div')))
-
-        #     log_success("Thông báo gia hạn đã xuất hiện")
-
-        #     log_info("Tắt thông báo gia hạn")
-        #     driver.find_element(By.XPATH, "/html/body/div[1]/div[3]/div[3]/div/div/div/div[1]/button").click()
-
-        # except TimeoutException:
-        #     log_error("Không có thông báo gia hạn")
+        bot_reply(user_id, "Lưu cấu hình thành công")
+        log_info("Làm mới trang web hoàn tất - cấu hình đã được lưu lại")
     except TimeoutError:
         bot_reply(user_id, "Tạo cấu hình mới thất bại")
         log_info("Tạo cấu hình mới thất bại")
 
-    bot_reply(user_id, "Đang mở live...")
+        driver.quit()
+        log_info("Đóng trình duyệt chrome")
+
+        log_info("Kết thúc tiến trình")
+        return
+
+    bot_reply(user_id, "Tiến hành mở phiên live")
     log_info("Tiến hành mở phiên live")
 
     try:
@@ -273,6 +234,12 @@ def main_molive_memelo(message):
         else:
             bot_reply(user_id, f"Mở phiên live thất bại\nThông báo từ web: {notify_openlive}")
             log_error(f"Mở phiên live thất bại - Thông báo từ web: {notify_openlive}")
+
+            driver.quit()
+            log_info("Đóng trình duyệt chrome")
+
+            log_info("Kết thúc tiến trình")
+            return
     except TimeoutError:
         bot_reply(user_id, "Mở phiên live thất bại\nNguyên nhân: sự cố kết nối từ máy chủ")
         log_error("Không thể mở phiên live - Sự cố kết nối từ máy chủ")
@@ -280,6 +247,8 @@ def main_molive_memelo(message):
     
     bot_reply(user_id, "Tiến hành kiểm tra khi nào phiên live được mở")
     log_info("Tiến hành kiểm tra thời điểm phiên live diễn ra")
+
+    # Kiểm tra xem có truy cập phiên live thành công hay không
     try:
         bot_reply(user_id, "Đang truy cập vào phiên live")
         log_info("Đang mở phiên live")

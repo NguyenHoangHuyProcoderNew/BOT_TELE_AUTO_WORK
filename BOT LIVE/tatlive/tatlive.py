@@ -47,18 +47,17 @@ from dylib.dylib import user_id
 from dylib.dylib import username
 
 ########## TRỞ VỀ MENU CHÍNH #########
-home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
 def back_home(message):
-    text = "VUI LÒNG CHỌN 👇"
-    bot.send_message(message.chat.id, text, reply_markup=home)
+    button_menuchinh = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
+    bot.send_message(message.chat.id, "VUI LÒNG CHỌN 👇", reply_markup=button_menuchinh)
 
 # Hàm xác nhận tắt live
 def xacnhan_tatlive(message):
     # Tạo nút xác nhận tắt live
     xacnhantatlive = telebot.types.ReplyKeyboardMarkup(True)
     xacnhantatlive.add('Có', 'Không').add('Trở lại menu chính')
-    log_info(f"Bot đang yêu cầu người dùng {username} xác nhận tắt phiên live")
     bot.send_message(message.chat.id, "Xác nhận tắt phiên live hiện tại?", reply_markup=xacnhantatlive)
+    log_info(f"Bot đang yêu cầu người dùng {username} xác nhận tắt phiên live")
 
     # Sau khi người dùng xác nhận gọi hàm main_tatlive để xử lý
     bot.register_next_step_handler(message, main_tatlive)
@@ -126,10 +125,10 @@ def main_tatlive(message):
                 EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-original-title='Dừng live']"))
             )
             if button_tatlive.get_attribute("data-original-title") == "Dừng live":
-                log_info("Click vào nút tắt live")
                 bot_reply(user_id, "Đang tắt phiên live...")
                 button_tatlive.click()
-        except:
+                log_info("Click vào nút tắt live")
+        except TimeoutException:
             bot_reply(user_id, "Hiện không có phiên live nào được mở")
             log_info("Hiện không có phiên live nào được mở")
 

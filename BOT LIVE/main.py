@@ -74,10 +74,10 @@ def handle_tatlive(message):
 # CHỨC NĂNG MỞ LIVE
 @bot.message_handler(func=lambda message: message.text == "Mở live")
 def select_molive(message):
-    log_info(f"Người dùng {username} - ID: {user_id} đã chọn Mở live từ menu chính")
     select_molive_button = types.ReplyKeyboardMarkup(True).add('Nick Chính Văn Bảo').add('Nick Phụ LBH').add("Nick Meme Lỏ").add('Trở lại menu chính')
     text = "Vui lòng chọn tài khoản cần mở live"
     bot.send_message(message.chat.id, text, reply_markup=select_molive_button)
+    log_info(f"Người dùng {username} - ID: {user_id} đã chọn Mở live từ menu chính")
 
 # MỞ LIVE VĂN BẢO
 @bot.message_handler(func=lambda message: message.text == "Nick Chính Văn Bảo")
@@ -104,16 +104,15 @@ def handle_molivenickphulbh(message):
 @bot.message_handler(func=lambda message: message.text in ["Trở lại menu chính", "Không, trở về menu chính"])
 def handle_back_home(message):
     # Gọi hàm xử lý việc trở lại menu chính
-    log_info("Người dùng đã chọn Trở Lại Menu Chính")
     back_home(message)
+    log_info("Người dùng đã chọn Trở Lại Menu Chính")
 
 # Hàm xử lý việc trở lại menu chính
 def back_home(message):
-    text = "VUI LÒNG CHỌN 👇"
     # TẠO NÚT CHO CHỨC NĂNG TRỞ VỀ MENU CHÍNH
     button_backhome = telebot.types.ReplyKeyboardMarkup(True)
     button_backhome.add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
-    bot.send_message(message.chat.id, text, reply_markup=button_backhome)
+    bot.send_message(message.chat.id, "VUI LÒNG CHỌN 👇", reply_markup=button_backhome)
 
 # Check view
 @bot.message_handler(func=lambda message: message.text == "Check view")

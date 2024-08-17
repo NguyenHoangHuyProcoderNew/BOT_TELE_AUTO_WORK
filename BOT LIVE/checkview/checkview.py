@@ -50,36 +50,45 @@ id_tiktok = None
 
 ############################ CHỨC NĂNG CHÍNH ##########################
 
-home = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
 def back_home(message):
-    text = "VUI LÒNG CHỌN 👇"
-    bot.send_message(message.chat.id, text, reply_markup=home)
+    button_menuchinh = telebot.types.ReplyKeyboardMarkup(True).add("Đổi IP").add("Mở live").add("Tắt live").add("Check view")
+    bot.send_message(message.chat.id, "VUI LÒNG CHỌN 👇", reply_markup=button_menuchinh)
     
 def ask_select_account_checkview(message):
-    log_info("Bot đang yêu cầu người dùng chọn tài khoản cần check view")
     button_select_account_checkview = telebot.types.ReplyKeyboardMarkup(True).add("Nick Văn Bảo").add("Nick Phụ LBH").add("Nick MEME Lỏ").add("Trở lại menu chính")
     bot.send_message(message.chat.id, "Vui lòng chọn tài khoản cần check view", reply_markup=button_select_account_checkview)
+    log_info("Bot đang yêu cầu người dùng chọn tài khoản cần check view")
 
     bot.register_next_step_handler(message, checkview_main)
 
 def checkview_main(message):
+    from dylib.dylib import close_existing_browser
     global id_tiktok
 
     if message.text == "Nick Văn Bảo":
-        id_tiktok = "vanbao165201"
         bot_reply(user_id, "Tiến hành check view cho Nick Văn Bảo")
         log_info("Người dùng đã chọn tài khoản Văn Bảo")
+        id_tiktok = "vanbao165201"
     elif message.text == "Nick Phụ LBH":
-        id_tiktok = "nammapsang_keorank"
         bot_reply(user_id, "Tiến hành check view cho Nick Phụ LBH")
         log_info("Người dùng đã chọn Nick Phụ LBH")
+        id_tiktok = "nammapsang_keorank"
     elif message.text == "Nick MEME Lỏ":
-        id_tiktok = "meme.l810"
         bot_reply(user_id, "Tiến hành check view cho Nick Meme Lỏ")
+        id_tiktok = "meme.l810"
     elif message.text == "Trở lại menu chính":
-        log_info("Người dùng đã chọn Trở Lại Menu Chính")
         back_home(message)
+        log_info("Người dùng đã chọn Trở Lại Menu Chính")
         return
+    else:
+        bot_reply(user_id, "Lựa chọn không hợp lệ")
+        back_home(message)
+        log_error("Lựa chọn không hợp lệ - trở về menu chính")
+        return
+    
+    bot_reply(user_id, "Đang đóng các phiên trình duyệt cũ")
+    close_existing_browser() # Đóng tất cả các phiên trình duyệt đang chạy
+    log_info("Đang chạy hàm kiểm tra các phiên trình duyệt đang chạy, nếu có phiên trình duyệt nào đang được sẽ đóng trình duyệt")
 
     log_info("Khởi tạo chrome driver")
     driver = webdriver.Chrome(service=service, options=options)
@@ -89,6 +98,7 @@ def checkview_main(message):
     driver.get(f'https://www.tiktok.com/@{id_tiktok}/live')
 
     try:
+        bot_reply(user_id, "Đang load phiên live")
         log_info("Đang load phiên live...")
 
         WebDriverWait(driver, 100).until(

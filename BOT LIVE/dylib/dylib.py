@@ -96,12 +96,17 @@ def print_green_and_send_message(chat_id, message):
 def handle_restart(message):
     restart_bot(message)
 
+import os
+import sys
+import telebot
 # Hàm để restart bot
 def restart_bot(message):
-    driver = webdriver.Chrome(service=service, options=options)
-    bot.reply_to(message, "Khởi động lại bot thành công")
-    driver.quit()  # Đóng trình duyệt Selenium trước khi restart
-    os.execv(sys.executable, ['python'] + sys.argv)
+    # Gửi thông báo cho người dùng về việc khởi động lại
+    bot.send_message(message.chat.id, "Bot đang khởi động lại...")
+
+    # Khởi động lại bot
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
 
 import psutil
 def close_existing_browser():
