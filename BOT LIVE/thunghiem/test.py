@@ -60,61 +60,62 @@ service = Service(chromedriver_path, service_log_path=service_log_path)
 
 
 def main_test(message):
-    from dylib.dylib import close_existing_browser
-    log_info("Đang chạy hàm kiểm tra các phiên trình duyệt đang chạy, nếu có phiên trình duyệt nào đang được sẽ đóng trình duyệt")
-    close_existing_browser() # Đóng tất cả các phiên trình duyệt đang chạy
+    # from dylib.dylib import close_existing_browser
+    # log_info("Đang chạy hàm kiểm tra các phiên trình duyệt đang chạy, nếu có phiên trình duyệt nào đang được sẽ đóng trình duyệt")
+    # close_existing_browser() # Đóng tất cả các phiên trình duyệt đang chạy
     # Khởi tạo chrome driver
     driver = webdriver.Chrome(service=service, options=options)
 
-    driver.get('https://www.tiktok.com/@nammapsang_keorank/live')
+    # Mở trang web livestream
+    bot_reply(user_id, "Đang mở trang web livestream")
+    log_info("Mở trang web livestream")
+    driver.get('https://autolive.me/tiktok')
 
+    # Kiểm tra xem có load trang web livestream thành công hay không
     try:
-        log_info("Đang load phiên live")
-        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[3]/div/div[1]/a')))
+        bot_reply(user_id, "Đang load trang web livestream...")
+        log_info("Đang load trang web livestream")
 
-        bot_reply(user_id, "Truy cập phiên live thành công, khi nào phiên live diễn ra tôi sẽ thông báo cho bạn")
-    except TimeoutException:
-        bot_reply(user_id, "Không thể truy cập phiên live, xảy ra sự cố kết nối internet")
-        log_info("Không thể truy cập phiên live do kết nối internet")
+        # Kiểm tra xem trang web đã load xong chưa
+        WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
+
+        bot_reply(user_id, "Load trang web livestream thành công")
+        log_success("Load trang web livestream thành công")
+    except TimeoutError:
+        bot_reply(user_id, "Load trang web livestream thất bại\nNguyên nhân: đường truyền internet quá yếu hoặc trang web sử dụng băng thông nước ngoài dẫn đến lỗi, kiểm tra lại kết nối internet của máy chủ")
+        log_error("Load trang web livestream thất bại")
 
         log_info("Đóng trình duyệt chrome")
         driver.quit()
 
         log_info("Kết thúc tiến trình")
         return
+
+    # Chờ nút mở live xuất hiện lần 1
+    log_info("Đang đợi nút mở phiên live xuất hiện")
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']"))
+        )
+
+        log_success("Nút mở live đã xuất hiện")
+    except TimeoutException:
+        log_error("Không tồn tại nút mở live")
+
+        log_info("Làm mới lại trang web livestream")
+        driver.refresh()
+
+    # Chờ nút mở live xuất hiện lần 2
+    log_info("Kiểm tra sự xuất hiện của nút mở live lần 2")
     
-    # HÀM KIỂM TRA PHIÊN LIVE
-    while True:
-        now = datetime.datetime.now() # Biến lấy ngày giờ hiện tại của hệ thống
-        try:
-            log_info("Đang check view...")
-            checkview = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/main/div[4]/div[2]/div/div[1]/div[1]/div[1]/div[1]/div/div/div[2]/div[2]/div/div')))
-            
-            bot_reply(user_id, f"Check live hoàn tất, phiên live đã được mở vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
-            log_info(f"Phiên live đã được diễn ra vào lúc {now.strftime('%d/%m/%Y %H:%M:%S')}")
+    log_info("Đang đợi nút mở phiên live xuất hiện")
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']"))
+        )
 
-            log_info("Đóng trình duyệt chrome")
-            driver.quit()
+        log_success("Nút mở live đã xuất hiện")
+    except TimeoutException:
+        log_error("Không tồn tại nút mở live")
 
-            log_info("Kết thúc tiến trình")
-            return
-        except TimeoutException:
-            log_info("Phiên live chưa được diễn ra")
-
-            log_info("Làm mới lại phiên live")
-            driver.refresh()
-
-            # Kiểm tra xem có làm mới lại phiên live thành công hay không
-            try:
-                WebDriverWait(driver, 100).until(
-                    EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/main/div[3]/div/div[1]/a"))
-                )
-            except TimeoutException:
-                bot_reply(user_id, "Kiểm tra phiên live thất bại do có sự cố kết nối internet, vui lòng kiểm tra lại đường truyền")
-                log_error("Kiểm tra phiên live thất bại do có sự cố về kết nối internet")
-
-                log_info("Đóng trình duyệt chrome")
-                driver.quit()
-
-                log_info("Kết thúc tiến trình")
-                return
+        log_info("Làm mới lại trang web livestream")

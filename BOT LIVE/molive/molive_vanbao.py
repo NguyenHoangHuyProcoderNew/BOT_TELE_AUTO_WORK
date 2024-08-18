@@ -214,6 +214,66 @@ def main_molive_vanbao(message):
     bot_reply(user_id, "Tiến hành mở phiên live")
     log_info("Tiến hành mở phiên live")
 
+    # Chờ nút mở live xuất hiện lần 1
+    bot_reply(user_id, "Đang đợi nút mở phiên live xuất hiện")
+    log_info("Đang đợi nút mở phiên live xuất hiện")
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']"))
+        )
+        bot_reply(user_id, )
+        log_success("Nút mở live đã xuất hiện")
+    except TimeoutException:
+        bot_reply(user_id, "Nút mở live không xuất hiện")
+        log_error("Không tồn tại nút mở live")
+
+        bot_reply("Tiến hành kiểm tra lại lần 2")
+        log_info("Tiến hành kiểm tra lần 2")
+
+        bot_reply(user_id, "Làm mới lại trang web livestream")
+        log_info("Làm mới lại trang web livestream")
+
+        driver.refresh()
+
+        # Kiểm tra xem có load trang web livestream thành công hay không
+        try:
+            # Kiểm tra xem trang web đã load xong chưa
+            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div/div[1]/div[1]/div/div[2]/h3/b')))
+
+            bot_reply(user_id, "Làm mới lại trang web livestram thành công")
+            log_success("Làm mới lại trang web livestream thành công")
+        except TimeoutError:
+            bot_reply(user_id, "Load trang web livestream thất bại\nNguyên nhân: đường truyền internet quá yếu hoặc trang web sử dụng băng thông nước ngoài dẫn đến lỗi, kiểm tra lại kết nối internet của máy chủ")
+            log_error("Load trang web livestream thất bại")
+
+            log_info("Đóng trình duyệt chrome")
+            driver.quit()
+
+            log_info("Kết thúc tiến trình")
+            return
+        
+        bot_reply(user_id, "Tiến hành hành kiểm tra sự xuất hiện của nút mở live lần 2")
+
+        # Chờ nút mở live xuất hiện lần 2
+        log_info("Đang đợi nút mở phiên live xuất hiện lần 2")
+        try:
+            WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']"))
+            )
+
+            bot_reply(user_id, "Nút mở phiên live đã xuất hiện")
+            log_success("Nút mở live đã xuất hiện")
+        except TimeoutException:
+            bot_reply(user_id, "Nút mở phiên live vẫn không xuất hiện, vui lòng truy cập vào trang web và kiểm tra lại")
+            log_error("Không tồn tại nút mở live")
+            
+            log_info("Đóng trình duyệt chrome")
+            driver.quit()
+
+            log_info("Kết thúc tiến trình")
+            return        
+    
+    # Kiểm tra xem có mở phiên live thành công hay không
     try:
         log_info("Click vào nút mở phiên live")
         driver.find_element(By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']").click()
