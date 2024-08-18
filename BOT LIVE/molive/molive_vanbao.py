@@ -222,7 +222,7 @@ def main_molive_vanbao(message):
         WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']"))
         )
-        bot_reply(user_id, )
+        bot_reply(user_id, "Nút mở phiên live đã xuất hiện")
         log_success("Nút mở live đã xuất hiện")
     except TimeoutException:
         bot_reply(user_id, "Nút mở live không xuất hiện")
@@ -273,6 +273,9 @@ def main_molive_vanbao(message):
 
             log_info("Kết thúc tiến trình")
             return        
+    
+    bot_reply(user_id, "Mở phiên live...")
+    log_info("Mở phiên live")
     
     # Kiểm tra xem có mở phiên live thành công hay không
     try:
