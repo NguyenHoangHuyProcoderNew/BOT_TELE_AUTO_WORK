@@ -142,20 +142,21 @@ def main_molive_vanbao(message):
 
         # Lấy dữ liệu của thông báo xóa cấu hình cũ
         log_info("Thông báo của web sau khi xóa cấu hình cũ đã xuất hiện, đang lấy dữ liệu của thông báo...")
-        notify_xoacauhinh = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
-
-        # Chuyển dữ liệu của thông báo xóa cấu hình cũ thành văn bản
-        log_info("Đang chuyển dữ liệu của thông báo thành văn bản...")
-        data_notify_xoacauhinh = notify_xoacauhinh.text
+        thongbao_xoacauhinhcu = driver.execute_script('''
+        // JavaScript code here
+        // Đoạn mã JavaScript để lấy nội dung của phần tử
+        var element = document.querySelector('div.text[data-notify-html="text"]');
+        return element.textContent;
+    ''')
 
         # KIỂM TRA DỮ LIỆU CỦA THÔNG BÁO
         log_info("Đang kiểm tra dữ liệu của thông báo")
-        if data_notify_xoacauhinh == "Success":
+        if thongbao_xoacauhinhcu == "Success":
             bot_reply(user_id, "Xóa cấu hình cũ thành công")
-            log_success(f"Xóa cấu hình cũ thành công - Thông báo của web: {data_notify_xoacauhinh}")
+            log_success(f"Xóa cấu hình cũ thành công - Thông báo của web: {thongbao_xoacauhinhcu}")
         else:
-            bot_reply(user_id, f"Xóa cấu hình cũ thất bại - Thông báo từ web: {data_notify_xoacauhinh}")
-            log_error(f"Xóa cấu hình cũ thất bại - Thông báo từ web: {data_notify_xoacauhinh}")
+            bot_reply(user_id, f"Xóa cấu hình cũ thất bại - Thông báo từ web: {thongbao_xoacauhinhcu}")
+            log_error(f"Xóa cấu hình cũ thất bại - Thông báo từ web: {thongbao_xoacauhinhcu}")
     except NoSuchElementException:
         bot_reply(user_id, "Hiện tại không có cấu hình cũ")
         log_info("Hiện tại không có cấu hình cũ")
