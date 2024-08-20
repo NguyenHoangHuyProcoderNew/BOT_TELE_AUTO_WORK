@@ -140,32 +140,58 @@ def main_tatlive(message):
 
         log_info("Đang kiểm tra có tắt phiên live thành công hay không")
 
-        # Đợi thông báo sau khi tắt live xuất hiện
-        WebDriverWait(driver, 100).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))
-        )
+        # # Đợi thông báo sau khi tắt live xuất hiện
+        # WebDriverWait(driver, 100).until(
+        #         EC.presence_of_element_located((By.CSS_SELECTOR, 'div > div.notifyjs-container > div'))
+        # )
             
-        log_info("Đang lấy dữ liệu thông báo của web sau khi tắt live")
-        notify_tatlive = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
+        # log_info("Đang lấy dữ liệu thông báo của web sau khi tắt live")
+        # notify_tatlive = driver.find_element(By.CSS_SELECTOR, 'div.text[data-notify-html="text"]')
 
-        log_info("Đang chuyển dữ liệu thông báo của web sau khi tắt live thành văn bản")
-        data_notify_tatlive = notify_tatlive.text
+        # log_info("Đang chuyển dữ liệu thông báo của web sau khi tắt live thành văn bản")
+        # data_notify_tatlive = notify_tatlive.text
 
-        log_info("Đang kiểm tra dữ liệu thông báo của web")
-        if data_notify_tatlive == "Success":
+        # log_info("Đang kiểm tra dữ liệu thông báo của web")
+        # if data_notify_tatlive == "Success":
+        #     bot_reply(user_id, "Tắt live thành công")
+        #     log_success(f"Thông báo của web là {data_notify_tatlive} - Tắt live thành công")
+
+        #     log_info("Đóng trình duyệt chrome")
+        #     driver.quit()
+        #     log_info("Kết thúc tiến trình")
+        # else:
+        #     bot_reply(user_id, f"Tắt live không thành công - Thông báo từ trang web: {data_notify_tatlive}")
+        #     log_error(f"Tắt live không thành công - Nguyên nhân: {data_notify_tatlive}")
+
+        #     log_info("Đóng trình duyệt chrome")
+        #     driver.quit()
+        #     log_info("Kết thúc tiến trình")
+
+        # Kiểm tra dữ liệu của phần tử trạng thái để xác định đã tắt live hay chưa
+        try:
+            # Chờ đợi phần tử Trạng thái xuất hiện
+            WebDriverWait(driver, 1000).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "span.badge.badge-success"))
+            )
+            
+            # Chờ đến khi giá trị của phần tử là "Mới"
+            check_data_phantutrangthai = WebDriverWait(driver, 1000).until(
+                lambda d: d.execute_script(
+                    "return document.querySelector('span.badge.badge-success').textContent;"
+                ) == "Mới"
+            )
+
             bot_reply(user_id, "Tắt live thành công")
-            log_success(f"Thông báo của web là {data_notify_tatlive} - Tắt live thành công")
+            log_success(f"Tắt live thành công - Dữ liệu của phần tử Trạng thái là: {check_data_phantutrangthai}")
+        except TimeoutException:
+            log_error("Tắt live không thành công")
+            bot_reply(user_id, "Tắt live không thành công")
 
-            log_info("Đóng trình duyệt chrome")
             driver.quit()
-            log_info("Kết thúc tiến trình")
-        else:
-            bot_reply(user_id, f"Tắt live không thành công - Thông báo từ trang web: {data_notify_tatlive}")
-            log_error(f"Tắt live không thành công - Nguyên nhân: {data_notify_tatlive}")
+            log_info("Đóng trình duyệt chrome")
 
-            log_info("Đóng trình duyệt chrome")
-            driver.quit()
             log_info("Kết thúc tiến trình")
-     
+            return
+
     elif message.text in ["Không", "Trở lại menu chính"]:
         back_home(message)

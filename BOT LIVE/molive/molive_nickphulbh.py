@@ -156,6 +156,12 @@ def main_molive_nickphulbh(message):
         else:
             bot_reply(user_id, f"Xóa cấu hình cũ thất bại - Thông báo từ web: {thongbao_xoacauhinhcu}")
             log_error(f"Xóa cấu hình cũ thất bại - Thông báo từ web: {thongbao_xoacauhinhcu}")
+
+            log_info("Đóng trình duyệt chrome")
+            driver.quit()
+
+            log_info("Kết thúc tiến trình")
+            return
     except NoSuchElementException:
         bot_reply(user_id, "Hiện tại không có cấu hình cũ")
         log_info("Hiện tại không có cấu hình cũ")
@@ -227,7 +233,7 @@ def main_molive_nickphulbh(message):
         bot_reply(user_id, "Nút mở live không xuất hiện")
         log_error("Không tồn tại nút mở live")
 
-        bot_reply("Tiến hành kiểm tra lại lần 2")
+        bot_reply(user_id, "Tiến hành kiểm tra lại lần 2")
         log_info("Tiến hành kiểm tra lần 2")
 
         bot_reply(user_id, "Làm mới lại trang web livestream")

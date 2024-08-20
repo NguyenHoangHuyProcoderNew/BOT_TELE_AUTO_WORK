@@ -91,31 +91,18 @@ def main_test(message):
         log_info("Kết thúc tiến trình")
         return
 
-    # Chờ nút mở live xuất hiện lần 1
-    log_info("Đang đợi nút mở phiên live xuất hiện")
     try:
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']"))
+        # Chờ đợi phần tử xuất hiện với selector đã cho
+        WebDriverWait(driver, 1000).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "span.badge.badge-success"))
         )
-
-        log_success("Nút mở live đã xuất hiện")
-    except TimeoutException:
-        log_error("Không tồn tại nút mở live")
-
-        log_info("Làm mới lại trang web livestream")
-        driver.refresh()
-
-    # Chờ nút mở live xuất hiện lần 2
-    log_info("Kiểm tra sự xuất hiện của nút mở live lần 2")
-    
-    log_info("Đang đợi nút mở phiên live xuất hiện")
-    try:
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-circle.btn-dark.btn-sm.waves-effect.waves-light.btn-status-live[data-status='1'][data-toggle='tooltip'][data-placement='top'][data-original-title='Bắt đầu live']"))
+        
+        # Chờ đến khi giá trị của phần tử là "Mới"
+        element_value = WebDriverWait(driver, 1000).until(
+            lambda d: d.execute_script(
+                "return document.querySelector('span.badge.badge-success').textContent;"
+            ) == "Mới"
         )
-
-        log_success("Nút mở live đã xuất hiện")
+        bot_reply(user_id, "Phiên live đã được tắt")
     except TimeoutException:
-        log_error("Không tồn tại nút mở live")
-
-        log_info("Làm mới lại trang web livestream")
+        bot_reply(user_id, "Tắt live không thành công")
