@@ -1,1 +1,1 @@
-pip install selenium pyTelegramBotAPI pyperclip colorama
+pip install selenium pyTelegramBotAPI pyperclip colorama psutil
